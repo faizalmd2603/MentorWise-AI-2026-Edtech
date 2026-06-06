@@ -7,17 +7,42 @@ import { useState, useRef, useEffect } from "react";
 import * as Icons from "lucide-react";
 import { ArrowLeft, Send, Image as ImageIcon, Loader2 } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+
 export const Route = createFileRoute("/agents/$agentId")({
   head: ({ params }) => {
     const agent = AGENTS.find((a) => a.id === params.agentId);
     const title = agent ? `${agent.name} — MentorWise AI` : "Agent — MentorWise AI";
+    const description = agent
+      ? `${agent.short}. ${agent.description}`
+      : "Specialist AI agent in the MentorWise AI ecosystem.";
+    const url = `${SITE}/agents/${params.agentId}`;
     return {
       meta: [
         { title },
-        { name: "description", content: agent?.description ?? "MentorWise AI agent" },
+        { name: "description", content: description },
         { property: "og:title", content: title },
-        { property: "og:description", content: agent?.description ?? "MentorWise AI agent" },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
       ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: agent
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Service",
+                name: agent.name,
+                description: agent.description,
+                serviceType: agent.short,
+                provider: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+                areaServed: "Worldwide",
+                url,
+              }),
+            },
+          ]
+        : undefined,
     };
   },
   component: AgentChat,
@@ -141,7 +166,7 @@ function AgentChat() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h2 className="font-display text-lg font-semibold truncate">{agent.name}</h2>
+                  <h1 className="font-display text-lg font-semibold truncate">{agent.name}</h1>
                   {agent.comingSoon && <span className="rounded-full bg-magenta/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-magenta ring-1 ring-magenta/40">Preview</span>}
                 </div>
                 <div className="text-xs text-muted-foreground truncate">{agent.short}</div>
@@ -158,7 +183,7 @@ function AgentChat() {
                   }`}>
                     {m.content}
                     {m.image && (
-                      <img src={m.image} alt="Generated" className="mt-3 rounded-xl max-w-full" />
+                      <img src={m.image} alt="AI-generated image" className="mt-3 rounded-xl max-w-full" />
                     )}
                   </div>
                 </div>
@@ -196,6 +221,7 @@ function AgentChat() {
                   onClick={() => setShowImg((v) => !v)}
                   className={`h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-xl ring-1 ring-border transition ${showImg ? "bg-magenta/20 text-magenta ring-magenta/40" : "bg-card/60 text-muted-foreground hover:text-foreground"}`}
                   title="Generate image"
+                  aria-label="Toggle image generation panel"
                   type="button"
                 >
                   <ImageIcon className="h-5 w-5" />
@@ -215,6 +241,7 @@ function AgentChat() {
                 />
                 <button
                   onClick={send}
+                  aria-label="Send message"
                   disabled={loading || !input.trim()}
                   className="h-11 shrink-0 inline-flex items-center gap-2 rounded-xl bg-cyber px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50 hover:brightness-110 transition glow-cyan"
                 >

@@ -2,14 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Sparkles, Target, Globe, Shield } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — MentorWise AI" },
-      { name: "description", content: "MentorWise AI democratizes elite career tooling for every student through a globally unique AI ecosystem." },
+      { name: "description", content: "How MentorWise AI is democratizing elite career tooling for every student through a globally unique AI agent ecosystem." },
       { property: "og:title", content: "About — MentorWise AI" },
-      { property: "og:description", content: "MentorWise AI democratizes elite career tooling for every student through a globally unique AI ecosystem." },
+      { property: "og:description", content: "How MentorWise AI is democratizing elite career tooling for every student through a globally unique AI agent ecosystem." },
+      { property: "og:url", content: `${SITE}/about` },
     ],
+    links: [{ rel: "canonical", href: `${SITE}/about` }],
   }),
   component: About,
 });
@@ -42,7 +46,7 @@ function About() {
               <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cyber/15 text-cyber ring-1 ring-cyber/30">
                 <p.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 font-display text-lg font-semibold">{p.title}</h3>
+              <h2 className="mt-4 font-display text-lg font-semibold">{p.title}</h2>
               <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
             </div>
           ))}

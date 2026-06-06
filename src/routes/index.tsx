@@ -4,14 +4,32 @@ import { SiteLayout } from "@/components/SiteLayout";
 import banner from "@/assets/mw-banner.jpeg.asset.json";
 import { ArrowRight, Sparkles, ShieldCheck, Zap } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const OG_IMAGE = `${SITE}${banner.url}`;
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MentorWise AI — The Ultimate AI-Powered Career Arsenal" },
-      { name: "description", content: "MNC-level AI agents for resumes, interviews, internships and growth — free for every student." },
-      { property: "og:title", content: "MentorWise AI — The Ultimate AI-Powered Career Arsenal" },
-      { property: "og:description", content: "MNC-level AI agents for resumes, interviews, internships and growth — free for every student." },
-      { property: "og:image", content: banner.url },
+      { title: "MentorWise AI — AI Career Arsenal for Students" },
+      { name: "description", content: "MNC-grade AI agents for resumes, interviews, internships and growth — free for every student." },
+      { property: "og:title", content: "MentorWise AI — AI Career Arsenal for Students" },
+      { property: "og:description", content: "MNC-grade AI agents for resumes, interviews, internships and growth — free for every student." },
+      { property: "og:url", content: `${SITE}/` },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [{ rel: "canonical", href: `${SITE}/` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "MentorWise AI",
+          url: SITE,
+          description: "AI career arsenal for students — 12 specialist agents for resumes, interviews, internships and growth.",
+        }),
+      },
     ],
   }),
   component: Home,
@@ -38,7 +56,7 @@ function SplashScreen() {
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background animate-scale-in">
       <div className="absolute inset-0 grid-bg opacity-80" />
       <div className="relative max-w-3xl px-6 text-center">
-        <img src={banner.url} alt="MentorWise AI" className="mx-auto w-full max-w-xl rounded-2xl animate-float-glow" />
+        <img src={banner.url} alt="MentorWise AI brand banner" className="mx-auto w-full max-w-xl rounded-2xl animate-float-glow" />
         <div className="mt-6 text-xs uppercase tracking-[0.3em] text-cyber animate-pulse">Initialising career arsenal…</div>
       </div>
     </div>
@@ -78,7 +96,7 @@ function Hero() {
           <div className="relative animate-fade-up [animation-delay:120ms]">
             <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-cyber/20 via-purple-glow/10 to-magenta/20 blur-2xl" />
             <div className="relative overflow-hidden rounded-3xl glass-strong p-2">
-              <img src={banner.url} alt="MentorWise AI ecosystem" className="w-full rounded-2xl" />
+              <img src={banner.url} alt="MentorWise AI ecosystem preview" className="w-full rounded-2xl" />
             </div>
           </div>
         </div>

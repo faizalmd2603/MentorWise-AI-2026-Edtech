@@ -1,0 +1,13 @@
+# MentorWise AI
+
+> AI-powered career arsenal for students and freshers — 12 specialist AI agents for resumes, interviews, internships, exams and growth, free to use. Built in Chennai, India.
+
+MentorWise AI is an EdTech platform that gives students access to MNC-grade career tooling through a free ecosystem of specialist AI agents.
+
+## Pages
+
+- [Home](/): Overview of the MentorWise AI ecosystem and core agents.
+- [Agent Ecosystem](/agents): All 12 specialist AI agents plus upcoming programs.
+- [About](/about): Mission, pillars and vision behind MentorWise AI.
+- [Founders](/founders): Profiles of Mohammed Faizal M and Saif Ahmed Z.
+- [Contact](/contact): Reach the team via form, email, WhatsApp or LinkedIn.

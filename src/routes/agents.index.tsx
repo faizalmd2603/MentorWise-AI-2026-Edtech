@@ -4,14 +4,18 @@ import { AGENTS, COMING_SECTIONS } from "@/lib/agents";
 import * as Icons from "lucide-react";
 import { Lock, Sparkles } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+
 export const Route = createFileRoute("/agents/")({
   head: () => ({
     meta: [
-      { title: "Agent Ecosystem — MentorWise AI" },
-      { name: "description", content: "Deploy any of 12 specialist AI agents engineered for elite student careers." },
-      { property: "og:title", content: "Agent Ecosystem — MentorWise AI" },
-      { property: "og:description", content: "Deploy any of 12 specialist AI agents engineered for elite student careers." },
+      { title: "AI Agent Ecosystem — MentorWise AI" },
+      { name: "description", content: "Browse 12 specialist AI agents built for student careers — resumes, interviews, LinkedIn, internships, exams and more." },
+      { property: "og:title", content: "AI Agent Ecosystem — MentorWise AI" },
+      { property: "og:description", content: "Browse 12 specialist AI agents built for student careers — resumes, interviews, LinkedIn, internships, exams and more." },
+      { property: "og:url", content: `${SITE}/agents` },
     ],
+    links: [{ rel: "canonical", href: `${SITE}/agents` }],
   }),
   component: AgentsIndex,
 });

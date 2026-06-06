@@ -5,14 +5,18 @@ import { submitContactForm } from "@/lib/contact.functions";
 import { useState } from "react";
 import { Mail, MessageCircle, Linkedin, Loader2, CheckCircle2 } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — MentorWise AI" },
-      { name: "description", content: "Send MentorWise AI a query. Our AI acknowledges instantly and our founders follow up personally." },
-      { property: "og:title", content: "Contact — MentorWise AI" },
-      { property: "og:description", content: "Send MentorWise AI a query. Our AI acknowledges instantly and our founders follow up personally." },
+      { title: "Contact MentorWise AI" },
+      { name: "description", content: "Reach the MentorWise AI team in Chennai — instant AI acknowledgement plus personal follow-up from the founders." },
+      { property: "og:title", content: "Contact MentorWise AI" },
+      { property: "og:description", content: "Reach the MentorWise AI team in Chennai — instant AI acknowledgement plus personal follow-up from the founders." },
+      { property: "og:url", content: `${SITE}/contact` },
     ],
+    links: [{ rel: "canonical", href: `${SITE}/contact` }],
   }),
   component: Contact,
 });

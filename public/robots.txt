@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://mentorwiseaiedtechservice.lovable.app/sitemap.xml
