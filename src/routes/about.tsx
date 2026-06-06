@@ -2,14 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Sparkles, Target, Globe, Shield } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — MentorWise AI" },
-      { name: "description", content: "MentorWise AI democratizes elite career tooling for every student through a globally unique AI ecosystem." },
+      { name: "description", content: "How MentorWise AI is democratizing elite career tooling for every student through a globally unique AI agent ecosystem." },
       { property: "og:title", content: "About — MentorWise AI" },
-      { property: "og:description", content: "MentorWise AI democratizes elite career tooling for every student through a globally unique AI ecosystem." },
+      { property: "og:description", content: "How MentorWise AI is democratizing elite career tooling for every student through a globally unique AI agent ecosystem." },
+      { property: "og:url", content: `${SITE}/about` },
     ],
+    links: [{ rel: "canonical", href: `${SITE}/about` }],
   }),
   component: About,
 });
