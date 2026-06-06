@@ -7,17 +7,42 @@ import { useState, useRef, useEffect } from "react";
 import * as Icons from "lucide-react";
 import { ArrowLeft, Send, Image as ImageIcon, Loader2 } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+
 export const Route = createFileRoute("/agents/$agentId")({
   head: ({ params }) => {
     const agent = AGENTS.find((a) => a.id === params.agentId);
     const title = agent ? `${agent.name} — MentorWise AI` : "Agent — MentorWise AI";
+    const description = agent
+      ? `${agent.short}. ${agent.description}`
+      : "Specialist AI agent in the MentorWise AI ecosystem.";
+    const url = `${SITE}/agents/${params.agentId}`;
     return {
       meta: [
         { title },
-        { name: "description", content: agent?.description ?? "MentorWise AI agent" },
+        { name: "description", content: description },
         { property: "og:title", content: title },
-        { property: "og:description", content: agent?.description ?? "MentorWise AI agent" },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
       ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: agent
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Service",
+                name: agent.name,
+                description: agent.description,
+                serviceType: agent.short,
+                provider: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+                areaServed: "Worldwide",
+                url,
+              }),
+            },
+          ]
+        : undefined,
     };
   },
   component: AgentChat,
