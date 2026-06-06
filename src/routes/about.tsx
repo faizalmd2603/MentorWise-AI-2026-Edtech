@@ -46,7 +46,7 @@ function About() {
               <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cyber/15 text-cyber ring-1 ring-cyber/30">
                 <p.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 font-display text-lg font-semibold">{p.title}</h3>
+              <h2 className="mt-4 font-display text-lg font-semibold">{p.title}</h2>
               <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
             </div>
           ))}
