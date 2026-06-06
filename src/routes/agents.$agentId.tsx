@@ -166,7 +166,7 @@ function AgentChat() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h2 className="font-display text-lg font-semibold truncate">{agent.name}</h2>
+                  <h1 className="font-display text-lg font-semibold truncate">{agent.name}</h1>
                   {agent.comingSoon && <span className="rounded-full bg-magenta/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-magenta ring-1 ring-magenta/40">Preview</span>}
                 </div>
                 <div className="text-xs text-muted-foreground truncate">{agent.short}</div>
@@ -183,7 +183,7 @@ function AgentChat() {
                   }`}>
                     {m.content}
                     {m.image && (
-                      <img src={m.image} alt="Generated" className="mt-3 rounded-xl max-w-full" />
+                      <img src={m.image} alt="AI-generated image" className="mt-3 rounded-xl max-w-full" />
                     )}
                   </div>
                 </div>
@@ -221,6 +221,7 @@ function AgentChat() {
                   onClick={() => setShowImg((v) => !v)}
                   className={`h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-xl ring-1 ring-border transition ${showImg ? "bg-magenta/20 text-magenta ring-magenta/40" : "bg-card/60 text-muted-foreground hover:text-foreground"}`}
                   title="Generate image"
+                  aria-label="Toggle image generation panel"
                   type="button"
                 >
                   <ImageIcon className="h-5 w-5" />
@@ -240,6 +241,7 @@ function AgentChat() {
                 />
                 <button
                   onClick={send}
+                  aria-label="Send message"
                   disabled={loading || !input.trim()}
                   className="h-11 shrink-0 inline-flex items-center gap-2 rounded-xl bg-cyber px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50 hover:brightness-110 transition glow-cyan"
                 >
