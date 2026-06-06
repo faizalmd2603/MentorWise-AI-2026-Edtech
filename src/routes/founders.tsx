@@ -4,15 +4,21 @@ import founder from "@/assets/founder-faizal.jpeg.asset.json";
 import cofounder from "@/assets/cofounder-saif.jpeg.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
 
+const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const FOUNDER_OG = `${SITE}${founder.url}`;
+
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
       { title: "Founders — MentorWise AI" },
-      { name: "description", content: "Meet the founders of MentorWise AI — Mohammed Faizal M and Saif Ahmed Z, building from Chennai." },
+      { name: "description", content: "Meet Mohammed Faizal M and Saif Ahmed Z — the Chennai-based student founders building MentorWise AI." },
       { property: "og:title", content: "Founders — MentorWise AI" },
-      { property: "og:description", content: "Meet the founders of MentorWise AI — Mohammed Faizal M and Saif Ahmed Z, building from Chennai." },
-      { property: "og:image", content: founder.url },
+      { property: "og:description", content: "Meet Mohammed Faizal M and Saif Ahmed Z — the Chennai-based student founders building MentorWise AI." },
+      { property: "og:url", content: `${SITE}/founders` },
+      { property: "og:image", content: FOUNDER_OG },
+      { name: "twitter:image", content: FOUNDER_OG },
     ],
+    links: [{ rel: "canonical", href: `${SITE}/founders` }],
   }),
   component: Founders,
 });
