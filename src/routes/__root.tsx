@@ -81,6 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "MentorWise AI" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "google-site-verification", content: "DHjo3vqRDJYGT0yhZU7S1XNTmL84AqdWO3DAzQznzC0" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
