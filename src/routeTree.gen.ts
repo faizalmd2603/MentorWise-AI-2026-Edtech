@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as FoundersRouteImport } from './routes/founders'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
@@ -16,6 +17,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FoundersRoute = FoundersRouteImport.update({
   id: '/founders',
   path: '/founders',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/founders': typeof FoundersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/agents/': typeof AgentsIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/founders': typeof FoundersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/agents': typeof AgentsIndexRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/founders': typeof FoundersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/agents/': typeof AgentsIndexRoute
 }
@@ -79,16 +88,25 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/founders'
+    | '/sitemap.xml'
     | '/agents/$agentId'
     | '/agents/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/founders' | '/agents/$agentId' | '/agents'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/founders'
+    | '/sitemap.xml'
+    | '/agents/$agentId'
+    | '/agents'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
     | '/founders'
+    | '/sitemap.xml'
     | '/agents/$agentId'
     | '/agents/'
   fileRoutesById: FileRoutesById
@@ -98,12 +116,20 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   FoundersRoute: typeof FoundersRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/founders': {
       id: '/founders'
       path: '/founders'
@@ -154,9 +180,20 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   FoundersRoute: FoundersRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   AgentsIndexRoute: AgentsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
