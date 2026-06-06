@@ -15,6 +15,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
+import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -47,6 +48,11 @@ const AgentsIndexRoute = AgentsIndexRouteImport.update({
   path: '/agents/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
+  id: '/resources/job-search-sites',
+  path: '/resources/job-search-sites',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
   id: '/agents/$agentId',
   path: '/agents/$agentId',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/founders': typeof FoundersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/founders': typeof FoundersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents': typeof AgentsIndexRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/founders': typeof FoundersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/founders'
     | '/sitemap.xml'
     | '/agents/$agentId'
+    | '/resources/job-search-sites'
     | '/agents/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/founders'
     | '/sitemap.xml'
     | '/agents/$agentId'
+    | '/resources/job-search-sites'
     | '/agents'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/founders'
     | '/sitemap.xml'
     | '/agents/$agentId'
+    | '/resources/job-search-sites'
     | '/agents/'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   FoundersRoute: typeof FoundersRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
+  ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
 }
 
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resources/job-search-sites': {
+      id: '/resources/job-search-sites'
+      path: '/resources/job-search-sites'
+      fullPath: '/resources/job-search-sites'
+      preLoaderRoute: typeof ResourcesJobSearchSitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agents/$agentId': {
       id: '/agents/$agentId'
       path: '/agents/$agentId'
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   FoundersRoute: FoundersRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
+  ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AgentsIndexRoute: AgentsIndexRoute,
 }
 export const routeTree = rootRouteImport
