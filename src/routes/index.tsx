@@ -10,14 +10,15 @@ const OG_IMAGE = `${SITE}${banner.url}`;
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MentorWise AI — AI Career Arsenal for Students" },
-      { name: "description", content: "MNC-grade AI agents for resumes, interviews, internships and growth — free for every student." },
-      { property: "og:title", content: "MentorWise AI — AI Career Arsenal for Students" },
-      { property: "og:description", content: "MNC-grade AI agents for resumes, interviews, internships and growth — free for every student." },
+      { title: "MentorWise AI | Free AI Career Operating System for Freshers" },
+      { name: "description", content: "Deploy 12 specialized Google GenAI agents acting as your 24/7 corporate career advisory board. 100% free and open-access tool." },
+      { property: "og:title", content: "MentorWise AI | Free AI Career Operating System for Freshers" },
+      { property: "og:description", content: "Deploy 12 specialized Google GenAI agents acting as your 24/7 corporate career advisory board. 100% free and open-access tool." },
       { property: "og:url", content: `${SITE}/` },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
     ],
+
     links: [{ rel: "canonical", href: `${SITE}/` }],
     scripts: [
       {

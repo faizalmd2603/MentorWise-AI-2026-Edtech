@@ -10,14 +10,15 @@ const FOUNDER_OG = `${SITE}${founder.url}`;
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
-      { title: "Founders — MentorWise AI" },
-      { name: "description", content: "Meet Mohammed Faizal M and Saif Ahmed Z — the Chennai-based student founders building MentorWise AI." },
-      { property: "og:title", content: "Founders — MentorWise AI" },
-      { property: "og:description", content: "Meet Mohammed Faizal M and Saif Ahmed Z — the Chennai-based student founders building MentorWise AI." },
+      { title: "About the Builders & Core Vision | MentorWise AI" },
+      { name: "description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z, building an ethical, corporate-social-responsibility driven tech infrastructure out of Chennai to democratize employment access." },
+      { property: "og:title", content: "About the Builders & Core Vision | MentorWise AI" },
+      { property: "og:description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — building MentorWise AI from Chennai to democratize employment access." },
       { property: "og:url", content: `${SITE}/founders` },
       { property: "og:image", content: FOUNDER_OG },
       { name: "twitter:image", content: FOUNDER_OG },
     ],
+
     links: [{ rel: "canonical", href: `${SITE}/founders` }],
   }),
   component: Founders,
