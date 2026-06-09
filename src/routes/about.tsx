@@ -7,14 +7,15 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — MentorWise AI" },
-      { name: "description", content: "How MentorWise AI is democratizing elite career tooling for every student through a globally unique AI agent ecosystem." },
-      { property: "og:title", content: "About — MentorWise AI" },
-      { property: "og:description", content: "How MentorWise AI is democratizing elite career tooling for every student through a globally unique AI agent ecosystem." },
+      { title: "About the Builders & Core Vision | MentorWise AI" },
+      { name: "description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z, building an ethical, corporate-social-responsibility driven tech infrastructure out of Chennai to democratize employment access." },
+      { property: "og:title", content: "About the Builders & Core Vision | MentorWise AI" },
+      { property: "og:description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — building MentorWise AI from Chennai to democratize employment access." },
       { property: "og:url", content: `${SITE}/about` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/about` }],
   }),
+
   component: About,
 });
 
