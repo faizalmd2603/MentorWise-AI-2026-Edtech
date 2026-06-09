@@ -10,6 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as MentorlinkRouteImport } from './routes/mentorlink'
+import { Route as InterviewRouteImport } from './routes/interview'
+import { Route as InternshipsRouteImport } from './routes/internships'
 import { Route as FoundersRouteImport } from './routes/founders'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
@@ -21,6 +25,26 @@ import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeRoute = ResumeRouteImport.update({
+  id: '/resume',
+  path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentorlinkRoute = MentorlinkRouteImport.update({
+  id: '/mentorlink',
+  path: '/mentorlink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewRoute = InterviewRouteImport.update({
+  id: '/interview',
+  path: '/interview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternshipsRoute = InternshipsRouteImport.update({
+  id: '/internships',
+  path: '/internships',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FoundersRoute = FoundersRouteImport.update({
@@ -64,6 +88,10 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/founders': typeof FoundersRoute
+  '/internships': typeof InternshipsRoute
+  '/interview': typeof InterviewRoute
+  '/mentorlink': typeof MentorlinkRoute
+  '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -74,6 +102,10 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/founders': typeof FoundersRoute
+  '/internships': typeof InternshipsRoute
+  '/interview': typeof InterviewRoute
+  '/mentorlink': typeof MentorlinkRoute
+  '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -85,6 +117,10 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/founders': typeof FoundersRoute
+  '/internships': typeof InternshipsRoute
+  '/interview': typeof InterviewRoute
+  '/mentorlink': typeof MentorlinkRoute
+  '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -97,6 +133,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/founders'
+    | '/internships'
+    | '/interview'
+    | '/mentorlink'
+    | '/resume'
     | '/sitemap.xml'
     | '/agents/$agentId'
     | '/resources/job-search-sites'
@@ -107,6 +147,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/founders'
+    | '/internships'
+    | '/interview'
+    | '/mentorlink'
+    | '/resume'
     | '/sitemap.xml'
     | '/agents/$agentId'
     | '/resources/job-search-sites'
@@ -117,6 +161,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/founders'
+    | '/internships'
+    | '/interview'
+    | '/mentorlink'
+    | '/resume'
     | '/sitemap.xml'
     | '/agents/$agentId'
     | '/resources/job-search-sites'
@@ -128,6 +176,10 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   FoundersRoute: typeof FoundersRoute
+  InternshipsRoute: typeof InternshipsRoute
+  InterviewRoute: typeof InterviewRoute
+  MentorlinkRoute: typeof MentorlinkRoute
+  ResumeRoute: typeof ResumeRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
@@ -141,6 +193,34 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume': {
+      id: '/resume'
+      path: '/resume'
+      fullPath: '/resume'
+      preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentorlink': {
+      id: '/mentorlink'
+      path: '/mentorlink'
+      fullPath: '/mentorlink'
+      preLoaderRoute: typeof MentorlinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview': {
+      id: '/interview'
+      path: '/interview'
+      fullPath: '/interview'
+      preLoaderRoute: typeof InterviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internships': {
+      id: '/internships'
+      path: '/internships'
+      fullPath: '/internships'
+      preLoaderRoute: typeof InternshipsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/founders': {
@@ -200,6 +280,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   FoundersRoute: FoundersRoute,
+  InternshipsRoute: InternshipsRoute,
+  InterviewRoute: InterviewRoute,
+  MentorlinkRoute: MentorlinkRoute,
+  ResumeRoute: ResumeRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
