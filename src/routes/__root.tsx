@@ -115,7 +115,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             height: 512,
           },
           image: "https://mentorwiseaiedtechservice.lovable.app/__l5e/assets-v1/1b0ef6b9-d92b-42d1-a7c5-510c337e758e/mw-logo-3d.jpeg",
-          description: "MentorWise AI is a 100% free, 12-agent Generative AI career operating system and EdTech platform engineered for college students and freshers. It provides ATS resume building, mock interview simulation, LinkedIn personal branding, free internships, courses and exam prep — built on Google GenAI.",
+          description: "MentorWise AI is a 100% free, 12-agent Generative AI career operating system and EdTech platform engineered for college students and freshers. It provides a Resume Optimiser, Interview Coach, LinkedIn Branding Agent, Internship Scout, Courses Curator, Projects & Assignment Agent, Exam Agent, Email Specialist, Humaniser, Social Media Agent and 1-on-1 Mentor — built on Google GenAI.",
           foundingDate: "2025",
           foundingLocation: { "@type": "Place", name: "Chennai, Tamil Nadu, India" },
           areaServed: "Worldwide",
