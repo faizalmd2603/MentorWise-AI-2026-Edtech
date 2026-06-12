@@ -32,10 +32,10 @@ function ResumePage() {
             <FileText className="h-3.5 w-3.5" /> Resume Agent
           </div>
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
-            Free <span className="text-gradient">ATS Resume Builder</span> for freshers & college students.
+            Free <span className="text-gradient">Resume Optimiser</span> for freshers & college students.
           </h1>
           <p className="mt-5 max-w-3xl text-muted-foreground">
-            Reverse-engineer enterprise recruitment software. MentorWise AI's resume agent crafts a structurally flawless, ATS-compliant resume engineered to clear the top MNC hiring filters used by Google, Microsoft, Deloitte and TCS.
+            Reverse-engineer enterprise recruitment software. MentorWise AI's resume agent crafts a structurally flawless, optimised resume engineered to clear the top MNC hiring filters used by Google, Microsoft, Deloitte and TCS.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/agents" className="rounded-full bg-cyber px-5 py-3 text-sm font-semibold text-primary-foreground hover:scale-[1.03] hover:brightness-110 transition glow-cyan">Launch Resume Agent</Link>
