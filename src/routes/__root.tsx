@@ -164,7 +164,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               name: "What is MentorWise AI?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "MentorWise AI is a 100% free, 12-agent Generative AI career platform for college students and freshers. It offers an ATS resume builder, mock interview simulator, LinkedIn growth agent, free internship scout, courses curator and exam prep — all powered by Google GenAI.",
+                text: "MentorWise AI is a 100% free, 12-agent Generative AI career platform for college students and freshers. It offers a Resume Optimiser, Interview Coach, LinkedIn Branding Agent, Internship Scout, Courses Curator, Projects & Assignment Agent, Exam Agent, Email Specialist, Humaniser, Social Media Agent and 1-on-1 Mentor — all powered by Google GenAI.",
               },
             },
             {
