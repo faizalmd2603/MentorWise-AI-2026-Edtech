@@ -368,17 +368,3 @@ function Popover({
   );
 }
 
-// HTML sanitizer (client-side render). Server also sanitizes before email.
-export function sanitizeHtml(html: string): string {
-  // Lazy import keeps DOMPurify out of any non-React paths
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const DOMPurify = require("isomorphic-dompurify").default;
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      "p","br","strong","em","u","s","h1","h2","h3","ul","ol","li","blockquote",
-      "code","pre","a","img","span","hr",
-    ],
-    ALLOWED_ATTR: ["href","target","rel","src","alt","style","class"],
-    ALLOWED_URI_REGEXP: /^(?:https?:|data:image\/)/i,
-  });
-}
