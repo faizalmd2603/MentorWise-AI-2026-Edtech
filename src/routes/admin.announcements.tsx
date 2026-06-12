@@ -8,10 +8,14 @@ import {
   createAnnouncement,
   deleteAnnouncement,
   listAnnouncements,
-  getMe,
 } from "@/lib/announcements.functions";
 import { ShieldCheck, Loader2, Send, Trash2 } from "lucide-react";
 import { RichEditor } from "@/components/RichEditor";
+
+const ADMIN_EMAILS = [
+  "mentorwiseaiedtech@gmail.com",
+  "saifahmedmentorwise@gmail.com",
+];
 
 export const Route = createFileRoute("/admin/announcements")({
   head: () => ({
@@ -28,7 +32,6 @@ function AdminPage() {
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const meFn = useServerFn(getMe);
   const createFn = useServerFn(createAnnouncement);
   const deleteFn = useServerFn(deleteAnnouncement);
   const listFn = useServerFn(listAnnouncements);
@@ -36,30 +39,49 @@ function AdminPage() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
+
+    function evaluate(email: string | null | undefined) {
+      if (cancelled) return;
+      if (!email) {
         navigate({ to: "/auth" });
         return;
       }
-      try {
-        const res = await meFn();
-        if (cancelled) return;
-        if (!res.isAdmin) {
-          navigate({ to: "/feed" });
-          return;
-        }
-        setIsAdmin(true);
-      } catch {
-        navigate({ to: "/auth" });
-      } finally {
-        if (!cancelled) setReady(true);
+      const lower = email.toLowerCase();
+      if (!ADMIN_EMAILS.includes(lower)) {
+        navigate({ to: "/feed" });
+        return;
       }
-    })();
+      setIsAdmin(true);
+      setReady(true);
+    }
+
+    // First, check existing session synchronously from storage
+    supabase.auth.getSession().then(({ data }) => {
+      if (cancelled) return;
+      const email = data.session?.user?.email ?? null;
+      if (email) {
+        evaluate(email);
+      }
+      // If no session yet, wait for onAuthStateChange below (INITIAL_SESSION)
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      const email = session?.user?.email ?? null;
+      // Ignore token-refresh churn; only act when we have a user or explicit sign-out
+      if (email) {
+        evaluate(email);
+      } else if (_event === "SIGNED_OUT") {
+        if (!cancelled) navigate({ to: "/auth" });
+      } else if (_event === "INITIAL_SESSION" && !session) {
+        if (!cancelled) navigate({ to: "/auth" });
+      }
+    });
+
     return () => {
       cancelled = true;
+      sub.subscription.unsubscribe();
     };
-  }, [meFn, navigate]);
+  }, [navigate]);
 
   const list = useQuery({
     queryKey: ["announcements"],
