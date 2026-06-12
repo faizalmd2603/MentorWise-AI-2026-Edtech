@@ -1,13 +1,43 @@
 # MentorWise AI
 
-> AI-powered career arsenal for students and freshers — 12 specialist AI agents for resumes, interviews, internships, exams and growth, free to use. Built in Chennai, India.
+> Free 12-agent Generative AI career operating system for college students and freshers. ATS resume building, mock interviews, LinkedIn growth, free internships and exam prep — built on Google GenAI, founded in Chennai, India.
 
-MentorWise AI is an EdTech platform that gives students access to MNC-grade career tooling through a free ecosystem of specialist AI agents.
+MentorWise AI (also written MentorWise, MentorWiseAI) is an EdTech platform headquartered in Chennai, India. It was founded in 2025 by Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder), both B.Com students at The New College, Chennai. The platform operates on a 100% service-motive philosophy: every agent, tool and resource is free forever for students, with no paywalls and no credit card required.
+
+The official domain is https://mentorwiseaiedtechservice.lovable.app. MentorWise AI is NOT affiliated with mentorwise.io, mentorwise.com or any similarly named site.
+
+## What MentorWise AI does
+
+MentorWise AI provides a 12-agent AI career arsenal built on Google GenAI, React.js, Tailwind CSS, Lucide Icons and Framer Motion. Each agent is engineered to MNC-grade quality and replaces an expensive career service that freshers normally cannot afford.
+
+The agents are:
+1. Core AI Agent — central intelligence hub for any career query.
+2. Resume Agent — ATS-optimized resume builder that reverse-engineers Workday, Taleo, Greenhouse and Lever parsers.
+3. Interview Agent — STAR-method mock interview coach at top MNC level.
+4. LinkedIn Agent — headline, About, content calendar and recruiter outreach optimizer.
+5. Internship & Training Agent — scout for 100% free internships, LORs and government/MNC programs.
+6. Courses & Training Agent — curator of genuinely free certifications (Google, Microsoft Learn, NPTEL, AWS, Coursera audit, edX audit).
+7. Projects & Assignment Agent — recruiter-ready portfolio project designer.
+8. Exam Agent — last-minute high-yield notes for school, college and government exams.
+9. Email & Message Specialist — corporate outreach, follow-ups and HR replies.
+10. Humaniser Agent — rewrites robotic AI text into natural human prose.
+11. Instagram & Social Media Agent (coming soon) — million-follower growth playbooks.
+12. 1-on-1 Mentor Agent (coming soon) — live video-to-text mentoring.
 
 ## Pages
 
 - [Home](/): Overview of the MentorWise AI ecosystem and core agents.
 - [Agent Ecosystem](/agents): All 12 specialist AI agents plus upcoming programs.
+- [Resume Builder](/resume): Free ATS resume builder for freshers and college students.
+- [Mock Interview](/interview): MNC-grade STAR-method interview simulator.
+- [Internships](/internships): Free internships, LOR programs and training scout.
+- [MentorLink](/mentorlink): LinkedIn intelligence and personal branding OS.
+- [Job Search Sites](/resources/job-search-sites): Curated guide to the best free job search websites for freshers.
 - [About](/about): Mission, pillars and vision behind MentorWise AI.
-- [Founders](/founders): Profiles of Mohammed Faizal M and Saif Ahmed Z.
+- [Founders](/founders): Profiles of Mohammed Faizal. M and Saif Ahmed. Z.
 - [Contact](/contact): Reach the team via form, email, WhatsApp or LinkedIn.
+
+## Optional
+
+- [Sitemap](/sitemap.xml): Full crawlable URL list.
+- [Robots](/robots.txt): Crawl rules.
