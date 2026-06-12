@@ -7,10 +7,10 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/resume")({
   head: () => ({
     meta: [
-      { title: "Free ATS Resume Builder for Freshers & College Students | MentorWise AI" },
-      { name: "description", content: "Reverse-engineer enterprise recruitment software. Build a structurally flawless, ATS-compliant resume engineered to clear top MNC hiring filters." },
-      { property: "og:title", content: "Free ATS Resume Builder for Freshers & College Students | MentorWise AI" },
-      { property: "og:description", content: "Build a structurally flawless, ATS-compliant resume engineered to clear top MNC hiring filters. 100% free for students." },
+      { title: "Free Resume Optimiser for Freshers & College Students | MentorWise AI" },
+      { name: "description", content: "Optimise your resume with AI. Get recruiter-ready, impact-driven bullet points and structurally flawless formatting engineered to clear top MNC hiring filters. 100% free for students." },
+      { property: "og:title", content: "Free Resume Optimiser for Freshers & College Students | MentorWise AI" },
+      { property: "og:description", content: "Optimise your resume with AI. Get recruiter-ready, impact-driven bullet points and structurally flawless formatting engineered to clear top MNC hiring filters. 100% free for students." },
       { property: "og:url", content: `${SITE}/resume` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/resume` }],
