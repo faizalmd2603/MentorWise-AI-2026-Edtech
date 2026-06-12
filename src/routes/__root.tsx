@@ -127,7 +127,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "Artificial Intelligence",
             "Generative AI",
             "Career Guidance",
-            "ATS Resume Building",
+            "Resume Optimiser",
             "Mock Interview Simulation",
             "LinkedIn Personal Branding",
             "Free Internships for Students",
