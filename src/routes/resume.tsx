@@ -20,7 +20,7 @@ export const Route = createFileRoute("/resume")({
 
 function ResumePage() {
   const features = [
-    { icon: ShieldCheck, title: "ATS-Bypassing Architecture", text: "Structurally optimized to clear Workday, Taleo, Greenhouse and Lever parsers without keyword stuffing." },
+    { icon: ShieldCheck, title: "Resume Optimiser Engine", text: "Structurally optimized to clear Workday, Taleo, Greenhouse and Lever parsers without keyword stuffing." },
     { icon: Zap, title: "Recruiter-Ready in Minutes", text: "Google GenAI translates raw experience into MNC-grade bullet points that quantify impact." },
     { icon: FileText, title: "Fresher-First Templates", text: "Engineered for zero-experience students — projects, coursework and internships positioned like real wins." },
   ];
