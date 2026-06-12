@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebSite",
           name: "MentorWise AI",
           url: SITE,
-          description: "AI career arsenal for students — 12 specialist agents for resumes, interviews, internships and growth.",
+          description: "Free 12-agent AI career stack for students. Resume Optimiser, Interview Coach, LinkedIn Agent, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media & 1-on-1 Mentor — all powered by Google GenAI.",
         }),
       },
     ],
