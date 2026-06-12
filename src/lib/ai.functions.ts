@@ -2,13 +2,22 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { AGENTS } from "./agents";
 
+const Attachment = z.object({
+  kind: z.enum(["image", "file"]),
+  name: z.string().min(1).max(200),
+  mime: z.string().min(1).max(120),
+  // data URL (data:<mime>;base64,...) — capped at ~8MB encoded
+  dataUrl: z.string().min(16).max(11_000_000),
+});
+
 const ChatInput = z.object({
   agentId: z.string().min(1).max(40),
   messages: z
     .array(
       z.object({
         role: z.enum(["user", "assistant"]),
-        content: z.string().min(1).max(8000),
+        content: z.string().max(8000),
+        attachments: z.array(Attachment).max(4).optional(),
       }),
     )
     .min(1)
@@ -16,7 +25,26 @@ const ChatInput = z.object({
 });
 
 const SHARED_STYLE_RULES =
-  "Style rules: write like a real conversational AI assistant. Never use markdown headings (no #, ##, ###), never use asterisks for bold or italics, never use bullet symbols like - or *. Use plain prose, short paragraphs, and where lists are essential use numbered lines like 1. 2. 3. Keep tone professional, warm, and globally polished. Keep replies concise to respect free-tier limits but maintain MNC-level quality. If the user asks for something outside your scope, redirect them to the correct MentorWise AI agent.";
+  "Style rules: write like a real conversational AI assistant. Never use markdown headings (no #, ##, ###), never use asterisks for bold or italics, never use bullet symbols like - or *. Use plain prose, short paragraphs, and where lists are essential use numbered lines like 1. 2. 3. Keep tone professional, warm, and globally polished. Keep replies concise to respect free-tier limits but maintain MNC-level quality. If the user is sharing an image, photo, document or file, analyse it carefully and reference what you actually see in it. If the user asks for something outside your scope, redirect them to the correct MentorWise AI agent.";
+
+type Part =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } }
+  | { type: "file"; file: { filename: string; file_data: string } };
+
+function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]): string | Part[] {
+  if (!attachments || attachments.length === 0) return text;
+  const parts: Part[] = [];
+  if (text.trim()) parts.push({ type: "text", text });
+  for (const a of attachments) {
+    if (a.kind === "image" || a.mime.startsWith("image/")) {
+      parts.push({ type: "image_url", image_url: { url: a.dataUrl } });
+    } else {
+      parts.push({ type: "file", file: { filename: a.name, file_data: a.dataUrl } });
+    }
+  }
+  return parts;
+}
 
 export const chatWithAgent = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ChatInput.parse(input))
@@ -37,10 +65,13 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
-        max_tokens: 700,
+        max_tokens: 900,
         messages: [
           { role: "system", content: systemPrompt },
-          ...data.messages,
+          ...data.messages.map((m) => ({
+            role: m.role,
+            content: buildContent(m.content, m.attachments),
+          })),
         ],
       }),
     });
