@@ -11,6 +11,7 @@ import {
   getMe,
 } from "@/lib/announcements.functions";
 import { ShieldCheck, Loader2, Send, Trash2 } from "lucide-react";
+import { RichEditor } from "@/components/RichEditor";
 
 export const Route = createFileRoute("/admin/announcements")({
   head: () => ({
@@ -67,16 +68,18 @@ function AdminPage() {
   });
 
   const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [bodyHtml, setBodyHtml] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  const bodyPlain = bodyHtml.replace(/<[^>]+>/g, "").trim();
+
   const createMut = useMutation({
-    mutationFn: (vars: { title: string; body: string }) => createFn({ data: vars }),
+    mutationFn: (vars: { title: string; bodyHtml: string }) => createFn({ data: vars }),
     onSuccess: () => {
       setTitle("");
-      setBody("");
-      setSuccess("Posted. Emails are being delivered to all members.");
+      setBodyHtml("");
+      setSuccess("Published. Your post is live on the feed and emails are being delivered to all members.");
       qc.invalidateQueries({ queryKey: ["announcements"] });
       setTimeout(() => setSuccess(null), 6000);
     },
@@ -125,7 +128,7 @@ function AdminPage() {
           onSubmit={(e) => {
             e.preventDefault();
             setSubmitError(null);
-            createMut.mutate({ title: title.trim(), body: body.trim() });
+            createMut.mutate({ title: title.trim(), bodyHtml });
           }}
           className="space-y-4 rounded-2xl border border-border bg-card p-6"
         >
@@ -133,7 +136,7 @@ function AdminPage() {
             <label className="mb-1.5 block text-sm font-medium text-foreground">Title</label>
             <input
               required
-              maxLength={160}
+              maxLength={200}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What's the headline?"
@@ -142,32 +145,28 @@ function AdminPage() {
           </div>
           <div>
             <label className="mb-1.5 block text-sm font-medium text-foreground">Message</label>
-            <textarea
-              required
-              maxLength={8000}
-              rows={8}
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              placeholder="Write your update… Line breaks are preserved."
-              className="w-full resize-y rounded-lg border border-input bg-background px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground/30"
+            <RichEditor
+              value={bodyHtml}
+              onChange={setBodyHtml}
+              placeholder="Share an update, link, or image… Format with bold, colors, bullets, emojis and more."
             />
-            <div className="mt-1 text-right text-xs text-muted-foreground">{body.length} / 8000</div>
+            <div className="mt-1 text-right text-xs text-muted-foreground">{bodyPlain.length} characters</div>
           </div>
 
           {submitError && (
-            <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+            <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-700 dark:text-red-200">
               {submitError}
             </div>
           )}
           {success && (
-            <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">
+            <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-200">
               {success}
             </div>
           )}
 
           <button
             type="submit"
-            disabled={createMut.isPending || !title.trim() || !body.trim()}
+            disabled={createMut.isPending || !title.trim() || bodyPlain.length < 3}
             className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-2.5 text-sm font-semibold text-background transition disabled:opacity-50"
           >
             {createMut.isPending ? (
@@ -175,7 +174,7 @@ function AdminPage() {
             ) : (
               <Send className="h-4 w-4" />
             )}
-            Post & email all members
+            Publish & email all members
           </button>
         </form>
 
