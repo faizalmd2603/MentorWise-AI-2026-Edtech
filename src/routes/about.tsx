@@ -56,7 +56,7 @@ function About() {
         <div className="mt-16 rounded-3xl glass-strong p-8 sm:p-10">
           <h2 className="font-display text-2xl font-bold">Built for autonomy</h2>
           <p className="mt-3 text-muted-foreground max-w-3xl">
-            From the first ATS-friendly resume to the final offer letter, MentorWise AI helps you operate like a one-person elite career team. Every agent is composable, every output is recruiter-ready, and every interaction respects your time and our shared mission: making elite outcomes the new baseline for students everywhere.
+            From the first optimised resume to the final offer letter, MentorWise AI helps you operate like a one-person elite career team. Every agent is composable, every output is recruiter-ready, and every interaction respects your time and our shared mission: making elite outcomes the new baseline for students everywhere.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/agents" className="rounded-full bg-cyber px-5 py-3 text-sm font-semibold text-primary-foreground hover:scale-[1.03] hover:brightness-110 transition glow-cyan">Explore the ecosystem</Link>
