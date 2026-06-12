@@ -150,7 +150,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: "MentorWise AI",
           publisher: { "@id": "https://mentorwiseaiedtechservice.lovable.app/#organization" },
           inLanguage: "en",
-          description: "Free 12-agent AI career operating system for students and freshers.",
+          description: "Free 12-agent AI career operating system for students and freshers. Resume Optimiser, Interview Coach, LinkedIn Branding, Internship Scout, Courses, Projects, Exams, Email, Humaniser, Social Media & 1-on-1 Mentor — all powered by Google GenAI.",
         }),
       },
       {
