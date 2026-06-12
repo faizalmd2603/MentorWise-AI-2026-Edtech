@@ -11,9 +11,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "MentorWise AI | Free AI Career Operating System for Freshers" },
-      { name: "description", content: "Deploy 12 specialized Google GenAI agents acting as your 24/7 corporate career advisory board. 100% free and open-access tool." },
+      { name: "description", content: "MentorWise AI — free 12-agent AI career stack for students. Resume Optimiser, Interview Coach, LinkedIn Agent, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media & 1-on-1 Mentor. 100% free forever." },
       { property: "og:title", content: "MentorWise AI | Free AI Career Operating System for Freshers" },
-      { property: "og:description", content: "Deploy 12 specialized Google GenAI agents acting as your 24/7 corporate career advisory board. 100% free and open-access tool." },
+      { property: "og:description", content: "MentorWise AI — free 12-agent AI career stack for students. Resume Optimiser, Interview Coach, LinkedIn Agent, Internship Scout, Courses, Projects, Exams & more. 100% free forever." },
       { property: "og:url", content: `${SITE}/` },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebSite",
           name: "MentorWise AI",
           url: SITE,
-          description: "AI career arsenal for students — 12 specialist agents for resumes, interviews, internships and growth.",
+          description: "Free 12-agent AI career stack for students. Resume Optimiser, Interview Coach, LinkedIn Agent, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media & 1-on-1 Mentor — all powered by Google GenAI.",
         }),
       },
     ],

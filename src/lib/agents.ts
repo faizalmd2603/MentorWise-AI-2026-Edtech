@@ -23,8 +23,8 @@ export const AGENTS: Agent[] = [
   {
     id: "resume",
     name: "Resume Agent",
-    short: "ATS-optimized resume expert",
-    description: "Pro-level engine that reverse-engineers recruiter and ATS algorithms.",
+    short: "Resume Optimiser expert",
+    description: "Pro-level engine that reverse-engineers recruiter algorithms to optimise your resume for top MNC filters.",
     icon: "FileText",
     accent: "cyan",
     system:

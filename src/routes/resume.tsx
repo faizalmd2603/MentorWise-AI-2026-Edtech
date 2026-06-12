@@ -7,10 +7,10 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/resume")({
   head: () => ({
     meta: [
-      { title: "Free ATS Resume Builder for Freshers & College Students | MentorWise AI" },
-      { name: "description", content: "Reverse-engineer enterprise recruitment software. Build a structurally flawless, ATS-compliant resume engineered to clear top MNC hiring filters." },
-      { property: "og:title", content: "Free ATS Resume Builder for Freshers & College Students | MentorWise AI" },
-      { property: "og:description", content: "Build a structurally flawless, ATS-compliant resume engineered to clear top MNC hiring filters. 100% free for students." },
+      { title: "Free Resume Optimiser for Freshers & College Students | MentorWise AI" },
+      { name: "description", content: "Optimise your resume with AI. Get recruiter-ready, impact-driven bullet points and structurally flawless formatting engineered to clear top MNC hiring filters. 100% free for students." },
+      { property: "og:title", content: "Free Resume Optimiser for Freshers & College Students | MentorWise AI" },
+      { property: "og:description", content: "Optimise your resume with AI. Get recruiter-ready, impact-driven bullet points and structurally flawless formatting engineered to clear top MNC hiring filters. 100% free for students." },
       { property: "og:url", content: `${SITE}/resume` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/resume` }],
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/resume")({
 
 function ResumePage() {
   const features = [
-    { icon: ShieldCheck, title: "ATS-Bypassing Architecture", text: "Structurally optimized to clear Workday, Taleo, Greenhouse and Lever parsers without keyword stuffing." },
+    { icon: ShieldCheck, title: "Resume Optimiser Engine", text: "Structurally optimized to clear Workday, Taleo, Greenhouse and Lever parsers without keyword stuffing." },
     { icon: Zap, title: "Recruiter-Ready in Minutes", text: "Google GenAI translates raw experience into MNC-grade bullet points that quantify impact." },
     { icon: FileText, title: "Fresher-First Templates", text: "Engineered for zero-experience students — projects, coursework and internships positioned like real wins." },
   ];
@@ -32,10 +32,10 @@ function ResumePage() {
             <FileText className="h-3.5 w-3.5" /> Resume Agent
           </div>
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
-            Free <span className="text-gradient">ATS Resume Builder</span> for freshers & college students.
+            Free <span className="text-gradient">Resume Optimiser</span> for freshers & college students.
           </h1>
           <p className="mt-5 max-w-3xl text-muted-foreground">
-            Reverse-engineer enterprise recruitment software. MentorWise AI's resume agent crafts a structurally flawless, ATS-compliant resume engineered to clear the top MNC hiring filters used by Google, Microsoft, Deloitte and TCS.
+            Reverse-engineer enterprise recruitment software. MentorWise AI's resume agent crafts a structurally flawless, optimised resume engineered to clear the top MNC hiring filters used by Google, Microsoft, Deloitte and TCS.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/agents" className="rounded-full bg-cyber px-5 py-3 text-sm font-semibold text-primary-foreground hover:scale-[1.03] hover:brightness-110 transition glow-cyan">Launch Resume Agent</Link>
