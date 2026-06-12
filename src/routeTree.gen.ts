@@ -15,12 +15,15 @@ import { Route as MentorlinkRouteImport } from './routes/mentorlink'
 import { Route as InterviewRouteImport } from './routes/interview'
 import { Route as InternshipsRouteImport } from './routes/internships'
 import { Route as FoundersRouteImport } from './routes/founders'
+import { Route as FeedRouteImport } from './routes/feed'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
+import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -52,9 +55,19 @@ const FoundersRoute = FoundersRouteImport.update({
   path: '/founders',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -82,17 +95,25 @@ const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
   path: '/agents/$agentId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
+  id: '/admin/announcements',
+  path: '/admin/announcements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
   '/mentorlink': typeof MentorlinkRoute
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
@@ -100,13 +121,16 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
   '/mentorlink': typeof MentorlinkRoute
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents': typeof AgentsIndexRoute
@@ -115,13 +139,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
   '/mentorlink': typeof MentorlinkRoute
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
@@ -131,13 +158,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
     | '/contact'
+    | '/feed'
     | '/founders'
     | '/internships'
     | '/interview'
     | '/mentorlink'
     | '/resume'
     | '/sitemap.xml'
+    | '/admin/announcements'
     | '/agents/$agentId'
     | '/resources/job-search-sites'
     | '/agents/'
@@ -145,13 +175,16 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/auth'
     | '/contact'
+    | '/feed'
     | '/founders'
     | '/internships'
     | '/interview'
     | '/mentorlink'
     | '/resume'
     | '/sitemap.xml'
+    | '/admin/announcements'
     | '/agents/$agentId'
     | '/resources/job-search-sites'
     | '/agents'
@@ -159,13 +192,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/auth'
     | '/contact'
+    | '/feed'
     | '/founders'
     | '/internships'
     | '/interview'
     | '/mentorlink'
     | '/resume'
     | '/sitemap.xml'
+    | '/admin/announcements'
     | '/agents/$agentId'
     | '/resources/job-search-sites'
     | '/agents/'
@@ -174,13 +210,16 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
+  FeedRoute: typeof FeedRoute
   FoundersRoute: typeof FoundersRoute
   InternshipsRoute: typeof InternshipsRoute
   InterviewRoute: typeof InterviewRoute
   MentorlinkRoute: typeof MentorlinkRoute
   ResumeRoute: typeof ResumeRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
@@ -230,11 +269,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FoundersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -272,19 +325,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentsAgentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/announcements': {
+      id: '/admin/announcements'
+      path: '/admin/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AdminAnnouncementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
+  FeedRoute: FeedRoute,
   FoundersRoute: FoundersRoute,
   InternshipsRoute: InternshipsRoute,
   InterviewRoute: InterviewRoute,
   MentorlinkRoute: MentorlinkRoute,
   ResumeRoute: ResumeRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AgentsIndexRoute: AgentsIndexRoute,
@@ -292,3 +355,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

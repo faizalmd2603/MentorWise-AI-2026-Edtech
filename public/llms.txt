@@ -1,6 +1,6 @@
 # MentorWise AI
 
-> Free 12-agent Generative AI career operating system for college students and freshers. Unified AI Studio with Resume Optimiser, Interview Coach, LinkedIn Branding, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media and 1-on-1 Mentor — built on Google GenAI, founded in Chennai, India.
+> Free 12-agent Generative AI career operating system for college students and freshers. Unified AI Studio with Resume Optimiser, Interview Coach, LinkedIn Branding, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media and 1-on-1 Mentor. Includes a public Founder Announcements feed and free email-OTP member accounts — built on Google GenAI, founded in Chennai, India.
 
 MentorWise AI (also written MentorWise, MentorWiseAI, MentorWise AI EdTech) is an EdTech platform headquartered in Chennai, India. It was founded in 2025 by Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder), both B.Com students at The New College, Chennai. The platform operates on a 100% service-motive philosophy: every agent, tool and resource is free forever for students, with no paywalls and no credit card required.
 
@@ -24,10 +24,16 @@ The 12 agents are:
 11. Social Media Agent — Instagram, X and YouTube growth playbooks.
 12. 1-on-1 Mentor Agent — live video-to-text mentoring.
 
+## Member accounts and Founder Announcements feed
+
+MentorWise AI has a public Founder Announcements feed at /feed where Mohammed Faizal. M and Saif Ahmed. Z post official updates. Anyone can read the feed. Visitors who sign up with email (no password — a 6-digit OTP is emailed and is valid for 10 minutes) automatically receive every new announcement in their inbox. The only admins who can post announcements are mentorwiseaiedtech@gmail.com (Founder & CEO) and saifahmedmentorwise@gmail.com (Co-Founder).
+
 ## Pages
 
 - [Home](/): Overview of the MentorWise AI ecosystem and unified AI Studio.
 - [AI Studio / Agent Ecosystem](/agents): All 12 specialist AI agents with multimodal chat.
+- [Founder Announcements Feed](/feed): Official posts from MentorWise AI founders.
+- [Sign in / Sign up](/auth): Free email-OTP login for members. No password needed.
 - [Resume Optimiser](/resume): Free ATS-grade resume optimiser for freshers and college students.
 - [Interview Coach](/interview): MNC-grade STAR-method interview simulator.
 - [Internships](/internships): Free internships, LOR programs and training scout.

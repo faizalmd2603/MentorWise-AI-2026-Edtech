@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "MentorWise AI — Free 12-Agent AI Career Arsenal for Students" },
-      { name: "description", content: "MentorWise AI is a free 12-agent AI career operating system for students and freshers. Resume Optimiser, Interview Coach, LinkedIn Branding, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media & 1-on-1 Mentor — all powered by Google GenAI. 100% free forever." },
+      { name: "description", content: "MentorWise AI — free 12-agent AI career operating system for students. Resume Optimiser, Interview Coach, LinkedIn, Internships, Courses, Projects, Exams, Email, Humaniser, Social Media & 1-on-1 Mentor. Plus a Founder Announcements feed and free member accounts. 100% free, powered by Google GenAI." },
       { name: "author", content: "MentorWise AI" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "MentorWise AI" },
