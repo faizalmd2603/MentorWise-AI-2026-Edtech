@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { sanitizeAnnouncementHtml, htmlToPlainText } from "./sanitize";
 
 const ADMIN_EMAILS = new Set([
   "mentorwiseaiedtech@gmail.com",
@@ -12,7 +13,7 @@ export const listAnnouncements = createServerFn({ method: "GET" }).handler(
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("announcements")
-      .select("id, title, body, author_name, created_at")
+      .select("id, title, body, body_html, author_name, created_at")
       .order("created_at", { ascending: false })
       .limit(50);
     if (error) throw new Error("Could not load announcements");
@@ -22,11 +23,11 @@ export const listAnnouncements = createServerFn({ method: "GET" }).handler(
 
 export const createAnnouncement = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { title: string; body: string }) =>
+  .inputValidator((d: { title: string; bodyHtml: string }) =>
     z
       .object({
-        title: z.string().trim().min(3).max(160),
-        body: z.string().trim().min(3).max(8000),
+        title: z.string().trim().min(3).max(200),
+        bodyHtml: z.string().trim().min(3).max(200_000),
       })
       .parse(d),
   )
@@ -43,20 +44,24 @@ export const createAnnouncement = createServerFn({ method: "POST" })
         ? "Mohammed Faizal. M (Founder & CEO)"
         : "Saif Ahmed. Z (Co-Founder)";
 
+    const safeHtml = sanitizeAnnouncementHtml(data.bodyHtml);
+    const plainBody = htmlToPlainText(safeHtml).slice(0, 8000);
+
     const { data: ins, error: insErr } = await supabaseAdmin
       .from("announcements")
       .insert({
         author_id: context.userId,
         author_name: authorName,
         title: data.title,
-        body: data.body,
+        body: plainBody,
+        body_html: safeHtml,
       })
-      .select("id, title, body, author_name, created_at")
+      .select("id, title, body, body_html, author_name, created_at")
       .single();
     if (insErr || !ins) throw new Error("Could not save announcement");
 
     // Fan-out emails to all registered members (don't block the response on it)
-    void broadcastAnnouncement(ins.id, ins.title, ins.body, authorName);
+    void broadcastAnnouncement(ins.id, ins.title, safeHtml, authorName);
 
     return { announcement: ins };
   });
@@ -64,7 +69,7 @@ export const createAnnouncement = createServerFn({ method: "POST" })
 async function broadcastAnnouncement(
   announcementId: string,
   title: string,
-  body: string,
+  bodyHtml: string,
   authorName: string,
 ) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -75,9 +80,8 @@ async function broadcastAnnouncement(
     .select("email");
   if (!members || members.length === 0) return;
 
-  const tpl = announcementEmailTemplate({ title, body, authorName });
+  const tpl = announcementEmailTemplate({ title, bodyHtml, authorName });
 
-  // Sequential with tiny delay to stay well below Gmail's per-second limits
   for (const m of members) {
     const recipient = m.email;
     if (!recipient) continue;

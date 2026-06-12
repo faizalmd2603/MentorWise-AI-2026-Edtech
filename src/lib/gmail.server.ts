@@ -118,25 +118,25 @@ export function otpEmailTemplate(otp: string): { subject: string; html: string }
 
 export function announcementEmailTemplate(opts: {
   title: string;
-  body: string;
+  bodyHtml: string;
   authorName: string;
 }): { subject: string; html: string } {
-  // Escape user text to prevent HTML injection; preserve newlines as <br>.
   const esc = (s: string) =>
     s
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
-  const safeBody = esc(opts.body).replace(/\r?\n/g, "<br>");
+  // bodyHtml is sanitized server-side before reaching this template.
   return {
     subject: `${opts.title} — MentorWise AI announcement`,
     html: shell(`
       <div style="display:inline-block;padding:4px 10px;background:#eef2ff;color:#1e3a8a;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border-radius:999px;margin-bottom:14px;">Founder announcement</div>
       <h1 style="margin:0 0 10px 0;font-size:22px;line-height:1.3;color:#0b1220;">${esc(opts.title)}</h1>
       <p style="margin:0 0 18px 0;color:#374151;font-size:14px;">From <strong>${esc(opts.authorName)}</strong></p>
-      <div style="margin:0 0 22px 0;color:#0b1220;font-size:15px;line-height:1.65;">${safeBody}</div>
+      <div style="margin:0 0 22px 0;color:#0b1220;font-size:15px;line-height:1.65;">${opts.bodyHtml}</div>
       <a href="https://mentorwiseaiedtechservice.lovable.app/feed" style="display:inline-block;padding:11px 20px;background:#0b1220;color:#ffffff;text-decoration:none;border-radius:10px;font-weight:600;font-size:14px;">Open the feed</a>
     `),
   };
 }
+

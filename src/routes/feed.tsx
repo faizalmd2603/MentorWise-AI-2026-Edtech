@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { listAnnouncements } from "@/lib/announcements.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizeAnnouncementHtml } from "@/lib/sanitize";
 import { Megaphone, ShieldCheck, LogIn } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
@@ -145,9 +146,16 @@ function FeedPage() {
                   </time>
                 </div>
                 <h2 className="text-lg font-bold text-foreground sm:text-xl">{a.title}</h2>
-                <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/90">
-                  {a.body}
-                </p>
+                {a.body_html ? (
+                  <div
+                    className="prose prose-sm sm:prose-base dark:prose-invert mt-2 max-w-none text-foreground"
+                    dangerouslySetInnerHTML={{ __html: sanitizeAnnouncementHtml(a.body_html) }}
+                  />
+                ) : (
+                  <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/90">
+                    {a.body}
+                  </p>
+                )}
               </li>
             ))}
           </ol>
