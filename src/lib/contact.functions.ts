@@ -12,17 +12,33 @@ function b64url(s: string) {
   return Buffer.from(s, "utf8").toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
+// Strip CR/LF (and other control chars) from anything placed in an RFC-2822 header
+function safeHeader(v: string) {
+  return v.replace(/[\r\n\u0000-\u001F\u007F]+/g, " ").trim();
+}
+
+// Escape user-supplied values before embedding in HTML email bodies
+function esc(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function buildRfc2822({ to, subject, html, replyTo }: { to: string; subject: string; html: string; replyTo?: string }) {
   const headers = [
     `From: MentorWise AI <mentorwiseaiedtech@gmail.com>`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
+    `To: ${safeHeader(to)}`,
+    `Subject: ${safeHeader(subject)}`,
     `MIME-Version: 1.0`,
     `Content-Type: text/html; charset="UTF-8"`,
   ];
-  if (replyTo) headers.push(`Reply-To: ${replyTo}`);
+  if (replyTo) headers.push(`Reply-To: ${safeHeader(replyTo)}`);
   return `${headers.join("\r\n")}\r\n\r\n${html}`;
 }
+
 
 async function sendGmail(raw: string) {
   const lovable = process.env.LOVABLE_API_KEY;
@@ -95,9 +111,10 @@ const contactsBlock = `
 </table>`;
 
 function userEmailHtml(name: string, aiAnswer: string | null) {
+  const safeName = esc(name);
   const intro = aiAnswer
-    ? `<p style="margin:0 0 12px;">Hi ${name},</p><p style="margin:0 0 12px;">Thank you for reaching out to MentorWise AI. Our AI assistant has reviewed your query and prepared an initial response below. Our founders will follow up personally if you need anything deeper.</p><div style="padding:14px 16px;border-left:3px solid #00c8ff;background:#f5fbff;white-space:pre-wrap;border-radius:6px;">${aiAnswer.replace(/</g, "&lt;")}</div>`
-    : `<p style="margin:0 0 12px;">Hi ${name},</p><p style="margin:0 0 12px;">Thank you for reaching out to MentorWise AI. We've received your query and one of our founders will personally respond shortly. In the meantime you can reach us directly using the contact details below.</p>`;
+    ? `<p style="margin:0 0 12px;">Hi ${safeName},</p><p style="margin:0 0 12px;">Thank you for reaching out to MentorWise AI. Our AI assistant has reviewed your query and prepared an initial response below. Our founders will follow up personally if you need anything deeper.</p><div style="padding:14px 16px;border-left:3px solid #00c8ff;background:#f5fbff;white-space:pre-wrap;border-radius:6px;">${esc(aiAnswer)}</div>`
+    : `<p style="margin:0 0 12px;">Hi ${safeName},</p><p style="margin:0 0 12px;">Thank you for reaching out to MentorWise AI. We've received your query and one of our founders will personally respond shortly. In the meantime you can reach us directly using the contact details below.</p>`;
 
   return `<!doctype html><html><body style="margin:0;padding:24px;background:#f7f7fb;font-family:Inter,Arial,sans-serif;color:#0b0b1a;">
   <div style="max-width:620px;margin:0 auto;background:#ffffff;border-radius:14px;padding:28px;border:1px solid #ececf3;">
@@ -113,15 +130,16 @@ function userEmailHtml(name: string, aiAnswer: string | null) {
 function teamEmailHtml(payload: z.infer<typeof ContactInput>, aiAnswer: string | null) {
   return `<!doctype html><html><body style="font-family:Inter,Arial,sans-serif;padding:20px;color:#0b0b1a;">
     <h2 style="margin:0 0 12px;">New MentorWise AI contact query</h2>
-    <p><b>Name:</b> ${payload.fullName}</p>
-    <p><b>Email:</b> <a href="mailto:${payload.email}">${payload.email}</a></p>
-    <p><b>Occupation:</b> ${payload.occupation}</p>
+    <p><b>Name:</b> ${esc(payload.fullName)}</p>
+    <p><b>Email:</b> <a href="mailto:${esc(payload.email)}">${esc(payload.email)}</a></p>
+    <p><b>Occupation:</b> ${esc(payload.occupation)}</p>
     <p><b>Query:</b></p>
-    <div style="padding:12px;background:#f5f5fa;border-radius:8px;white-space:pre-wrap;">${payload.query.replace(/</g, "&lt;")}</div>
+    <div style="padding:12px;background:#f5f5fa;border-radius:8px;white-space:pre-wrap;">${esc(payload.query)}</div>
     <p style="margin-top:16px;"><b>AI auto-answer sent to user:</b></p>
-    <div style="padding:12px;background:#f0fbff;border-radius:8px;white-space:pre-wrap;">${(aiAnswer ?? "(escalated to founders — no AI auto-answer was sent)").replace(/</g, "&lt;")}</div>
+    <div style="padding:12px;background:#f0fbff;border-radius:8px;white-space:pre-wrap;">${esc(aiAnswer ?? "(escalated to founders — no AI auto-answer was sent)")}</div>
   </body></html>`;
 }
+
 
 export const submitContactForm = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ContactInput.parse(input))

@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { AGENTS } from "./agents";
+
 
 const Attachment = z.object({
   kind: z.enum(["image", "file"]),
@@ -47,8 +49,10 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
 }
 
 export const chatWithAgent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
   .handler(async ({ data }) => {
+
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI service is not configured.");
 
@@ -107,8 +111,10 @@ const ImageInput = z.object({
 });
 
 export const generateImage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ImageInput.parse(input))
   .handler(async ({ data }) => {
+
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI service is not configured.");
 
