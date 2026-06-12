@@ -9,16 +9,17 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/agents/")({
   head: () => ({
     meta: [
-      { title: "AI Agent Ecosystem — MentorWise AI" },
-      { name: "description", content: "Browse 12 specialist AI agents built for student careers — resumes, interviews, LinkedIn, internships, exams and more." },
-      { property: "og:title", content: "AI Agent Ecosystem — MentorWise AI" },
-      { property: "og:description", content: "Browse 12 specialist AI agents built for student careers — resumes, interviews, LinkedIn, internships, exams and more." },
+      { title: "AI Studio — 12 Specialist Agents | MentorWise AI" },
+      { name: "description", content: "One unified AI Studio with 12 specialist career agents — Resume Optimiser, Interview Coach, LinkedIn, Internship Scout, Courses, Exams, Email and more. Camera, file and image upload in every chat." },
+      { property: "og:title", content: "AI Studio — 12 Specialist Agents | MentorWise AI" },
+      { property: "og:description", content: "Unified LLM-style AI Studio with 12 specialist agents, ready-to-use prompts, camera capture and file uploads. 100% free." },
       { property: "og:url", content: `${SITE}/agents` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/agents` }],
   }),
   component: AgentsIndex,
 });
+
 
 const accentMap = {
   cyan: "from-cyber/30 to-cyber/0 text-cyber",
@@ -32,11 +33,21 @@ function AgentsIndex() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-3xl text-center animate-fade-up">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs text-cyber">
-            <Sparkles className="h-3.5 w-3.5" /> The Ecosystem
+            <Sparkles className="h-3.5 w-3.5" /> Unified AI Studio
           </div>
-          <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Your AI <span className="text-gradient">Agent Arsenal</span></h1>
-          <p className="mt-3 text-muted-foreground">Select an agent to start a private conversation. Every agent is tuned to deliver MNC-grade output within free-tier limits.</p>
+          <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Your AI <span className="text-gradient">Agent Studio</span></h1>
+          <p className="mt-3 text-muted-foreground">One LLM-style workspace, 12 specialist agents, ready-to-use prompts, camera capture and file uploads. Switch agents from the sidebar — your conversation, supercharged.</p>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <Link
+              to="/agents/$agentId"
+              params={{ agentId: "core" }}
+              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-cyber to-magenta px-5 py-2.5 text-sm font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+            >
+              <Sparkles className="h-4 w-4" /> Launch AI Studio
+            </Link>
+          </div>
         </div>
+
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {AGENTS.map((agent, idx) => {
