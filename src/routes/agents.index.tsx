@@ -84,21 +84,31 @@ function AgentsIndex() {
                 <Link
                   to="/agents/$agentId"
                   params={{ agentId: agent.id }}
-                  className="block h-full rounded-2xl glass p-6 transition hover:-translate-y-1 hover:glow-cyan"
+                  className="block h-full overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:glow-cyan"
                 >
-                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${accentMap[agent.accent]}`}>
-                    <IconComp className="h-6 w-6" />
-                  </div>
-                  <div className="mt-4 flex items-start justify-between gap-2">
-                    <h3 className="font-display text-lg font-semibold text-foreground leading-tight">{agent.name}</h3>
+                  <div className="relative aspect-square overflow-hidden bg-background/40">
+                    <img
+                      src={AGENT_IMAGES[agent.id]}
+                      alt={`${agent.name} — ${agent.short}`}
+                      width={1024}
+                      height={1024}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                    />
                     {agent.comingSoon && (
-                      <span className="shrink-0 rounded-full bg-magenta/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-magenta ring-1 ring-magenta/40">Soon</span>
+                      <span className="absolute right-3 top-3 rounded-full bg-magenta/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow">Soon</span>
                     )}
+                    <div className={`absolute left-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-background/70 backdrop-blur ${accentMap[agent.accent].split(" ").slice(-1).join(" ")}`}>
+                      <IconComp className="h-4 w-4" />
+                    </div>
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{agent.short}</div>
-                  <p className="mt-3 text-sm text-muted-foreground">{agent.description}</p>
-                  <div className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-cyber">
-                    {agent.comingSoon ? "Preview agent →" : "Launch chat →"}
+                  <div className="p-5">
+                    <h3 className="font-display text-lg font-semibold text-foreground leading-tight">{agent.name}</h3>
+                    <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{agent.short}</div>
+                    <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{agent.description}</p>
+                    <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyber">
+                      {agent.comingSoon ? "Preview agent →" : "Launch chat →"}
+                    </div>
                   </div>
                 </Link>
               </div>
