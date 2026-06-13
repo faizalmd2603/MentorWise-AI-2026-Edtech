@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import banner from "@/assets/mw-banner.jpeg.asset.json";
-import { ArrowRight, Sparkles, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, ExternalLink, Crown } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${banner.url}`;
