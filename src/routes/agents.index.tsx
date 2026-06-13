@@ -79,38 +79,57 @@ function AgentsIndex() {
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {AGENTS.map((agent, idx) => {
             const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[agent.icon] ?? Icons.Bot;
+            const locked = !!agent.comingSoon;
+            const inner = (
+              <>
+                <div className="relative aspect-square overflow-hidden bg-background/40">
+                  <img
+                    src={AGENT_IMAGES[agent.id]}
+                    alt={`${agent.name} — ${agent.short}`}
+                    width={1024}
+                    height={1024}
+                    loading="lazy"
+                    className={`h-full w-full object-cover transition duration-500 group-hover:scale-[1.03] ${locked ? "grayscale-[35%] opacity-80" : ""}`}
+                  />
+                  {locked && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-background/40 backdrop-blur-[2px]">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-background/80 px-3 py-1.5 text-xs font-semibold text-foreground ring-1 ring-border">
+                        <Lock className="h-3.5 w-3.5 text-magenta" /> Locked · Launching soon
+                      </span>
+                    </div>
+                  )}
+                  {locked && (
+                    <span className="absolute right-3 top-3 rounded-full bg-magenta/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow">Soon</span>
+                  )}
+                  <div className={`absolute left-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-background/70 backdrop-blur ${accentMap[agent.accent].split(" ").slice(-1).join(" ")}`}>
+                    <IconComp className="h-4 w-4" />
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-lg font-semibold text-foreground leading-tight">{agent.name}</h3>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{agent.short}</div>
+                  <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{agent.description}</p>
+                  <div className={`mt-4 inline-flex items-center gap-1 text-xs font-semibold ${locked ? "text-muted-foreground" : "text-cyber"}`}>
+                    {locked ? (<><Lock className="h-3 w-3" /> Locked</>) : "Launch chat →"}
+                  </div>
+                </div>
+              </>
+            );
             return (
               <div key={agent.id} className="group relative animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
-                <Link
-                  to="/agents/$agentId"
-                  params={{ agentId: agent.id }}
-                  className="block h-full overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:glow-cyan"
-                >
-                  <div className="relative aspect-square overflow-hidden bg-background/40">
-                    <img
-                      src={AGENT_IMAGES[agent.id]}
-                      alt={`${agent.name} — ${agent.short}`}
-                      width={1024}
-                      height={1024}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                    />
-                    {agent.comingSoon && (
-                      <span className="absolute right-3 top-3 rounded-full bg-magenta/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow">Soon</span>
-                    )}
-                    <div className={`absolute left-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-background/70 backdrop-blur ${accentMap[agent.accent].split(" ").slice(-1).join(" ")}`}>
-                      <IconComp className="h-4 w-4" />
-                    </div>
+                {locked ? (
+                  <div aria-disabled className="block h-full overflow-hidden rounded-2xl glass cursor-not-allowed">
+                    {inner}
                   </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-lg font-semibold text-foreground leading-tight">{agent.name}</h3>
-                    <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{agent.short}</div>
-                    <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{agent.description}</p>
-                    <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyber">
-                      {agent.comingSoon ? "Preview agent →" : "Launch chat →"}
-                    </div>
-                  </div>
-                </Link>
+                ) : (
+                  <Link
+                    to="/agents/$agentId"
+                    params={{ agentId: agent.id }}
+                    className="block h-full overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:glow-cyan"
+                  >
+                    {inner}
+                  </Link>
+                )}
               </div>
             );
           })}
