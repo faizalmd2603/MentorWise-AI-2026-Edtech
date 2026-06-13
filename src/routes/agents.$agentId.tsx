@@ -291,41 +291,56 @@ function AgentChat() {
 
       <div className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8">
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-          {/* Sidebar — agent selection */}
+          {/* Sidebar — agent selection (Gemini-inspired) */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <Link to="/agents" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-3.5 w-3.5" /> All agents
             </Link>
-            <div className="mt-3 max-h-[78vh] overflow-y-auto rounded-3xl glass p-2 tilt-3d">
-              <div className="px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
-                <Sparkles className="h-3 w-3 text-cyber" /> Agent Studio
+            <div className="mt-3 max-h-[78vh] overflow-y-auto rounded-3xl glass p-3 tilt-3d">
+              <Link
+                to="/agents"
+                className="mb-2 flex items-center gap-3 rounded-full bg-gradient-to-r from-cyber/20 to-magenta/10 px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-cyber/30 hover:ring-cyber/60 transition"
+              >
+                <MessageSquarePlus className="h-4 w-4 text-cyber" />
+                <span>New chat</span>
+              </Link>
+              <div className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
+                <Sparkles className="h-3 w-3 text-cyber" /> Agents
               </div>
               {AGENTS.map((a) => {
                 const Ic = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[a.icon] ?? Icons.Bot;
                 const active = a.id === agent.id;
-                return (
+                const locked = !!a.comingSoon;
+                const baseClass = `group flex items-center gap-3 rounded-full px-3 py-2 text-sm transition my-0.5`;
+                const stateClass = active
+                  ? "bg-gradient-to-r from-cyber/25 via-magenta/15 to-transparent text-foreground ring-1 ring-cyber/40"
+                  : locked
+                    ? "text-muted-foreground/70 cursor-not-allowed"
+                    : "text-muted-foreground hover:bg-card/70 hover:text-foreground";
+                const iconWrap = `inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full ring-1 ring-border ${active ? "bg-cyber/20 text-cyber ring-cyber/40" : "bg-card/60 group-hover:text-cyber"}`;
+                const content = (
+                  <>
+                    <span className={iconWrap}>
+                      {locked ? <Lock className="h-3.5 w-3.5 text-magenta" /> : <Ic className="h-3.5 w-3.5" />}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="truncate font-medium leading-tight">{a.name}</div>
+                      <div className="truncate text-[11px] text-muted-foreground">{locked ? "Locked · Soon" : a.short}</div>
+                    </div>
+                  </>
+                );
+                return locked ? (
+                  <div key={a.id} aria-disabled className={baseClass + " " + stateClass}>
+                    {content}
+                  </div>
+                ) : (
                   <Link
                     key={a.id}
                     to="/agents/$agentId"
                     params={{ agentId: a.id }}
-                    className={`group flex items-start gap-3 rounded-2xl px-3 py-2.5 text-sm transition ${
-                      active
-                        ? "bg-gradient-to-r from-cyber/20 via-magenta/10 to-transparent text-foreground ring-1 ring-cyber/40 glow-cyan"
-                        : "text-muted-foreground hover:bg-card/70 hover:text-foreground"
-                    }`}
+                    className={baseClass + " " + stateClass}
                   >
-                    <span className={`mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ring-1 ring-border ${active ? "bg-cyber/20 text-cyber ring-cyber/40" : "bg-card/60 group-hover:text-cyber"}`}>
-                      <Ic className="h-3.5 w-3.5" />
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="truncate font-medium">{a.name}</div>
-                      <div className="truncate text-[11px] text-muted-foreground">{a.short}</div>
-                      {a.comingSoon && (
-                        <div className="mt-0.5 inline-block rounded-full bg-magenta/15 px-1.5 text-[9px] font-semibold uppercase tracking-wider text-magenta ring-1 ring-magenta/40">
-                          Soon
-                        </div>
-                      )}
-                    </div>
+                    {content}
                   </Link>
                 );
               })}
