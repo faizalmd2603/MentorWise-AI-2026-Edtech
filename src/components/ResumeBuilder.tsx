@@ -143,9 +143,43 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
   async function askAI(textOverride?: string) {
     const text = (textOverride ?? aiInput).trim();
     if (!text || aiLoading) return;
-    const ctx = `Current resume builder step: ${step}. Current resume data (JSON): ${JSON.stringify(
-      data,
+    // Build a compact snapshot so we stay well under the 8000-char limit
+    // enforced by the chat server function input validator. Photos (large
+    // data URLs) are stripped because they would also blow past the cap.
+    const d: any = data;
+    const snapshot = {
+      step,
+      headline: d.headline,
+      summary: (d.summary || "").slice(0, 400),
+      contact: {
+        email: d.email,
+        phone: d.phone,
+        location: d.location,
+        linkedin: d.linkedin,
+        portfolio: d.portfolio,
+      },
+      education: (d.education || []).slice(0, 4).map((e: any) => ({
+        school: e.school,
+        degree: e.degree,
+        year: e.year,
+      })),
+      experience: (d.experience || []).slice(0, 4).map((x: any) => ({
+        role: x.role,
+        company: x.company,
+        period: x.period,
+        bullets: (x.bullets || []).slice(0, 3),
+      })),
+      projects: (d.projects || []).slice(0, 4).map((p: any) => ({
+        name: p.name,
+        tech: p.tech,
+        summary: (p.summary || "").slice(0, 200),
+      })),
+      skills: (d.skills || []).slice(0, 25),
+    };
+    let ctx = `You are the side assistant inside the ATS Resume Builder. Current step: ${step}. Resume snapshot (JSON): ${JSON.stringify(
+      snapshot,
     )}. User asks: ${text}. Reply with concise, ATS-friendly, recruiter-grade guidance. If they ask you to write content, give them the exact text to paste.`;
+    if (ctx.length > 7500) ctx = ctx.slice(0, 7500);
     const next = [...aiMsgs, { role: "user" as const, content: text }];
     setAiMsgs(next);
     setAiInput("");
@@ -158,11 +192,17 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
         },
       });
       setAiMsgs((m) => [...m, { role: "assistant", content: res.reply }]);
-    } catch {
-      setAiMsgs((m) => [
-        ...m,
-        { role: "assistant", content: "AI is unreachable right now. Please retry shortly." },
-      ]);
+    } catch (err) {
+      console.error("ResumeBuilder askAI failed", err);
+      const message = err instanceof Error ? err.message : String(err ?? "");
+      const friendly = /unauthor/i.test(message)
+        ? "Please sign in to your MentorWise AI account to use the assistant."
+        : /rate|429/i.test(message)
+          ? "I'm getting a lot of requests. Try again in a moment."
+          : /quota|402/i.test(message)
+            ? "Daily AI quota is exhausted. Please try again later."
+            : "AI is unreachable right now. Please retry shortly.";
+      setAiMsgs((m) => [...m, { role: "assistant", content: friendly }]);
     } finally {
       setAiLoading(false);
     }
