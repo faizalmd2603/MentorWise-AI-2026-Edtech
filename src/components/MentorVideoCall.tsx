@@ -84,10 +84,10 @@ export function MentorVideoCall({ open, onClose }: Props) {
         const msg = await res.text();
         throw new Error(msg || `Token failed (${res.status})`);
       }
-      const { token, error: tokErr } = (await res.json()) as { token?: string; error?: string };
-      if (!token) throw new Error(tokErr || "No token received");
+      const { token: convToken, error: tokErr } = (await res.json()) as { token?: string; error?: string };
+      if (!convToken) throw new Error(tokErr || "No token received");
       await conversation.startSession({
-        conversationToken: token,
+        conversationToken: convToken,
         connectionType: "webrtc",
       });
     } catch (e) {
