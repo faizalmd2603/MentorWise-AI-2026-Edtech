@@ -19,6 +19,8 @@ import {
   FileText as FileIcon,
   Video,
   Wand2,
+  Lock,
+  MessageSquarePlus,
 } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
