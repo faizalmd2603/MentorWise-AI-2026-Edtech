@@ -2,6 +2,7 @@ import { useConversation } from "@elevenlabs/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Mic, MicOff, PhoneOff, Video, Loader2, X } from "lucide-react";
 import avatarMeta from "@/assets/agents/mentor-avatar-3d.png.asset.json";
+import { supabase } from "@/integrations/supabase/client";
 
 const MAX_SECONDS = 20 * 60; // 20-minute hard cap
 
@@ -72,7 +73,13 @@ export function MentorVideoCall({ open, onClose }: Props) {
     setConnecting(true);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      const res = await fetch("/api/elevenlabs/mentor-token", { method: "POST" });
+      const { data: sess } = await supabase.auth.getSession();
+      const token = sess.session?.access_token;
+      if (!token) throw new Error("Please sign in to start a mentor call");
+      const res = await fetch("/api/elevenlabs/mentor-token", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) {
         const msg = await res.text();
         throw new Error(msg || `Token failed (${res.status})`);
