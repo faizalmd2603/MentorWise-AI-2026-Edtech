@@ -17,7 +17,9 @@ import {
   Sparkles,
   Plus,
   FileText as FileIcon,
+  Video,
 } from "lucide-react";
+import { MentorVideoCall } from "@/components/MentorVideoCall";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
