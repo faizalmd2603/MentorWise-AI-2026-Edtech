@@ -631,6 +631,12 @@ function AgentChat() {
       {agent.id === "mentor" && (
         <MentorVideoCall open={callOpen} onClose={() => setCallOpen(false)} />
       )}
+      {agent.id === "resume" && (
+        <ResumeBuilder open={resumeOpen} onClose={() => setResumeOpen(false)} />
+      )}
+    </SiteLayout>
+  );
+}
     </SiteLayout>
   );
 }
