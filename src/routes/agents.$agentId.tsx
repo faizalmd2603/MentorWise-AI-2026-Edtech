@@ -104,6 +104,7 @@ function AgentChat() {
   const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [showPlus, setShowPlus] = useState(false);
+  const [callOpen, setCallOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
