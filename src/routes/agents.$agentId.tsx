@@ -344,6 +344,15 @@ function AgentChat() {
                 </div>
                 <div className="text-xs text-muted-foreground truncate">{agent.short}</div>
               </div>
+              {agent.id === "mentor" && (
+                <button
+                  onClick={() => setCallOpen(true)}
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-cyber to-magenta px-3 py-1.5 text-xs font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+                  type="button"
+                >
+                  <Video className="h-3.5 w-3.5" /> Video Call
+                </button>
+              )}
             </header>
 
             {/* Messages */}
