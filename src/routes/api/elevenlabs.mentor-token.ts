@@ -3,7 +3,31 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/api/elevenlabs/mentor-token")({
   server: {
     handlers: {
-      POST: async () => {
+      POST: async ({ request }) => {
+        // Require a valid Supabase session — token is a billable, abuseable resource.
+        const authHeader = request.headers.get("authorization") ?? "";
+        if (!authHeader.startsWith("Bearer ")) {
+          return Response.json({ error: "Unauthorized" }, { status: 401 });
+        }
+        const userJwt = authHeader.slice(7).trim();
+        if (!userJwt) {
+          return Response.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const SUPABASE_URL = process.env.SUPABASE_URL;
+        const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
+        if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+          return Response.json({ error: "Auth not configured" }, { status: 500 });
+        }
+        const { createClient } = await import("@supabase/supabase-js");
+        const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+          auth: { persistSession: false, autoRefreshToken: false },
+        });
+        const { data: claimsData, error: claimsErr } = await supabase.auth.getClaims(userJwt);
+        if (claimsErr || !claimsData?.claims?.sub) {
+          return Response.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const apiKey = process.env.ELEVENLABS_API_KEY;
         const agentId = process.env.ELEVENLABS_MENTOR_AGENT_ID;
         if (!apiKey) {

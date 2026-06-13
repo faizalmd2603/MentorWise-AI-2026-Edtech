@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Public can view announcement images" ON storage.objects;

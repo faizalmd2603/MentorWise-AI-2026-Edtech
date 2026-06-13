@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 const ContactInput = z.object({
@@ -141,9 +142,50 @@ function teamEmailHtml(payload: z.infer<typeof ContactInput>, aiAnswer: string |
 }
 
 
+// Per-IP rate limit: max 5 contact submissions per hour
+async function enforceContactRateLimit(): Promise<void> {
+  const req = getRequest();
+  const ip =
+    req?.headers.get("cf-connecting-ip") ??
+    req?.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    req?.headers.get("x-real-ip") ??
+    "unknown";
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: row } = await supabaseAdmin
+    .from("contact_rate_limit")
+    .select("count, window_start")
+    .eq("ip", ip)
+    .maybeSingle();
+  const now = new Date();
+  const WINDOW_MS = 60 * 60 * 1000;
+  const LIMIT = 5;
+  if (row) {
+    const started = new Date(row.window_start).getTime();
+    if (now.getTime() - started < WINDOW_MS) {
+      if (row.count >= LIMIT) {
+        throw new Error("Too many requests. Please try again later.");
+      }
+      await supabaseAdmin
+        .from("contact_rate_limit")
+        .update({ count: row.count + 1 })
+        .eq("ip", ip);
+    } else {
+      await supabaseAdmin
+        .from("contact_rate_limit")
+        .update({ count: 1, window_start: now.toISOString() })
+        .eq("ip", ip);
+    }
+  } else {
+    await supabaseAdmin
+      .from("contact_rate_limit")
+      .insert({ ip, count: 1, window_start: now.toISOString() });
+  }
+}
+
 export const submitContactForm = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ContactInput.parse(input))
   .handler(async ({ data }) => {
+    await enforceContactRateLimit();
     const aiAnswer = await aiQueryAnswer(data.occupation, data.query);
 
     const userRaw = buildRfc2822({
