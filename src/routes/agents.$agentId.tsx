@@ -348,6 +348,23 @@ function AgentChat() {
           </aside>
 
           {/* Chat panel */}
+          {agent.comingSoon ? (
+            <section className="flex h-[82vh] flex-col items-center justify-center overflow-hidden rounded-3xl glass-strong tilt-3d p-8 text-center">
+              <div className="inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-magenta/30 to-cyber/20 ring-1 ring-magenta/40">
+                <Lock className="h-7 w-7 text-magenta" />
+              </div>
+              <h1 className="mt-6 font-display text-2xl font-bold">{agent.name} is locked</h1>
+              <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                This agent is launching soon under the MentorWise AI ecosystem. Explore the other live agents in the meantime.
+              </p>
+              <Link
+                to="/agents"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-cyber to-magenta px-5 py-2.5 text-sm font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+              >
+                <ArrowLeft className="h-4 w-4" /> Back to AI Studio
+              </Link>
+            </section>
+          ) : (
           <section className="flex h-[82vh] flex-col overflow-hidden rounded-3xl glass-strong tilt-3d">
             <header className="flex items-center gap-3 border-b border-border/50 px-5 py-4">
               <div className="relative">
