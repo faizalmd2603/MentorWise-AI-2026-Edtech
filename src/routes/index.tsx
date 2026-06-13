@@ -46,9 +46,48 @@ function Home() {
     <SiteLayout>
       {show && <SplashScreen />}
       <Hero />
+      <NexoraShowcase />
       <Highlights />
       <CTA />
     </SiteLayout>
+  );
+}
+
+function NexoraShowcase() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6">
+      <a
+        href="https://nexora-sphere-ai.lovable.app/app"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group relative block overflow-hidden rounded-3xl glass-strong p-8 sm:p-10 transition hover:-translate-y-1 hover:glow-cyan animate-fade-up"
+      >
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-cyber/25 blur-3xl" />
+        <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-magenta/20 blur-3xl" />
+        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyber/30 to-magenta/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground ring-1 ring-cyber/40">
+              <Crown className="h-3.5 w-3.5 text-cyber" /> Premium First Build · MentorWise AI Ecosystem
+            </div>
+            <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+              Nexora <span className="text-gradient">AI</span>
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              Our flagship education-grade LLM experience — a polished ChatGPT and Gemini-class web app, engineered as the first premium product under the MentorWise AI parent ecosystem.
+            </p>
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-cyber px-5 py-2.5 text-sm font-semibold text-primary-foreground glow-cyan group-hover:brightness-110 transition">
+              Launch Nexora AI <ExternalLink className="h-4 w-4" />
+            </div>
+          </div>
+          <div className="relative shrink-0">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyber/30 to-magenta/30 blur-2xl" />
+            <div className="relative grid h-32 w-32 place-items-center rounded-3xl glass ring-1 ring-cyber/40 sm:h-40 sm:w-40">
+              <Sparkles className="h-12 w-12 text-cyber animate-pulse sm:h-16 sm:w-16" />
+            </div>
+          </div>
+        </div>
+      </a>
+    </section>
   );
 }
 
