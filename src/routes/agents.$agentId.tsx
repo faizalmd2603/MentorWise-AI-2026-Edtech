@@ -637,6 +637,3 @@ function AgentChat() {
     </SiteLayout>
   );
 }
-    </SiteLayout>
-  );
-}
