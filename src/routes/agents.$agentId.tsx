@@ -609,6 +609,7 @@ function AgentChat() {
               </p>
             </footer>
           </section>
+          )}
         </div>
       </div>
 
