@@ -107,6 +107,7 @@ function AgentChat() {
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [showPlus, setShowPlus] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
