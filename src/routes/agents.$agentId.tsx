@@ -616,6 +616,9 @@ function AgentChat() {
           </div>
         </div>
       )}
+      {agent.id === "mentor" && (
+        <MentorVideoCall open={callOpen} onClose={() => setCallOpen(false)} />
+      )}
     </SiteLayout>
   );
 }
