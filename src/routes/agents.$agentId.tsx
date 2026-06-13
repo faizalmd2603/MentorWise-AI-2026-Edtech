@@ -359,6 +359,15 @@ function AgentChat() {
                   <Video className="h-3.5 w-3.5" /> Video Call
                 </button>
               )}
+              {agent.id === "resume" && (
+                <button
+                  onClick={() => setResumeOpen(true)}
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-cyber to-magenta px-3 py-1.5 text-xs font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+                  type="button"
+                >
+                  <Wand2 className="h-3.5 w-3.5" /> Build Resume
+                </button>
+              )}
             </header>
 
             {/* Messages */}
