@@ -18,8 +18,10 @@ import {
   Plus,
   FileText as FileIcon,
   Video,
+  Wand2,
 } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
+import { ResumeBuilder } from "@/components/ResumeBuilder";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
