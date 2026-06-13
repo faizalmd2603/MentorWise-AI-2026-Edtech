@@ -82,6 +82,24 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_rate_limit: {
+        Row: {
+          count: number
+          ip: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          ip: string
+          window_start?: string
+        }
+        Update: {
+          count?: number
+          ip?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       email_otps: {
         Row: {
           attempts: number
