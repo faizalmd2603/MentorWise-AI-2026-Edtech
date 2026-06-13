@@ -18,8 +18,10 @@ import {
   Plus,
   FileText as FileIcon,
   Video,
+  Wand2,
 } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
+import { ResumeBuilder } from "@/components/ResumeBuilder";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -105,6 +107,7 @@ function AgentChat() {
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [showPlus, setShowPlus] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -354,6 +357,15 @@ function AgentChat() {
                   type="button"
                 >
                   <Video className="h-3.5 w-3.5" /> Video Call
+                </button>
+              )}
+              {agent.id === "resume" && (
+                <button
+                  onClick={() => setResumeOpen(true)}
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-cyber to-magenta px-3 py-1.5 text-xs font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+                  type="button"
+                >
+                  <Wand2 className="h-3.5 w-3.5" /> Build Resume
                 </button>
               )}
             </header>
@@ -618,6 +630,9 @@ function AgentChat() {
       )}
       {agent.id === "mentor" && (
         <MentorVideoCall open={callOpen} onClose={() => setCallOpen(false)} />
+      )}
+      {agent.id === "resume" && (
+        <ResumeBuilder open={resumeOpen} onClose={() => setResumeOpen(false)} />
       )}
     </SiteLayout>
   );
