@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { Typewriter } from "@/components/Typewriter";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
 import banner from "@/assets/mw-banner.jpeg.asset.json";
 import { ArrowRight, Sparkles, ShieldCheck, Zap, ExternalLink, Crown } from "lucide-react";
 
@@ -113,7 +115,19 @@ function Hero() {
               <Sparkles className="h-3.5 w-3.5" /> Powered by Google + Microsoft-class AI agents
             </div>
             <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl">
-              The Ultimate <span className="text-gradient">AI-Powered</span> Career Arsenal.
+              The Ultimate <span className="text-gradient">AI-Powered</span>{" "}
+              <span className="block mt-2 min-h-[1.15em]">
+                <Typewriter
+                  className="text-gradient"
+                  phrases={[
+                    "Career Arsenal.",
+                    "Resume Optimiser.",
+                    "Interview Coach.",
+                    "Internship Scout.",
+                    "Mentor on Demand.",
+                  ]}
+                />
+              </span>
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
               MentorWise AI is the world's most advanced ecosystem for students and freshers — a suite of elite AI agents engineered to bypass ATS filters, crack top-tier interviews, and unlock premium internships at zero cost.
