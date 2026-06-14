@@ -7,10 +7,10 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/internships")({
   head: () => ({
     meta: [
-      { title: "Verified Zero-Cost Internship & Certification Scout | MentorWise AI" },
-      { name: "description", content: "Automated search engine curating completely free internships, upskilling paths, and professional letters of recommendation for early-career growth." },
-      { property: "og:title", content: "Verified Zero-Cost Internship & Certification Scout | MentorWise AI" },
-      { property: "og:description", content: "Curated free internships, certifications and letters of recommendation for students and freshers — zero cost, fully verified." },
+      { title: "Free Internships for Students & Freshers | MentorWise AI" },
+      { name: "description", content: "Find free internships, free online courses with certificate, and free letters of recommendation. Made for college students and freshers." },
+      { property: "og:title", content: "Free Internships for Students & Freshers | MentorWise AI" },
+      { property: "og:description", content: "Free internships, free certifications and free letters of recommendation for students and freshers." },
       { property: "og:url", content: `${SITE}/internships` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/internships` }],
