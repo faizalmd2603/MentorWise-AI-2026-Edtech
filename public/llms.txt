@@ -1,6 +1,6 @@
 # MentorWise AI
 
-> Free 12-agent Generative AI career operating system for college students and freshers. Unified AI Studio with Resume Optimiser, Interview Coach, LinkedIn Branding, Internship Scout, Courses, Projects, Exams, Email Specialist, Humaniser, Social Media and 1-on-1 Mentor. Includes a public Founder Announcements feed and free email-OTP member accounts — built on Google GenAI, founded in Chennai, India.
+> Free AI career app for college students and freshers. Build your resume, practice mock interviews, find free internships, get free online courses, fix your LinkedIn and get study help — all in one simple app, always free.
 
 MentorWise AI (also written MentorWise, MentorWiseAI, MentorWise AI EdTech) is an EdTech platform headquartered in Chennai, India. It was founded in 2025 by Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder), both B.Com students at The New College, Chennai. The platform operates on a 100% service-motive philosophy: every agent, tool and resource is free forever for students, with no paywalls and no credit card required.
 
