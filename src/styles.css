@@ -47,7 +47,7 @@
   --card-foreground: oklch(0.22 0.02 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.02 260);
-  --primary: oklch(0.58 0.18 256);               /* Google Blue #1A73E8 */
+  --primary: oklch(0.42 0.12 250);               /* corporate navy */
   --primary-foreground: oklch(0.99 0.005 250);
   --secondary: oklch(0.96 0.01 250);             /* soft grey chip */
   --secondary-foreground: oklch(0.28 0.03 260);
@@ -55,14 +55,14 @@
   --muted-foreground: oklch(0.48 0.02 260);
   --accent: oklch(0.95 0.04 256);                /* light blue tint */
   --accent-foreground: oklch(0.32 0.12 256);
-  --destructive: oklch(0.62 0.22 27);            /* Google Red */
+  --destructive: oklch(0.55 0.18 27);            /* corporate red */
   --destructive-foreground: oklch(0.99 0.005 250);
   --border: oklch(0.9 0.01 250);
   --input: oklch(0.94 0.01 250);
-  --ring: oklch(0.58 0.18 256);
-  --cyber: oklch(0.58 0.18 256);                 /* Google Blue */
-  --magenta: oklch(0.62 0.22 27);                /* Google Red */
-  --purple-glow: oklch(0.7 0.18 145);            /* Google Green */
+  --ring: oklch(0.42 0.12 250);
+  --cyber: oklch(0.42 0.12 250);                 /* corporate navy */
+  --magenta: oklch(0.55 0.11 215);               /* steel teal */
+  --purple-glow: oklch(0.62 0.11 200);           /* soft cyan-teal */
 }
 
 @layer base {
@@ -107,10 +107,9 @@
 
 @utility text-gradient {
   background: linear-gradient(120deg,
-    oklch(0.58 0.18 256),  /* blue */
-    oklch(0.62 0.22 27),   /* red */
-    oklch(0.78 0.16 85),   /* yellow */
-    oklch(0.65 0.18 145)); /* green */
+    oklch(0.42 0.12 250),
+    oklch(0.55 0.11 215),
+    oklch(0.62 0.11 200));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -118,20 +117,20 @@
 
 @utility grid-bg {
   background-image:
-    radial-gradient(circle at 15% 10%, color-mix(in oklab, var(--color-cyber) 14%, transparent) 0%, transparent 45%),
-    radial-gradient(circle at 85% 85%, color-mix(in oklab, var(--color-purple-glow) 12%, transparent) 0%, transparent 45%),
+    radial-gradient(circle at 15% 10%, color-mix(in oklab, var(--color-cyber) 12%, transparent) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, color-mix(in oklab, var(--color-purple-glow) 10%, transparent) 0%, transparent 45%),
     radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--color-magenta) 8%, transparent) 0%, transparent 35%),
     linear-gradient(to bottom, var(--color-background), var(--color-background));
 }
 
-/* Google-style multi-color underline accent (used under hero sections) */
+/* Brand accent bar (corporate navy → teal gradient) */
 @utility google-bar {
   background: linear-gradient(to right,
-    #ea4335 0 25%,
-    #4285f4 25% 50%,
-    #34a853 50% 75%,
-    #fbbc04 75% 100%);
-  height: 4px;
+    oklch(0.42 0.12 250),
+    oklch(0.5 0.12 230),
+    oklch(0.6 0.11 205),
+    oklch(0.7 0.09 195));
+  height: 3px;
   border-radius: 9999px;
 }
 
@@ -173,7 +172,7 @@
 .animate-orb { animation: orb-drift 18s ease-in-out infinite; }
 
 .shimmer-text {
-  background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc04, #34a853, #4285f4);
+  background: linear-gradient(90deg, oklch(0.42 0.12 250), oklch(0.55 0.11 215), oklch(0.65 0.10 200), oklch(0.42 0.12 250));
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
