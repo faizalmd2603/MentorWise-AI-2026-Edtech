@@ -135,7 +135,7 @@ function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/agents" className="inline-flex items-center gap-2 rounded-full bg-cyber px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.03] hover:brightness-110 glow-cyan">
-                Deploy Your Agent <ArrowRight className="h-4 w-4" />
+                Start for Free <ArrowRight className="h-4 w-4" />
               </Link>
               <Link to="/founders" className="inline-flex items-center gap-2 rounded-full glass px-5 py-3 text-sm font-semibold text-foreground transition hover:scale-[1.03] hover:glow-cyan">
                 Meet the Founders
@@ -143,8 +143,8 @@ function Hero() {
             </div>
             <div className="mt-8 flex flex-wrap gap-6 text-xs text-muted-foreground">
               <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-cyber" /> Always 100% free</div>
-              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-magenta" /> 12 specialist agents</div>
-              <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-purple-glow" /> MNC-grade output</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-magenta" /> 12 helpful AI tools</div>
+              <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-purple-glow" /> Made for students</div>
             </div>
           </div>
 
