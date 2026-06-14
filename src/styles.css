@@ -55,14 +55,14 @@
   --muted-foreground: oklch(0.48 0.02 260);
   --accent: oklch(0.95 0.04 256);                /* light blue tint */
   --accent-foreground: oklch(0.32 0.12 256);
-  --destructive: oklch(0.62 0.22 27);            /* Google Red */
+  --destructive: oklch(0.55 0.18 27);            /* corporate red */
   --destructive-foreground: oklch(0.99 0.005 250);
   --border: oklch(0.9 0.01 250);
   --input: oklch(0.94 0.01 250);
-  --ring: oklch(0.58 0.18 256);
-  --cyber: oklch(0.58 0.18 256);                 /* Google Blue */
-  --magenta: oklch(0.62 0.22 27);                /* Google Red */
-  --purple-glow: oklch(0.7 0.18 145);            /* Google Green */
+  --ring: oklch(0.42 0.12 250);
+  --cyber: oklch(0.42 0.12 250);                 /* corporate navy */
+  --magenta: oklch(0.55 0.11 215);               /* steel teal */
+  --purple-glow: oklch(0.62 0.11 200);           /* soft cyan-teal */
 }
 
 @layer base {
