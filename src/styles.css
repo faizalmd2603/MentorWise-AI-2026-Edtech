@@ -185,3 +185,45 @@
   transition: transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
 }
 .tilt-3d:hover { transform: perspective(900px) rotateX(0deg) translateY(-2px); }
+
+/* Typewriter caret */
+@keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+.animate-blink { animation: blink 1s steps(1) infinite; }
+
+/* Scroll mouse dot */
+@keyframes scroll-dot {
+  0% { transform: translate(-50%, 0); opacity: 0; }
+  30% { opacity: 1; }
+  80% { transform: translate(-50%, 14px); opacity: 0; }
+  100% { transform: translate(-50%, 14px); opacity: 0; }
+}
+.animate-scroll-dot { animation: scroll-dot 1.6s cubic-bezier(0.4,0,0.2,1) infinite; }
+
+/* Card pop on enter */
+@keyframes pop-in {
+  0% { opacity: 0; transform: translateY(20px) scale(0.94); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-pop-in { animation: pop-in 0.55s cubic-bezier(0.2,0.8,0.2,1) both; }
+
+/* Logo subtle spin/breathe */
+@keyframes logo-breathe {
+  0%, 100% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50% { transform: rotate(3deg) scale(1.05); filter: drop-shadow(0 4px 16px color-mix(in oklab, var(--color-cyber) 35%, transparent)); }
+}
+.animate-logo { animation: logo-breathe 4.5s ease-in-out infinite; }
+
+/* Page transition */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-transition { animation: page-in 0.4s cubic-bezier(0.2,0.8,0.2,1) both; }
+
+/* Reveal on scroll helper (pairs with IntersectionObserver class swap) */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(0.2,0.8,0.2,1); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Smooth-scrolling root for in-page anchors */
+html { scroll-behavior: smooth; }
