@@ -163,9 +163,9 @@ function Hero() {
 
 function Highlights() {
   const items = [
-    { title: "12 elite AI agents", desc: "Resume, Interview, LinkedIn, Internships, Exams and more — each tuned to MNC standards." },
-    { title: "Free-tier optimized", desc: "Premium-quality responses delivered within free AI quotas, so every student gets equal access." },
-    { title: "Built by students", desc: "Designed and operated from Chennai by a founding team that lives the fresher journey." },
+    { title: "12 free AI tools", desc: "Resume help, mock interviews, free internships, courses, study help, LinkedIn tips and more — all in one app." },
+    { title: "Always free", desc: "No paywall, no credit card. Every student gets the same full access." },
+    { title: "Made by students", desc: "Built in Chennai by college students who know the fresher journey." },
   ];
   return (
     <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6">
