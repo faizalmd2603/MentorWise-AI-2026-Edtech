@@ -7,10 +7,10 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/interview")({
   head: () => ({
     meta: [
-      { title: "Live AI Mock Interview Simulator (STAR Method) | MentorWise AI" },
-      { name: "description", content: "Practice high-pressure technical and HR mock interviews. Get real-time behavioral analysis and structural communication feedback powered by GenAI." },
-      { property: "og:title", content: "Live AI Mock Interview Simulator (STAR Method) | MentorWise AI" },
-      { property: "og:description", content: "Practice high-pressure technical and HR mock interviews with real-time STAR-method behavioral analysis powered by GenAI." },
+      { title: "Free Mock Interview Practice Online | MentorWise AI" },
+      { name: "description", content: "Practice job interviews online for free. Get real-time AI feedback on HR and technical questions — perfect for students and freshers." },
+      { property: "og:title", content: "Free Mock Interview Practice Online | MentorWise AI" },
+      { property: "og:description", content: "Free online mock interview practice with AI feedback. HR and technical questions for students and freshers." },
       { property: "og:url", content: `${SITE}/interview` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/interview` }],
