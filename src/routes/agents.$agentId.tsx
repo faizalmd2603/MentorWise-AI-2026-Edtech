@@ -250,9 +250,10 @@ function AgentChat() {
       setMessages((m) => [...m, { role: "assistant", content: res.reply }]);
     } catch (e) {
       console.error(e, "sent with", sentAttachments.length, "attachments");
+      const msg = e instanceof Error ? e.message : "";
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: "I ran into a problem reaching the AI service. Please try again in a moment." },
+        { role: "assistant", content: `I ran into a problem reaching the AI service. ${msg ? `(${msg}) ` : ""}Please try again in a moment.` },
       ]);
     } finally {
       setLoading(false);
