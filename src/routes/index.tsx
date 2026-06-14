@@ -188,10 +188,10 @@ function CTA() {
         <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-magenta/20 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-cyber/20 blur-3xl" />
         <div className="relative">
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">Ready to scale from student to autonomous professional?</h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">Deploy your first AI agent in seconds, or talk to the founders directly.</p>
+          <h2 className="font-display text-3xl font-bold sm:text-4xl">Ready to start your career — for free?</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">Open your first free AI tool in seconds, or message the founders directly.</p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link to="/agents" className="rounded-full bg-cyber px-5 py-3 text-sm font-semibold text-primary-foreground hover:scale-[1.03] hover:brightness-110 transition glow-cyan">Access AI Agents</Link>
+            <Link to="/agents" className="rounded-full bg-cyber px-5 py-3 text-sm font-semibold text-primary-foreground hover:scale-[1.03] hover:brightness-110 transition glow-cyan">Open Free AI Tools</Link>
             <Link to="/contact" className="rounded-full glass px-5 py-3 text-sm font-semibold text-foreground hover:scale-[1.03] hover:glow-cyan transition">Contact Us</Link>
           </div>
         </div>
