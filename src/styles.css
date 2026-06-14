@@ -172,7 +172,7 @@
 .animate-orb { animation: orb-drift 18s ease-in-out infinite; }
 
 .shimmer-text {
-  background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc04, #34a853, #4285f4);
+  background: linear-gradient(90deg, oklch(0.42 0.12 250), oklch(0.55 0.11 215), oklch(0.65 0.10 200), oklch(0.42 0.12 250));
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
