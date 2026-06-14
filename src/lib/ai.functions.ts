@@ -49,7 +49,6 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
 }
 
 export const chatWithAgent = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
   .handler(async ({ data }) => {
 
