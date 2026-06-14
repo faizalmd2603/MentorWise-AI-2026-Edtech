@@ -16,6 +16,8 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const today = new Date().toISOString().slice(0, 10);
+        // bumped after theme/UI relaunch — encourages re-crawl
+
 
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "daily", priority: "1.0", lastmod: today },
