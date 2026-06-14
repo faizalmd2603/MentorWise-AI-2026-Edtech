@@ -148,12 +148,13 @@ function Hero() {
           </div>
 
           <div className="relative animate-fade-up [animation-delay:120ms]">
-            <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-cyber/20 via-purple-glow/10 to-magenta/20 blur-2xl" />
-            <div className="relative overflow-hidden rounded-3xl glass-strong p-2">
-              <img src={banner.url} alt="MentorWise AI ecosystem preview" className="w-full rounded-2xl" />
+            <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-cyber/20 via-purple-glow/10 to-magenta/20 blur-2xl animate-orb" />
+            <div className="relative overflow-hidden rounded-3xl glass-strong p-2 tilt-3d">
+              <img src={banner.url} alt="MentorWise AI ecosystem preview" className="w-full rounded-2xl animate-logo" />
             </div>
           </div>
         </div>
+        <div className="flex justify-center"><ScrollIndicator label="Scroll to explore" /></div>
       </div>
     </section>
   );
