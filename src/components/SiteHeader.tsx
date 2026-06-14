@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import logo from "@/assets/mw-logo.jpeg.asset.json";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, LogIn, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/" as const, label: "Home" },
-  { to: "/agents" as const, label: "Agents" },
+  { to: "/agents" as const, label: "AI Studio" },
   { to: "/feed" as const, label: "Feed" },
   { to: "/about" as const, label: "About" },
   { to: "/founders" as const, label: "Founders" },
@@ -15,19 +16,28 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [authed, setAuthed] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setAuthed(!!s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      <div className="glass-strong border-b border-border/40">
+      <div className="glass-strong border-b border-border/60">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative h-10 w-10 overflow-hidden rounded-xl ring-1 ring-cyber/40 glow-cyan">
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl ring-1 ring-border">
               <img src={logo.url} alt="MentorWise AI" className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="font-display text-base font-bold tracking-tight text-gradient">MentorWise AI</span>
-              <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Career Arsenal</span>
+              <span className="font-display text-base font-bold tracking-tight text-foreground">
+                MentorWise <span className="text-gradient">AI</span>
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">EdTech · Career OS</span>
             </div>
           </Link>
 
@@ -38,14 +48,13 @@ export function SiteHeader() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  className={`relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                    active
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
                 >
                   {l.label}
-                  {active && (
-                    <span className="absolute inset-x-2 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-cyber to-transparent" />
-                  )}
                 </Link>
               );
             })}
@@ -54,39 +63,67 @@ export function SiteHeader() {
           <div className="flex items-center gap-2">
             <Link
               to="/agents"
-              className="hidden md:inline-flex items-center rounded-full bg-cyber/10 px-4 py-2 text-sm font-semibold text-cyber ring-1 ring-cyber/40 transition hover:bg-cyber/20 hover:glow-cyan"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-primary hover:bg-accent transition"
             >
-              Access AI Agents
+              <Sparkles className="h-4 w-4" /> AI Studio
             </Link>
+
+            {/* Bold, force-pinned auth CTA */}
+            {authed ? (
+              <Link
+                to="/feed"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98]"
+              >
+                <span className="hidden sm:inline">My Account</span>
+                <span className="sm:hidden">Account</span>
+              </Link>
+            ) : (
+              <Link
+                to="/auth"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_6px_16px_-6px_oklch(0.58_0.18_256_/_0.55)] transition hover:brightness-110 active:scale-[0.98] sm:px-5"
+                aria-label="Sign in or Sign up"
+              >
+                <LogIn className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+                <span>Sign in</span>
+                <span className="hidden h-4 w-px bg-primary-foreground/40 sm:block" />
+                <span className="hidden sm:inline">Sign up</span>
+              </Link>
+            )}
+
             <button
               aria-label="Toggle menu"
               onClick={() => setOpen((v) => !v)}
-              className="inline-flex md:hidden h-10 w-10 items-center justify-center rounded-lg glass"
+              className="inline-flex md:hidden h-10 w-10 items-center justify-center rounded-full hover:bg-secondary"
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
+        {/* Google-style 4-color thin bar under nav */}
+        <div className="google-bar opacity-90" />
+
         {open && (
-          <nav className="md:hidden border-t border-border/40 px-4 py-3 flex flex-col gap-1">
+          <nav className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-1 bg-card">
             {links.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-card/60 hover:text-foreground"
+                className="rounded-full px-3.5 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"
               >
                 {l.label}
               </Link>
             ))}
-            <Link
-              to="/agents"
-              onClick={() => setOpen(false)}
-              className="mt-1 rounded-lg bg-cyber/10 px-3 py-2.5 text-sm font-semibold text-cyber ring-1 ring-cyber/40"
-            >
-              Access AI Agents
-            </Link>
+            {!authed && (
+              <Link
+                to="/auth"
+                onClick={() => setOpen(false)}
+                className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+              >
+                <LogIn className="h-4 w-4" /> Sign in / Sign up
+              </Link>
+            )}
           </nav>
         )}
       </div>
