@@ -47,7 +47,7 @@
   --card-foreground: oklch(0.22 0.02 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.02 260);
-  --primary: oklch(0.58 0.18 256);               /* Google Blue #1A73E8 */
+  --primary: oklch(0.42 0.12 250);               /* corporate navy */
   --primary-foreground: oklch(0.99 0.005 250);
   --secondary: oklch(0.96 0.01 250);             /* soft grey chip */
   --secondary-foreground: oklch(0.28 0.03 260);
