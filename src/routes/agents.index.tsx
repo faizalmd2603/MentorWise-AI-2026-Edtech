@@ -116,7 +116,7 @@ function AgentsIndex() {
               </>
             );
             return (
-              <div key={agent.id} className="group relative animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
+              <div key={agent.id} className="group relative animate-pop-in hover:[transform:translateZ(0)]" style={{ animationDelay: `${idx * 60}ms` }}>
                 {locked ? (
                   <div aria-disabled className="block h-full overflow-hidden rounded-2xl glass cursor-not-allowed">
                     {inner}
@@ -125,7 +125,7 @@ function AgentsIndex() {
                   <Link
                     to="/agents/$agentId"
                     params={{ agentId: agent.id }}
-                    className="block h-full overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:glow-cyan"
+                    className="block h-full overflow-hidden rounded-2xl glass transition duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:glow-cyan"
                   >
                     {inner}
                   </Link>
