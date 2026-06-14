@@ -7,7 +7,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen grid-bg">
       <SiteHeader />
-      <main>{children}</main>
+      <main className="page-transition">{children}</main>
       <SiteFooter />
       <WhatsAppFab />
     </div>
