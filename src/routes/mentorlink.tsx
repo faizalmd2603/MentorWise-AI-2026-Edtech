@@ -7,10 +7,10 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/mentorlink")({
   head: () => ({
     meta: [
-      { title: "MentorLink AI — Premium Personal Brand & LinkedIn Intelligence OS" },
-      { name: "description", content: "Transform your networking presence. Features AI Year in Review (Career Wrapped), automated high-end interactive carousel generators, and an AI Post Humanizer to completely bypass robotic text patterns for corporate reach." },
-      { property: "og:title", content: "MentorLink AI — Premium Personal Brand & LinkedIn Intelligence OS" },
-      { property: "og:description", content: "Career Wrapped, carousel generator and AI post humanizer — engineered to bypass robotic patterns and unlock corporate reach on LinkedIn." },
+      { title: "Free LinkedIn Help for Students | MentorWise AI" },
+      { name: "description", content: "Free LinkedIn help for students and freshers. Improve your profile, write better posts and grow your network — all for free." },
+      { property: "og:title", content: "Free LinkedIn Help for Students | MentorWise AI" },
+      { property: "og:description", content: "Improve your LinkedIn profile and posts for free. Made for students and freshers." },
       { property: "og:url", content: `${SITE}/mentorlink` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/mentorlink` }],
