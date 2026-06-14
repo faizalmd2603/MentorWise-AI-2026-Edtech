@@ -36,10 +36,10 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/agents/")({
   head: () => ({
     meta: [
-      { title: "AI Studio — 12 Specialist Agents | MentorWise AI" },
-      { name: "description", content: "One unified AI Studio with 12 specialist career agents — Resume Optimiser, Interview Coach, LinkedIn, Internship Scout, Courses, Exams, Email and more. Camera, file and image upload in every chat." },
-      { property: "og:title", content: "AI Studio — 12 Specialist Agents | MentorWise AI" },
-      { property: "og:description", content: "Unified LLM-style AI Studio with 12 specialist agents, ready-to-use prompts, camera capture and file uploads. 100% free." },
+      { title: "Free AI Tools for Students — 12 in One App | MentorWise AI" },
+      { name: "description", content: "12 free AI tools for students in one app — resume help, mock interview, LinkedIn help, free internships, free courses, study help, email writing and more." },
+      { property: "og:title", content: "Free AI Tools for Students — 12 in One App | MentorWise AI" },
+      { property: "og:description", content: "12 free AI tools for students — resume, interview, LinkedIn, internships, courses, study help and more. All free." },
       { property: "og:url", content: `${SITE}/agents` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/agents` }],
