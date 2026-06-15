@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { createEvent, listEvents, deleteEvent, setEventStatus } from "@/lib/events.functions";
-import { supabase } from "@/integrations/supabase/client";
-import { Radio, Calendar, Plus, Trash2, Play, Square, LogIn, Video } from "lucide-react";
+import { useAuthReady } from "@/hooks/use-auth-ready";
+import { Radio, Calendar, Plus, Trash2, Play, Square, LogIn, Video, Loader2 } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -29,29 +29,18 @@ function EventsPage() {
   const createFn = useServerFn(createEvent);
   const delFn = useServerFn(deleteEvent);
   const statusFn = useServerFn(setEventStatus);
-  const [user, setUser] = useState<{ id: string; email: string; isAdmin: boolean } | null>(null);
+  const auth = useAuthReady();
+  const user = auth.user ? { id: auth.user.id, email: auth.email ?? "", isAdmin: auth.isAdmin } : null;
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", scheduled_at: "" });
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    let mounted = true;
-    const load = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!mounted || !data.user) return setUser(null);
-      const email = data.user.email?.toLowerCase() ?? "";
-      const admins = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
-      setUser({ id: data.user.id, email, isAdmin: admins.includes(email) });
-    };
-    load();
-    const { data: sub } = supabase.auth.onAuthStateChange(load);
-    return () => { mounted = false; sub.subscription.unsubscribe(); };
-  }, []);
-
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["events"],
     queryFn: () => fetchList(),
-    refetchInterval: 15000,
+    staleTime: 45_000,
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   async function handleCreate(e: React.FormEvent) {
@@ -80,7 +69,11 @@ function EventsPage() {
               Voice & video events hosted by our founders. Chat, react, and raise your hand to be heard. Sign in to attend.
             </p>
           </div>
-          {user?.isAdmin && (
+          {!auth.isReady ? (
+            <span className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" /> Restoring session
+            </span>
+          ) : user?.isAdmin && (
             <button onClick={() => setShowForm((v) => !v)} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
               <Plus className="h-4 w-4" /> {showForm ? "Cancel" : "New Event"}
             </button>
