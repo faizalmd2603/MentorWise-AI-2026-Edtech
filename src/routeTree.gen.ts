@@ -27,6 +27,7 @@ import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
 
@@ -120,6 +121,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/admin/reports',
+  path: '/admin/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
   id: '/admin/announcements',
   path: '/admin/announcements',
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
@@ -167,6 +174,7 @@ export interface FileRoutesByTo {
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/sitemap.xml'
     | '/admin/announcements'
+    | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
     | '/events/$eventId'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/sitemap.xml'
     | '/admin/announcements'
+    | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
     | '/events/$eventId'
@@ -258,6 +269,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/sitemap.xml'
     | '/admin/announcements'
+    | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
     | '/events/$eventId'
@@ -281,6 +293,7 @@ export interface RootRouteChildren {
   ResumeRoute: typeof ResumeRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
+  AdminReportsRoute: typeof AdminReportsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
@@ -419,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/announcements': {
       id: '/admin/announcements'
       path: '/admin/announcements'
@@ -449,6 +469,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResumeRoute: ResumeRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
+  AdminReportsRoute: AdminReportsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   EventsEventIdRoute: EventsEventIdRoute,
