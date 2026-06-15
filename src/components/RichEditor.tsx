@@ -1,12 +1,13 @@
-import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import { TextStyle } from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
+import {
+  TextStyle,
+  Color,
+  FontFamily,
+  FontSize,
+} from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-import FontFamily from "@tiptap/extension-font-family";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
@@ -29,6 +30,7 @@ import {
   Highlighter,
   ChevronDown,
   Loader2,
+  RemoveFormatting,
 } from "lucide-react";
 import { uploadAnnouncementImage } from "@/lib/storage.functions";
 
@@ -41,33 +43,23 @@ const FONT_FAMILIES = [
 ];
 
 const FONT_SIZES = [
-  { label: "S", value: "0.875rem" },
-  { label: "M", value: "1rem" },
-  { label: "L", value: "1.125rem" },
-  { label: "XL", value: "1.375rem" },
-  { label: "2XL", value: "1.75rem" },
+  { label: "Small", value: "14px" },
+  { label: "Normal", value: "16px" },
+  { label: "Large", value: "18px" },
+  { label: "XL", value: "22px" },
+  { label: "2XL", value: "28px" },
 ];
 
 const COLORS = [
   "#0b1220", "#374151", "#6b7280",
   "#dc2626", "#ea580c", "#f59e0b",
   "#16a34a", "#0ea5e9", "#2563eb",
-  "#7c3aed", "#db2777",
+  "#7c3aed", "#db2777", "#ffffff",
 ];
 
 const HIGHLIGHTS = [
   "#fde68a", "#fecaca", "#bbf7d0",
   "#bfdbfe", "#ddd6fe", "#fbcfe8",
-];
-
-const BULLET_STYLES: { label: string; symbol: string; css: string }[] = [
-  { label: "Dot", symbol: "•", css: "disc" },
-  { label: "Circle", symbol: "◦", css: "circle" },
-  { label: "Square", symbol: "▪", css: "square" },
-  { label: "Star", symbol: "★", css: "'★  '" },
-  { label: "Arrow", symbol: "➤", css: "'➤  '" },
-  { label: "Check", symbol: "✔", css: "'✔  '" },
-  { label: "Diamond", symbol: "◆", css: "'◆  '" },
 ];
 
 interface Props {
@@ -83,21 +75,26 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [showColor, setShowColor] = useState(false);
   const [showHi, setShowHi] = useState(false);
-  const [showBullets, setShowBullets] = useState(false);
-  const [bulletStyle, setBulletStyle] = useState<string>("disc");
-  const [fontSize, setFontSize] = useState<string>("1rem");
+  const [showMore, setShowMore] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
-      Underline,
+      // StarterKit v3 already includes Bold, Italic, Underline, Strike, Link,
+      // Heading, BulletList, OrderedList, Blockquote, History, etc.
+      // Tune the bundled Link extension instead of adding it twice.
+      StarterKit.configure({
+        link: {
+          openOnClick: false,
+          HTMLAttributes: { rel: "noopener noreferrer", target: "_blank" },
+        },
+      }),
       TextStyle,
       Color,
       FontFamily,
+      FontSize,
       Highlight.configure({ multicolor: true }),
       Image.configure({ HTMLAttributes: { class: "rounded-lg my-3 max-w-full" } }),
-      Link.configure({ openOnClick: false, HTMLAttributes: { rel: "noopener noreferrer", target: "_blank" } }),
       Placeholder.configure({ placeholder: placeholder ?? "Write your post…" }),
     ],
     content: value || "",
@@ -105,7 +102,6 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
       attributes: {
         class:
           "min-h-[280px] max-w-none px-4 py-3 focus:outline-none prose prose-sm sm:prose-base dark:prose-invert text-foreground",
-        style: `font-size: ${fontSize}`,
       },
     },
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
@@ -146,38 +142,59 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
     }
   }
 
+  const closeAll = () => {
+    setShowEmoji(false);
+    setShowColor(false);
+    setShowHi(false);
+    setShowMore(false);
+  };
+
   return (
-    <div className="rounded-xl border border-input bg-background shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-input bg-background shadow-sm focus-within:ring-2 focus-within:ring-foreground/20">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-1 border-b border-border bg-muted/40 px-2 py-2">
-        <ToolBtn label="Bold" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
-          <Bold className="h-4 w-4" />
-        </ToolBtn>
-        <ToolBtn label="Italic" active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}>
-          <Italic className="h-4 w-4" />
-        </ToolBtn>
-        <ToolBtn label="Underline" active={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}>
-          <UnderlineIcon className="h-4 w-4" />
-        </ToolBtn>
-        <ToolBtn label="Strike" active={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}>
-          <Strikethrough className="h-4 w-4" />
-        </ToolBtn>
+      <div className="flex flex-wrap items-center gap-1 border-b border-border bg-gradient-to-b from-muted/60 to-muted/30 px-2 py-2 backdrop-blur">
+        <Group>
+          <ToolBtn label="Bold (Ctrl+B)" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
+            <Bold className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Italic (Ctrl+I)" active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}>
+            <Italic className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Underline (Ctrl+U)" active={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}>
+            <UnderlineIcon className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Strikethrough" active={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}>
+            <Strikethrough className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Clear formatting" onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}>
+            <RemoveFormatting className="h-4 w-4" />
+          </ToolBtn>
+        </Group>
 
         <Divider />
 
-        <ToolBtn label="Heading" active={editor.isActive("heading", { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
-          <Heading2 className="h-4 w-4" />
-        </ToolBtn>
-        <ToolBtn label="Quote" active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}>
-          <Quote className="h-4 w-4" />
-        </ToolBtn>
+        <Group>
+          <ToolBtn label="Heading" active={editor.isActive("heading", { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
+            <Heading2 className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Quote" active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}>
+            <Quote className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Bullet list" active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}>
+            <List className="h-4 w-4" />
+          </ToolBtn>
+          <ToolBtn label="Numbered list" active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}>
+            <ListOrdered className="h-4 w-4" />
+          </ToolBtn>
+        </Group>
 
         <Divider />
 
         {/* Font family */}
         <select
           aria-label="Font family"
-          className="h-8 rounded-md border border-input bg-background px-2 text-xs text-foreground"
+          className="h-8 cursor-pointer rounded-md border border-input bg-background px-2 text-xs font-medium text-foreground transition hover:bg-foreground/5"
+          value={editor.getAttributes("textStyle").fontFamily || ""}
           onChange={(e) => {
             const v = e.target.value;
             if (!v) editor.chain().focus().unsetFontFamily().run();
@@ -189,15 +206,15 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
           ))}
         </select>
 
-        {/* Font size — applied to editor wrapper */}
+        {/* Font size (as a real text mark) */}
         <select
           aria-label="Font size"
-          value={fontSize}
-          className="h-8 rounded-md border border-input bg-background px-2 text-xs text-foreground"
+          className="h-8 cursor-pointer rounded-md border border-input bg-background px-2 text-xs font-medium text-foreground transition hover:bg-foreground/5"
+          value={editor.getAttributes("textStyle").fontSize || "16px"}
           onChange={(e) => {
-            setFontSize(e.target.value);
-            const el = editor.view.dom as HTMLElement;
-            el.style.fontSize = e.target.value;
+            const v = e.target.value;
+            if (v === "16px") editor.chain().focus().unsetFontSize().run();
+            else editor.chain().focus().setFontSize(v).run();
           }}
         >
           {FONT_SIZES.map((s) => (
@@ -208,14 +225,14 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
         <Divider />
 
         {/* Color */}
-        <Popover open={showColor} onClose={() => setShowColor(false)} trigger={
-          <ToolBtn label="Text color" onClick={() => { setShowColor((v) => !v); setShowHi(false); setShowEmoji(false); setShowBullets(false); }}>
+        <Popover open={showColor} onClose={closeAll} trigger={
+          <ToolBtn label="Text color" onClick={() => { const v = !showColor; closeAll(); setShowColor(v); }}>
             <Palette className="h-4 w-4" />
           </ToolBtn>
         }>
           <div className="grid grid-cols-6 gap-1.5 p-2">
             {COLORS.map((c) => (
-              <button key={c} type="button" className="h-6 w-6 rounded border border-border" style={{ background: c }}
+              <button key={c} type="button" className="h-6 w-6 rounded border border-border transition hover:scale-110" style={{ background: c }}
                 onClick={() => { editor.chain().focus().setColor(c).run(); setShowColor(false); }} aria-label={`Color ${c}`} />
             ))}
             <button type="button" className="col-span-6 mt-1 text-xs text-muted-foreground hover:text-foreground"
@@ -224,14 +241,14 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
         </Popover>
 
         {/* Highlight */}
-        <Popover open={showHi} onClose={() => setShowHi(false)} trigger={
-          <ToolBtn label="Highlight" onClick={() => { setShowHi((v) => !v); setShowColor(false); setShowEmoji(false); setShowBullets(false); }}>
+        <Popover open={showHi} onClose={closeAll} trigger={
+          <ToolBtn label="Highlight" onClick={() => { const v = !showHi; closeAll(); setShowHi(v); }}>
             <Highlighter className="h-4 w-4" />
           </ToolBtn>
         }>
           <div className="grid grid-cols-6 gap-1.5 p-2">
             {HIGHLIGHTS.map((c) => (
-              <button key={c} type="button" className="h-6 w-6 rounded border border-border" style={{ background: c }}
+              <button key={c} type="button" className="h-6 w-6 rounded border border-border transition hover:scale-110" style={{ background: c }}
                 onClick={() => { editor.chain().focus().toggleHighlight({ color: c }).run(); setShowHi(false); }} aria-label={`Highlight ${c}`} />
             ))}
             <button type="button" className="col-span-6 mt-1 text-xs text-muted-foreground hover:text-foreground"
@@ -241,44 +258,9 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
 
         <Divider />
 
-        {/* Bullets dropdown */}
-        <Popover open={showBullets} onClose={() => setShowBullets(false)} trigger={
-          <button type="button" onClick={() => { setShowBullets((v) => !v); setShowColor(false); setShowHi(false); setShowEmoji(false); }}
-            className="inline-flex h-8 items-center gap-1 rounded-md border border-input bg-background px-2 text-xs text-foreground hover:bg-foreground/5"
-            aria-label="Bullet style">
-            <List className="h-4 w-4" /> Bullets <ChevronDown className="h-3 w-3" />
-          </button>
-        }>
-          <div className="w-48 p-1">
-            {BULLET_STYLES.map((b) => (
-              <button key={b.label} type="button"
-                className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm text-foreground hover:bg-foreground/5"
-                onClick={() => {
-                  setBulletStyle(b.css);
-                  editor.chain().focus().toggleBulletList().run();
-                  // Apply chosen marker style to the active list element
-                  setTimeout(() => {
-                    const root = editor.view.dom as HTMLElement;
-                    root.querySelectorAll("ul").forEach((ul) => ((ul as HTMLElement).style.listStyle = b.css));
-                  }, 0);
-                  setShowBullets(false);
-                }}>
-                <span className="flex items-center gap-2"><span className="w-5 text-center">{b.symbol}</span>{b.label}</span>
-              </button>
-            ))}
-            <div className="my-1 h-px bg-border" />
-            <button type="button" className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-foreground hover:bg-foreground/5"
-              onClick={() => { editor.chain().focus().toggleOrderedList().run(); setShowBullets(false); }}>
-              <ListOrdered className="h-4 w-4" /> Numbered list
-            </button>
-          </div>
-        </Popover>
-
-        <Divider />
-
         {/* Emoji */}
-        <Popover open={showEmoji} onClose={() => setShowEmoji(false)} trigger={
-          <ToolBtn label="Emoji" onClick={() => { setShowEmoji((v) => !v); setShowColor(false); setShowHi(false); setShowBullets(false); }}>
+        <Popover open={showEmoji} onClose={closeAll} trigger={
+          <ToolBtn label="Emoji" onClick={() => { const v = !showEmoji; closeAll(); setShowEmoji(v); }}>
             <Smile className="h-4 w-4" />
           </ToolBtn>
         }>
@@ -319,13 +301,19 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
 
         <Divider />
 
-        <ToolBtn label="Undo" onClick={() => editor.chain().focus().undo().run()}><Undo2 className="h-4 w-4" /></ToolBtn>
-        <ToolBtn label="Redo" onClick={() => editor.chain().focus().redo().run()}><Redo2 className="h-4 w-4" /></ToolBtn>
+        <Group>
+          <ToolBtn label="Undo" onClick={() => editor.chain().focus().undo().run()}><Undo2 className="h-4 w-4" /></ToolBtn>
+          <ToolBtn label="Redo" onClick={() => editor.chain().focus().redo().run()}><Redo2 className="h-4 w-4" /></ToolBtn>
+        </Group>
       </div>
 
       <EditorContent editor={editor} />
     </div>
   );
+}
+
+function Group({ children }: { children: React.ReactNode }) {
+  return <div className="flex items-center gap-0.5 rounded-lg bg-background/60 p-0.5 ring-1 ring-border/60">{children}</div>;
 }
 
 function ToolBtn({
@@ -335,10 +323,13 @@ function ToolBtn({
     <button
       type="button"
       aria-label={label}
+      aria-pressed={active ? true : undefined}
       title={label}
       onClick={onClick}
       className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-foreground transition ${
-        active ? "border-foreground bg-foreground text-background" : "border-transparent hover:bg-foreground/5"
+        active
+          ? "border-foreground/80 bg-foreground text-background shadow-sm"
+          : "border-transparent hover:border-border hover:bg-foreground/5"
       }`}
     >
       {children}
@@ -347,7 +338,7 @@ function ToolBtn({
 }
 
 function Divider() {
-  return <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />;
+  return <span className="mx-1 h-5 w-px bg-border" aria-hidden />;
 }
 
 function Popover({
@@ -367,4 +358,3 @@ function Popover({
     </div>
   );
 }
-
