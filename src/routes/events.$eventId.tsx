@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { getLiveKitToken } from "@/lib/events.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuthReady } from "@/hooks/use-auth-ready";
 import { Room, RoomEvent, Track, type RemoteTrack, type RemoteParticipant } from "livekit-client";
 import { Mic, MicOff, Hand, Send, LogIn, ArrowLeft, Smile, Radio } from "lucide-react";
 
@@ -22,8 +23,8 @@ function LiveEventRoom() {
   const { eventId } = Route.useParams();
   const navigate = useNavigate();
   const tokenFn = useServerFn(getLiveKitToken);
-  const [user, setUser] = useState<{ id: string; name: string } | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
+  const auth = useAuthReady();
+  const user = auth.user ? { id: auth.user.id, name: auth.displayName } : null;
   const [event, setEvent] = useState<any>(null);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [text, setText] = useState("");
@@ -33,27 +34,15 @@ function LiveEventRoom() {
   const [micOn, setMicOn] = useState(false);
   const [connected, setConnected] = useState(false);
   const [participants, setParticipants] = useState<number>(1);
-  const [activeReactions, setActiveReactions] = useState<{ id: string; emoji: string }[]>([]);
+  const [activeReactions, setActiveReactions] = useState<{ id: string; emoji: string; left: number }[]>([]);
   const roomRef = useRef<Room | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auth
-  useEffect(() => {
-    let mounted = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      if (data.user) {
-        const meta: any = data.user.user_metadata || {};
-        setUser({ id: data.user.id, name: meta.full_name || meta.display_name || data.user.email || "Guest" });
-      }
-      setAuthChecked(true);
-    });
-  }, []);
-
   // Load event + messages + realtime
   useEffect(() => {
+    if (!auth.isReady || !user) return;
     let mounted = true;
     (async () => {
       const { data: ev } = await supabase.from("live_events").select("*").eq("id", eventId).maybeSingle();
@@ -72,7 +61,7 @@ function LiveEventRoom() {
           setMessages((prev) => [...prev, m]);
           if (m.kind === "reaction") {
             const id = `${m.id}-${Math.random()}`;
-            setActiveReactions((p) => [...p, { id, emoji: m.content }]);
+            setActiveReactions((p) => [...p, { id, emoji: m.content, left: 20 + Math.random() * 60 }]);
             setTimeout(() => setActiveReactions((p) => p.filter((r) => r.id !== id)), 3000);
           }
         })
@@ -81,7 +70,7 @@ function LiveEventRoom() {
       .subscribe();
 
     return () => { mounted = false; supabase.removeChannel(channel); };
-  }, [eventId]);
+  }, [auth.isReady, user?.id, eventId]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -131,7 +120,7 @@ function LiveEventRoom() {
       roomRef.current?.disconnect();
       roomRef.current = null;
     };
-  }, [user, event, eventId, tokenFn]);
+  }, [user?.id, event?.id, eventId]);
 
   async function postMessage(kind: string, content: string) {
     if (!user) return;
@@ -160,7 +149,7 @@ function LiveEventRoom() {
     setMicOn(next);
   }
 
-  if (!authChecked) return <SiteLayout><div className="p-12 text-center text-muted-foreground">Loading…</div></SiteLayout>;
+  if (!auth.isReady) return <SiteLayout><div className="p-12 text-center text-muted-foreground">Restoring your session…</div></SiteLayout>;
 
   if (!user) {
     return (
@@ -216,7 +205,7 @@ function LiveEventRoom() {
             <div className="pointer-events-none absolute inset-0">
               {activeReactions.map((r) => (
                 <div key={r.id} className="absolute bottom-10 animate-[float_3s_ease-out_forwards] text-4xl"
-                  style={{ left: `${20 + Math.random() * 60}%` }}>
+                  style={{ left: `${r.left}%` }}>
                   {r.emoji}
                 </div>
               ))}
