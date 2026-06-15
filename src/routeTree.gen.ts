@@ -23,6 +23,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
+import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
@@ -97,6 +98,11 @@ const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
   path: '/resources/job-search-sites',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsEventIdRoute = EventsEventIdRouteImport.update({
+  id: '/events/$eventId',
+  path: '/events/$eventId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
   id: '/agents/$agentId',
   path: '/agents/$agentId',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents': typeof AgentsIndexRoute
   '/events': typeof EventsIndexRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/announcements'
     | '/agents/$agentId'
+    | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/agents/'
     | '/events/'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/announcements'
     | '/agents/$agentId'
+    | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/agents'
     | '/events'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/announcements'
     | '/agents/$agentId'
+    | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/agents/'
     | '/events/'
@@ -246,6 +258,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
+  EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -352,6 +365,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesJobSearchSitesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/$eventId': {
+      id: '/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof EventsEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agents/$agentId': {
       id: '/agents/$agentId'
       path: '/agents/$agentId'
@@ -390,6 +410,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
+  EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
