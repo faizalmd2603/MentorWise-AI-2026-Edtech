@@ -22,6 +22,8 @@ interface Props {
 export function RichEditor({ value, onChange, placeholder }: Props) {
   const uploadFn = useServerFn(uploadAnnouncementImage);
   const quillRef = useRef<ReactQuillType | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const [uploading, setUploading] = useState(false);
 
   // Image upload handler — hooks into Quill's toolbar "image" button so
