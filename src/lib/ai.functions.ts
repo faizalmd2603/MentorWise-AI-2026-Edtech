@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { AGENTS } from "./agents";
 
 
@@ -49,6 +50,7 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
 }
 
 export const chatWithAgent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
   .handler(async ({ data }) => {
 
@@ -110,6 +112,7 @@ const ImageInput = z.object({
 });
 
 export const generateImage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ImageInput.parse(input))
   .handler(async ({ data }) => {
 
