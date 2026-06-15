@@ -131,9 +131,12 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
       <style>{`
         .rich-editor .ql-toolbar.ql-snow {
           border: none;
-          border-bottom: 1px solid hsl(var(--border));
-          background: linear-gradient(to bottom, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.3));
-          padding: 8px;
+          border-bottom: 1px solid var(--border);
+          background: color-mix(in oklab, var(--muted) 70%, transparent);
+          padding: 10px 10px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
         }
         .rich-editor .ql-container.ql-snow {
           border: none;
@@ -143,41 +146,63 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
         }
         .rich-editor .ql-editor {
           min-height: 280px;
-          color: hsl(var(--foreground));
+          color: var(--foreground);
           padding: 14px 16px;
         }
         .rich-editor .ql-editor.ql-blank::before {
-          color: hsl(var(--muted-foreground));
+          color: var(--muted-foreground);
           font-style: normal;
+          left: 16px;
+          right: 16px;
         }
-        .rich-editor .ql-snow .ql-stroke { stroke: hsl(var(--foreground)); }
-        .rich-editor .ql-snow .ql-fill { fill: hsl(var(--foreground)); }
-        .rich-editor .ql-snow .ql-picker { color: hsl(var(--foreground)); }
+        /* Force visible icons regardless of theme tokens */
+        .rich-editor .ql-snow .ql-stroke,
+        .rich-editor .ql-snow .ql-stroke-miter { stroke: var(--foreground); }
+        .rich-editor .ql-snow .ql-fill,
+        .rich-editor .ql-snow .ql-even { fill: var(--foreground); }
+        .rich-editor .ql-snow .ql-picker,
+        .rich-editor .ql-snow .ql-picker-label { color: var(--foreground); }
+        .rich-editor .ql-snow .ql-picker-label {
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          padding: 2px 22px 2px 8px;
+        }
         .rich-editor .ql-snow .ql-picker-options {
-          background: hsl(var(--popover));
-          border-color: hsl(var(--border));
-          color: hsl(var(--popover-foreground));
+          background: var(--popover);
+          border: 1px solid var(--border) !important;
+          color: var(--popover-foreground);
+          border-radius: 8px;
+          padding: 6px;
+          box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.18);
         }
+        .rich-editor .ql-snow.ql-toolbar button,
+        .rich-editor .ql-snow .ql-picker-label {
+          height: 30px;
+          border-radius: 6px;
+        }
+        .rich-editor .ql-snow.ql-toolbar button { width: 32px; }
         .rich-editor .ql-snow.ql-toolbar button:hover,
         .rich-editor .ql-snow.ql-toolbar button.ql-active,
         .rich-editor .ql-snow .ql-picker-label:hover,
         .rich-editor .ql-snow .ql-picker-label.ql-active {
-          color: hsl(var(--primary));
+          background: color-mix(in oklab, var(--foreground) 8%, transparent);
+          color: var(--primary);
         }
         .rich-editor .ql-snow.ql-toolbar button:hover .ql-stroke,
         .rich-editor .ql-snow.ql-toolbar button.ql-active .ql-stroke {
-          stroke: hsl(var(--primary));
+          stroke: var(--primary);
         }
         .rich-editor .ql-snow.ql-toolbar button:hover .ql-fill,
         .rich-editor .ql-snow.ql-toolbar button.ql-active .ql-fill {
-          fill: hsl(var(--primary));
+          fill: var(--primary);
         }
         .rich-editor .ql-editor img { border-radius: 12px; margin: 12px 0; max-width: 100%; }
         .rich-editor .ql-editor blockquote {
-          border-left: 3px solid hsl(var(--primary));
+          border-left: 3px solid var(--primary);
           padding-left: 12px;
-          color: hsl(var(--muted-foreground));
+          color: var(--muted-foreground);
         }
+        .rich-editor .ql-tooltip { z-index: 50; }
       `}</style>
     </div>
   );
