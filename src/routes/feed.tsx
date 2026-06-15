@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { memo, useMemo } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { listAnnouncements } from "@/lib/announcements.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeAnnouncementHtml } from "@/lib/sanitize";
-import { Megaphone, ShieldCheck, LogIn } from "lucide-react";
+import { useAuthReady } from "@/hooks/use-auth-ready";
+import { Megaphone, ShieldCheck, LogIn, Loader2 } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -31,33 +32,51 @@ export const Route = createFileRoute("/feed")({
   component: FeedPage,
 });
 
+const AnnouncementItem = memo(({ a }: { a: any }) => {
+  const sanitizedHtml = useMemo(() => 
+    a.body_html ? sanitizeAnnouncementHtml(a.body_html) : null
+  , [a.body_html]);
+
+  return (
+    <li className="motion-card rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          {a.author_name}
+        </span>
+        <time className="text-xs text-muted-foreground" dateTime={a.created_at}>
+          {new Date(a.created_at).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </time>
+      </div>
+      <h2 className="text-lg font-bold text-foreground sm:text-xl">{a.title}</h2>
+      {sanitizedHtml ? (
+        <div
+          className="prose prose-sm sm:prose-base dark:prose-invert mt-2 max-w-none text-foreground"
+          dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+        />
+      ) : (
+        <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/90">
+          {a.body}
+        </p>
+      )}
+    </li>
+  );
+});
+
+AnnouncementItem.displayName = "AnnouncementItem";
+
 function FeedPage() {
   const fetchFeed = useServerFn(listAnnouncements);
-  const [user, setUser] = useState<{ email: string | null; isAdmin: boolean } | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      const email = data.user?.email?.toLowerCase() ?? null;
-      const admins = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
-      setUser(email ? { email, isAdmin: admins.includes(email) } : null);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      const email = session?.user?.email?.toLowerCase() ?? null;
-      const admins = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
-      setUser(email ? { email, isAdmin: admins.includes(email) } : null);
-    });
-    return () => {
-      mounted = false;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+  const auth = useAuthReady();
 
   const { data, isLoading } = useQuery({
     queryKey: ["announcements"],
     queryFn: () => fetchFeed(),
-    refetchOnWindowFocus: true,
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   async function signOut() {
@@ -82,12 +101,16 @@ function FeedPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {user ? (
+            {!auth.isReady ? (
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Restoring session
+              </span>
+            ) : auth.user ? (
               <>
                 <span className="hidden sm:inline-block text-xs text-muted-foreground">
-                  {user.email}
+                  {auth.email}
                 </span>
-                {user.isAdmin && (
+                {auth.isAdmin && (
                   <Link
                     to="/admin/announcements"
                     className="inline-flex items-center gap-1.5 rounded-lg border border-foreground/20 bg-foreground px-3 py-1.5 text-xs font-semibold text-background"
@@ -116,11 +139,11 @@ function FeedPage() {
         </header>
 
         {isLoading ? (
-          <div className="rounded-xl border border-border bg-card p-6 text-muted-foreground">
-            Loading announcements…
+          <div className="motion-card rounded-xl border border-border bg-card p-6 text-muted-foreground">
+            <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading announcements…</span>
           </div>
         ) : !data?.announcements.length ? (
-          <div className="rounded-xl border border-dashed border-border bg-card/50 p-10 text-center">
+          <div className="motion-card rounded-xl border border-dashed border-border bg-card/50 p-10 text-center">
             <Megaphone className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
             <p className="text-foreground font-medium">No announcements yet</p>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -130,33 +153,7 @@ function FeedPage() {
         ) : (
           <ol className="space-y-5">
             {data.announcements.map((a) => (
-              <li
-                key={a.id}
-                className="rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:shadow-md"
-              >
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    {a.author_name}
-                  </span>
-                  <time className="text-xs text-muted-foreground" dateTime={a.created_at}>
-                    {new Date(a.created_at).toLocaleString(undefined, {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                  </time>
-                </div>
-                <h2 className="text-lg font-bold text-foreground sm:text-xl">{a.title}</h2>
-                {a.body_html ? (
-                  <div
-                    className="prose prose-sm sm:prose-base dark:prose-invert mt-2 max-w-none text-foreground"
-                    dangerouslySetInnerHTML={{ __html: sanitizeAnnouncementHtml(a.body_html) }}
-                  />
-                ) : (
-                  <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/90">
-                    {a.body}
-                  </p>
-                )}
-              </li>
+              <AnnouncementItem key={a.id} a={a} />
             ))}
           </ol>
         )}

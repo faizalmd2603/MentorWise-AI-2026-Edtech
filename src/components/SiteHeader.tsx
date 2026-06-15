@@ -1,10 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import logo from "@/assets/mw-logo.jpeg.asset.json";
 import { Menu, X, LogIn, Sparkles, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-
-const ADMIN_EMAILS = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
+import { useState } from "react";
+import { useAuthReady } from "@/hooks/use-auth-ready";
 
 const links = [
   { to: "/" as const, label: "Home" },
@@ -19,19 +17,9 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [authed, setAuthed] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
-
-  useEffect(() => {
-    const apply = (email: string | null | undefined, hasSession: boolean) => {
-      setAuthed(hasSession);
-      setIsAdmin(!!email && ADMIN_EMAILS.includes(email.toLowerCase()));
-    };
-    supabase.auth.getSession().then(({ data }) => apply(data.session?.user?.email, !!data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => apply(s?.user?.email, !!s));
-    return () => sub.subscription.unsubscribe();
-  }, []);
+  const { isReady, user, isAdmin } = useAuthReady();
+  const authed = isReady && !!user;
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -86,7 +74,11 @@ export function SiteHeader() {
             )}
 
             {/* Bold, force-pinned auth CTA */}
-            {authed ? (
+            {!isReady ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-sm font-semibold text-muted-foreground shadow-sm">
+                Account
+              </span>
+            ) : authed ? (
               <Link
                 to="/feed"
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98]"
@@ -141,7 +133,7 @@ export function SiteHeader() {
                 <ShieldCheck className="h-4 w-4" /> Admin Console
               </Link>
             )}
-            {!authed && (
+            {isReady && !authed && (
               <Link
                 to="/auth"
                 onClick={() => setOpen(false)}
