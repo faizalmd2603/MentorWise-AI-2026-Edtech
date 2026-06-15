@@ -22,9 +22,12 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
 
@@ -93,6 +96,11 @@ const AgentsIndexRoute = AgentsIndexRouteImport.update({
   path: '/agents/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
   id: '/resources/job-search-sites',
   path: '/resources/job-search-sites',
@@ -106,6 +114,16 @@ const EventsEventIdRoute = EventsEventIdRouteImport.update({
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
   id: '/agents/$agentId',
   path: '/agents/$agentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/admin/reports',
+  path: '/admin/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
@@ -133,9 +151,12 @@ export interface FileRoutesByFullPath {
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
+  '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -153,9 +174,12 @@ export interface FileRoutesByTo {
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
+  '/admin': typeof AdminIndexRoute
   '/agents': typeof AgentsIndexRoute
   '/events': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -174,9 +198,12 @@ export interface FileRoutesById {
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
+  '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -196,9 +223,12 @@ export interface FileRouteTypes {
     | '/resume'
     | '/sitemap.xml'
     | '/admin/announcements'
+    | '/admin/reports'
+    | '/admin/users'
     | '/agents/$agentId'
     | '/events/$eventId'
     | '/resources/job-search-sites'
+    | '/admin/'
     | '/agents/'
     | '/events/'
     | '/api/elevenlabs/mentor-token'
@@ -216,9 +246,12 @@ export interface FileRouteTypes {
     | '/resume'
     | '/sitemap.xml'
     | '/admin/announcements'
+    | '/admin/reports'
+    | '/admin/users'
     | '/agents/$agentId'
     | '/events/$eventId'
     | '/resources/job-search-sites'
+    | '/admin'
     | '/agents'
     | '/events'
     | '/api/elevenlabs/mentor-token'
@@ -236,9 +269,12 @@ export interface FileRouteTypes {
     | '/resume'
     | '/sitemap.xml'
     | '/admin/announcements'
+    | '/admin/reports'
+    | '/admin/users'
     | '/agents/$agentId'
     | '/events/$eventId'
     | '/resources/job-search-sites'
+    | '/admin/'
     | '/agents/'
     | '/events/'
     | '/api/elevenlabs/mentor-token'
@@ -257,9 +293,12 @@ export interface RootRouteChildren {
   ResumeRoute: typeof ResumeRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
+  AdminReportsRoute: typeof AdminReportsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
@@ -358,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resources/job-search-sites': {
       id: '/resources/job-search-sites'
       path: '/resources/job-search-sites'
@@ -377,6 +423,20 @@ declare module '@tanstack/react-router' {
       path: '/agents/$agentId'
       fullPath: '/agents/$agentId'
       preLoaderRoute: typeof AgentsAgentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/announcements': {
@@ -409,9 +469,12 @@ const rootRouteChildren: RootRouteChildren = {
   ResumeRoute: ResumeRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
+  AdminReportsRoute: AdminReportsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
+  AdminIndexRoute: AdminIndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
