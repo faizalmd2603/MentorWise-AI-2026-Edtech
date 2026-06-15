@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState, memo, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { listAnnouncements } from "@/lib/announcements.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeAnnouncementHtml } from "@/lib/sanitize";
-import { Megaphone, ShieldCheck, LogIn } from "lucide-react";
+import { useAuthReady } from "@/hooks/use-auth-ready";
+import { Megaphone, ShieldCheck, LogIn, Loader2 } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -68,31 +69,14 @@ AnnouncementItem.displayName = "AnnouncementItem";
 
 function FeedPage() {
   const fetchFeed = useServerFn(listAnnouncements);
-  const [user, setUser] = useState<{ email: string | null; isAdmin: boolean } | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      const email = data.user?.email?.toLowerCase() ?? null;
-      const admins = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
-      setUser(email ? { email, isAdmin: admins.includes(email) } : null);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      const email = session?.user?.email?.toLowerCase() ?? null;
-      const admins = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
-      setUser(email ? { email, isAdmin: admins.includes(email) } : null);
-    });
-    return () => {
-      mounted = false;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+  const auth = useAuthReady();
 
   const { data, isLoading } = useQuery({
     queryKey: ["announcements"],
     queryFn: () => fetchFeed(),
-    refetchOnWindowFocus: true,
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   async function signOut() {
@@ -117,12 +101,16 @@ function FeedPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {user ? (
+            {!auth.isReady ? (
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Restoring session
+              </span>
+            ) : auth.user ? (
               <>
                 <span className="hidden sm:inline-block text-xs text-muted-foreground">
-                  {user.email}
+                  {auth.email}
                 </span>
-                {user.isAdmin && (
+                {auth.isAdmin && (
                   <Link
                     to="/admin/announcements"
                     className="inline-flex items-center gap-1.5 rounded-lg border border-foreground/20 bg-foreground px-3 py-1.5 text-xs font-semibold text-background"
