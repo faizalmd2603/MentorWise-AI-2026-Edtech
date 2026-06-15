@@ -20,6 +20,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
@@ -81,6 +82,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentsIndexRoute = AgentsIndexRouteImport.update({
   id: '/agents/',
   path: '/agents/',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
+  '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
 }
 export interface FileRoutesByTo {
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents': typeof AgentsIndexRoute
+  '/events': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
 }
 export interface FileRoutesById {
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
+  '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
 }
 export interface FileRouteTypes {
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/agents/$agentId'
     | '/resources/job-search-sites'
     | '/agents/'
+    | '/events/'
     | '/api/elevenlabs/mentor-token'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/agents/$agentId'
     | '/resources/job-search-sites'
     | '/agents'
+    | '/events'
     | '/api/elevenlabs/mentor-token'
   id:
     | '__root__'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/agents/$agentId'
     | '/resources/job-search-sites'
     | '/agents/'
+    | '/events/'
     | '/api/elevenlabs/mentor-token'
   fileRoutesById: FileRoutesById
 }
@@ -236,6 +248,7 @@ export interface RootRouteChildren {
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
+  EventsIndexRoute: typeof EventsIndexRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
 }
 
@@ -318,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/': {
+      id: '/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agents/': {
       id: '/agents/'
       path: '/agents'
@@ -372,6 +392,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AgentsIndexRoute: AgentsIndexRoute,
+  EventsIndexRoute: EventsIndexRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
 }
 export const routeTree = rootRouteImport

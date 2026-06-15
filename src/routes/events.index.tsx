@@ -9,7 +9,7 @@ import { Radio, Calendar, Plus, Trash2, Play, Square, LogIn, Video } from "lucid
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
-export const Route = createFileRoute("/events")({
+export const Route = createFileRoute("/events/")({
   head: () => ({
     meta: [
       { title: "Live Events — MentorWise AI" },
