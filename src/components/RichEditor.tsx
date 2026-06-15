@@ -108,15 +108,21 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
 
   return (
     <div className="rich-editor overflow-hidden rounded-xl border border-input bg-background shadow-sm focus-within:ring-2 focus-within:ring-foreground/20">
-      <ReactQuill
-        ref={(el) => { quillRef.current = el; }}
-        theme="snow"
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder ?? "Write your post…"}
-        modules={modules}
-        formats={formats}
-      />
+      {mounted ? (
+        <Suspense fallback={<div className="px-4 py-6 text-sm text-muted-foreground">Loading editor…</div>}>
+          <ReactQuill
+            ref={(el) => { quillRef.current = el; }}
+            theme="snow"
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder ?? "Write your post…"}
+            modules={modules}
+            formats={formats}
+          />
+        </Suspense>
+      ) : (
+        <div className="px-4 py-6 text-sm text-muted-foreground">Loading editor…</div>
+      )}
       {uploading && (
         <div className="border-t border-border bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
           Uploading image…
