@@ -112,6 +112,7 @@ const ImageInput = z.object({
 });
 
 export const generateImage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ImageInput.parse(input))
   .handler(async ({ data }) => {
 
