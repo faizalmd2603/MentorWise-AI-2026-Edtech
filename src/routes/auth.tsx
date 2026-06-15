@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { requestEmailOtp, verifyEmailOtp } from "@/lib/auth-otp.functions";
+import { useAuthReady } from "@/hooks/use-auth-ready";
 import { Mail, ShieldCheck, Loader2, Lock, UserPlus, LogIn } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
@@ -31,6 +32,7 @@ function AuthPage() {
   const navigate = useNavigate();
   const requestOtp = useServerFn(requestEmailOtp);
   const verifyOtp = useServerFn(verifyEmailOtp);
+  const auth = useAuthReady();
 
   const [mode, setMode] = useState<Mode>("signin");
   const [loading, setLoading] = useState(false);
@@ -51,6 +53,10 @@ function AuthPage() {
   // otp fallback
   const [otpStep, setOtpStep] = useState<"email" | "code">("email");
   const [otp, setOtp] = useState("");
+
+  useEffect(() => {
+    if (auth.isReady && auth.user) navigate({ to: "/feed", replace: true });
+  }, [auth.isReady, auth.user, navigate]);
 
   function reset() {
     setError(null);
