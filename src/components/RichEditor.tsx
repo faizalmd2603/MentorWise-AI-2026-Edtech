@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import ReactQuill from "react-quill-new";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import "react-quill-new/dist/quill.snow.css";
+import type ReactQuillType from "react-quill-new";
 import { useServerFn } from "@tanstack/react-start";
+
+// Quill touches `document` at import time, so load it only in the browser.
+const ReactQuill = lazy(() => import("react-quill-new"));
 import { uploadAnnouncementImage } from "@/lib/storage.functions";
 
 interface Props {
