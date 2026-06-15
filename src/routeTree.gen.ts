@@ -22,6 +22,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
@@ -93,6 +94,11 @@ const AgentsIndexRoute = AgentsIndexRouteImport.update({
   path: '/agents/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
   id: '/resources/job-search-sites',
   path: '/resources/job-search-sites',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
+  '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
+  '/admin': typeof AdminIndexRoute
   '/agents': typeof AgentsIndexRoute
   '/events': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
+  '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/agents/$agentId'
     | '/events/$eventId'
     | '/resources/job-search-sites'
+    | '/admin/'
     | '/agents/'
     | '/events/'
     | '/api/elevenlabs/mentor-token'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/agents/$agentId'
     | '/events/$eventId'
     | '/resources/job-search-sites'
+    | '/admin'
     | '/agents'
     | '/events'
     | '/api/elevenlabs/mentor-token'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/agents/$agentId'
     | '/events/$eventId'
     | '/resources/job-search-sites'
+    | '/admin/'
     | '/agents/'
     | '/events/'
     | '/api/elevenlabs/mentor-token'
@@ -260,6 +272,7 @@ export interface RootRouteChildren {
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
@@ -358,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resources/job-search-sites': {
       id: '/resources/job-search-sites'
       path: '/resources/job-search-sites'
@@ -412,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
+  AdminIndexRoute: AdminIndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
