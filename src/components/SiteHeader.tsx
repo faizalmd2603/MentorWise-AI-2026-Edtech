@@ -1,8 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import logo from "@/assets/mw-logo.jpeg.asset.json";
-import { Menu, X, LogIn, Sparkles } from "lucide-react";
+import { Menu, X, LogIn, Sparkles, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+
+const ADMIN_EMAILS = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail.com"];
 
 const links = [
   { to: "/" as const, label: "Home" },
@@ -18,11 +20,16 @@ const links = [
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [authed, setAuthed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setAuthed(!!s));
+    const apply = (email: string | null | undefined, hasSession: boolean) => {
+      setAuthed(hasSession);
+      setIsAdmin(!!email && ADMIN_EMAILS.includes(email.toLowerCase()));
+    };
+    supabase.auth.getSession().then(({ data }) => apply(data.session?.user?.email, !!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => apply(s?.user?.email, !!s));
     return () => sub.subscription.unsubscribe();
   }, []);
 
