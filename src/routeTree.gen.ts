@@ -20,8 +20,10 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
+import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
@@ -81,6 +83,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentsIndexRoute = AgentsIndexRouteImport.update({
   id: '/agents/',
   path: '/agents/',
@@ -89,6 +96,11 @@ const AgentsIndexRoute = AgentsIndexRouteImport.update({
 const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
   id: '/resources/job-search-sites',
   path: '/resources/job-search-sites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsEventIdRoute = EventsEventIdRouteImport.update({
+  id: '/events/$eventId',
+  path: '/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
@@ -122,8 +134,10 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
+  '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
 }
 export interface FileRoutesByTo {
@@ -140,8 +154,10 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents': typeof AgentsIndexRoute
+  '/events': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
 }
 export interface FileRoutesById {
@@ -159,8 +175,10 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/agents/': typeof AgentsIndexRoute
+  '/events/': typeof EventsIndexRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
 }
 export interface FileRouteTypes {
@@ -179,8 +197,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/announcements'
     | '/agents/$agentId'
+    | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/agents/'
+    | '/events/'
     | '/api/elevenlabs/mentor-token'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -197,8 +217,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/announcements'
     | '/agents/$agentId'
+    | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/agents'
+    | '/events'
     | '/api/elevenlabs/mentor-token'
   id:
     | '__root__'
@@ -215,8 +237,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/announcements'
     | '/agents/$agentId'
+    | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/agents/'
+    | '/events/'
     | '/api/elevenlabs/mentor-token'
   fileRoutesById: FileRoutesById
 }
@@ -234,8 +258,10 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
+  EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
+  EventsIndexRoute: typeof EventsIndexRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
 }
 
@@ -318,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/': {
+      id: '/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agents/': {
       id: '/agents/'
       path: '/agents'
@@ -330,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/resources/job-search-sites'
       fullPath: '/resources/job-search-sites'
       preLoaderRoute: typeof ResourcesJobSearchSitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/$eventId': {
+      id: '/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof EventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/agents/$agentId': {
@@ -370,20 +410,12 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
+  EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AgentsIndexRoute: AgentsIndexRoute,
+  EventsIndexRoute: EventsIndexRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
