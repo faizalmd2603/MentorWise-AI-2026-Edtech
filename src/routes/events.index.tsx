@@ -81,7 +81,7 @@ function EventsPage() {
         </header>
 
         {showForm && user?.isAdmin && (
-          <form onSubmit={handleCreate} className="mb-8 space-y-3 rounded-2xl border border-border bg-card p-5">
+          <form onSubmit={handleCreate} className="motion-card mb-8 space-y-3 rounded-2xl border border-border bg-card p-5">
             <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Event title" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
             <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={3} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
             <input required type="datetime-local" value={form.scheduled_at} onChange={(e) => setForm({ ...form, scheduled_at: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
@@ -90,9 +90,11 @@ function EventsPage() {
         )}
 
         {isLoading ? (
-          <div className="rounded-xl border border-border bg-card p-6 text-muted-foreground">Loading…</div>
+          <div className="motion-card rounded-xl border border-border bg-card p-6 text-muted-foreground">
+            <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading live events…</span>
+          </div>
         ) : !data?.events.length ? (
-          <div className="rounded-xl border border-dashed border-border bg-card/50 p-10 text-center">
+          <div className="motion-card rounded-xl border border-dashed border-border bg-card/50 p-10 text-center">
             <Video className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
             <p className="font-medium">No live events yet</p>
             <p className="mt-1 text-sm text-muted-foreground">Check back soon — founders post new sessions here.</p>
@@ -100,7 +102,7 @@ function EventsPage() {
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2">
             {data.events.map((e) => (
-              <li key={e.id} className="group relative rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:shadow-md">
+              <li key={e.id} className="motion-card group relative rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <div className="mb-2 flex items-center justify-between">
                   <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${e.status === "live" ? "bg-red-500/15 text-red-600" : e.status === "ended" ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
                     {e.status === "live" && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />}

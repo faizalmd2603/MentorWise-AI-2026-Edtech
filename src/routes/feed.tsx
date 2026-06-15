@@ -38,7 +38,7 @@ const AnnouncementItem = memo(({ a }: { a: any }) => {
   , [a.body_html]);
 
   return (
-    <li className="rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:shadow-md">
+    <li className="motion-card rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {a.author_name}
@@ -139,11 +139,11 @@ function FeedPage() {
         </header>
 
         {isLoading ? (
-          <div className="rounded-xl border border-border bg-card p-6 text-muted-foreground">
-            Loading announcements…
+          <div className="motion-card rounded-xl border border-border bg-card p-6 text-muted-foreground">
+            <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading announcements…</span>
           </div>
         ) : !data?.announcements.length ? (
-          <div className="rounded-xl border border-dashed border-border bg-card/50 p-10 text-center">
+          <div className="motion-card rounded-xl border border-dashed border-border bg-card/50 p-10 text-center">
             <Megaphone className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
             <p className="text-foreground font-medium">No announcements yet</p>
             <p className="mt-1 text-sm text-muted-foreground">
