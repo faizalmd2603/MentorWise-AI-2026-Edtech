@@ -8,7 +8,7 @@ The official domain is https://mentorwiseaiedtechservice.lovable.app. MentorWise
 
 ## What MentorWise AI does
 
-MentorWise AI is a unified ChatGPT/Claude/Gemini-class AI Studio with a sidebar to switch between 12 specialist career agents. It supports multimodal input — text, images, file and folder uploads, and live front/back camera capture — and is built on Google GenAI, React.js, TanStack Start, Tailwind CSS, Lucide Icons and Framer Motion. Each agent is engineered to MNC-grade quality and replaces an expensive career service that freshers normally cannot afford.
+MentorWise AI is a unified ChatGPT/Claude/Gemini-class AI Studio with a sidebar to switch between 12 specialist career agents. It supports multimodal input — text, images, file and folder uploads, and live front/back camera capture — and is built on Google GenAI, React.js, TanStack Start, Tailwind CSS and Lucide Icons. Each agent is engineered to MNC-grade quality and replaces an expensive career service that freshers normally cannot afford.
 
 The 12 agents are:
 1. Core AI Agent — central intelligence hub for any career query.
@@ -24,16 +24,17 @@ The 12 agents are:
 11. Social Media Agent — Instagram, X and YouTube growth playbooks.
 12. 1-on-1 Mentor Agent — live video-to-text mentoring.
 
-## Member accounts and Founder Announcements feed
+## Member accounts, Founder Announcements feed and Live Events
 
-MentorWise AI has a public Founder Announcements feed at /feed where Mohammed Faizal. M and Saif Ahmed. Z post official updates. Anyone can read the feed. Visitors who sign up with email (no password — a 6-digit OTP is emailed and is valid for 10 minutes) automatically receive every new announcement in their inbox. The only admins who can post announcements are mentorwiseaiedtech@gmail.com (Founder & CEO) and saifahmedmentorwise@gmail.com (Co-Founder).
+MentorWise AI has a Founder Announcements feed at /feed where Mohammed Faizal. M and Saif Ahmed. Z post official updates. Visitors can create a free member account with email/password or sign in with an email code fallback; sessions are designed to remain active until the user manually signs out. Signed-in members can attend live voice, text and founder-hosted video events at /events. The only admins who can post announcements, manage users, and create live streams are mentorwiseaiedtech@gmail.com (Founder & CEO) and saifahmedmentorwise@gmail.com (Co-Founder).
 
 ## Pages
 
 - [Home](/): Overview of the MentorWise AI ecosystem and unified AI Studio.
 - [AI Studio / Agent Ecosystem](/agents): All 12 specialist AI agents with multimodal chat.
+- [Live Events](/events): Founder-hosted voice, chat and live video event rooms for signed-in members.
 - [Founder Announcements Feed](/feed): Official posts from MentorWise AI founders.
-- [Sign in / Sign up](/auth): Free email-OTP login for members. No password needed.
+- [Sign in / Sign up](/auth): Free member account login with email/password and email-code fallback.
 - [Resume Optimiser](/resume): Free ATS-grade resume optimiser for freshers and college students.
 - [Interview Coach](/interview): MNC-grade STAR-method interview simulator.
 - [Internships](/internships): Free internships, LOR programs and training scout.
