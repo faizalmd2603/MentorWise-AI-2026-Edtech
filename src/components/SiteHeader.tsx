@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 const links = [
   { to: "/" as const, label: "Home" },
   { to: "/agents" as const, label: "AI Studio" },
+  { to: "/events" as const, label: "Live Events" },
   { to: "/feed" as const, label: "Feed" },
   { to: "/about" as const, label: "About" },
   { to: "/founders" as const, label: "Founders" },
