@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useMemo } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { listAnnouncements } from "@/lib/announcements.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,6 +30,41 @@ export const Route = createFileRoute("/feed")({
   }),
   component: FeedPage,
 });
+
+const AnnouncementItem = memo(({ a }: { a: any }) => {
+  const sanitizedHtml = useMemo(() => 
+    a.body_html ? sanitizeAnnouncementHtml(a.body_html) : null
+  , [a.body_html]);
+
+  return (
+    <li className="rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:shadow-md">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          {a.author_name}
+        </span>
+        <time className="text-xs text-muted-foreground" dateTime={a.created_at}>
+          {new Date(a.created_at).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </time>
+      </div>
+      <h2 className="text-lg font-bold text-foreground sm:text-xl">{a.title}</h2>
+      {sanitizedHtml ? (
+        <div
+          className="prose prose-sm sm:prose-base dark:prose-invert mt-2 max-w-none text-foreground"
+          dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+        />
+      ) : (
+        <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/90">
+          {a.body}
+        </p>
+      )}
+    </li>
+  );
+});
+
+AnnouncementItem.displayName = "AnnouncementItem";
 
 function FeedPage() {
   const fetchFeed = useServerFn(listAnnouncements);
@@ -130,33 +165,7 @@ function FeedPage() {
         ) : (
           <ol className="space-y-5">
             {data.announcements.map((a) => (
-              <li
-                key={a.id}
-                className="rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:shadow-md"
-              >
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    {a.author_name}
-                  </span>
-                  <time className="text-xs text-muted-foreground" dateTime={a.created_at}>
-                    {new Date(a.created_at).toLocaleString(undefined, {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                  </time>
-                </div>
-                <h2 className="text-lg font-bold text-foreground sm:text-xl">{a.title}</h2>
-                {a.body_html ? (
-                  <div
-                    className="prose prose-sm sm:prose-base dark:prose-invert mt-2 max-w-none text-foreground"
-                    dangerouslySetInnerHTML={{ __html: sanitizeAnnouncementHtml(a.body_html) }}
-                  />
-                ) : (
-                  <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/90">
-                    {a.body}
-                  </p>
-                )}
-              </li>
+              <AnnouncementItem key={a.id} a={a} />
             ))}
           </ol>
         )}
