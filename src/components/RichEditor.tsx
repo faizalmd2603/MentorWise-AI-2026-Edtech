@@ -145,7 +145,7 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
     setShowEmoji(false);
     setShowColor(false);
     setShowHi(false);
-    setShowMore(false);
+    
   };
 
   return (
