@@ -32,7 +32,7 @@ function EventsPage() {
   const auth = useAuthReady();
   const user = auth.user ? { id: auth.user.id, email: auth.email ?? "", isAdmin: auth.isAdmin } : null;
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ title: "", description: "", scheduled_at: "" });
+  const [form, setForm] = useState({ title: "", description: "", scheduled_at: "", meeting_url: "" });
   const [busy, setBusy] = useState(false);
 
   const { data, isLoading, refetch } = useQuery({
@@ -48,7 +48,7 @@ function EventsPage() {
     setBusy(true);
     try {
       await createFn({ data: { ...form, scheduled_at: new Date(form.scheduled_at).toISOString() } });
-      setForm({ title: "", description: "", scheduled_at: "" });
+      setForm({ title: "", description: "", scheduled_at: "", meeting_url: "" });
       setShowForm(false);
       refetch();
     } catch (err) {
@@ -85,6 +85,12 @@ function EventsPage() {
             <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Event title" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
             <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={3} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
             <input required type="datetime-local" value={form.scheduled_at} onChange={(e) => setForm({ ...form, scheduled_at: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <div>
+              <input required type="url" value={form.meeting_url} onChange={(e) => setForm({ ...form, meeting_url: e.target.value })} placeholder="https://meet.google.com/xxx-xxxx-xxx" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              <p className="mt-1.5 text-[11px] text-muted-foreground">
+                Free Google Meet link — open <a href="https://meet.google.com/new" target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline">meet.google.com/new</a> in a new tab (sign in with any Google account), copy the URL from the address bar, and paste it here. Zoom and Microsoft Teams links also work.
+              </p>
+            </div>
             <button disabled={busy} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">{busy ? "Creating…" : "Create Event"}</button>
           </form>
         )}

@@ -178,6 +178,7 @@ export type Database = {
           host_id: string
           host_name: string
           id: string
+          meeting_url: string | null
           room_name: string
           scheduled_at: string
           status: string
@@ -190,6 +191,7 @@ export type Database = {
           host_id: string
           host_name: string
           id?: string
+          meeting_url?: string | null
           room_name: string
           scheduled_at?: string
           status?: string
@@ -202,6 +204,7 @@ export type Database = {
           host_id?: string
           host_name?: string
           id?: string
+          meeting_url?: string | null
           room_name?: string
           scheduled_at?: string
           status?: string

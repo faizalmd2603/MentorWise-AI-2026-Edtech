@@ -1,12 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
-import { AccessToken } from "livekit-server-sdk";
+
+const MeetUrl = z
+  .string()
+  .trim()
+  .url()
+  .refine(
+    (u) => /^(https:\/\/)?(meet\.google\.com|meet\.jit\.si|zoom\.us|.*\.zoom\.us|teams\.microsoft\.com|teams\.live\.com)\//i.test(u),
+    "Must be a Google Meet (or Zoom/Teams) link",
+  );
 
 const CreateEvent = z.object({
   title: z.string().min(3).max(120),
   description: z.string().max(2000).optional().default(""),
   scheduled_at: z.string().min(8),
+  meeting_url: MeetUrl,
 });
 
 export const createEvent = createServerFn({ method: "POST" })
@@ -40,7 +49,8 @@ export const createEvent = createServerFn({ method: "POST" })
         scheduled_at: data.scheduled_at,
         room_name,
         status: "scheduled",
-      })
+        meeting_url: data.meeting_url,
+      } as never)
       .select()
       .single();
     if (error) throw new Error(error.message);
@@ -89,28 +99,24 @@ export const listEvents = createServerFn({ method: "GET" }).handler(async () => 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
     .from("live_events")
-    .select("*")
+    .select("id, host_id, host_name, title, description, scheduled_at, status, created_at, updated_at")
     .order("scheduled_at", { ascending: false })
     .limit(50);
   if (error) throw new Error(error.message);
   return { events: data ?? [] };
 });
 
-const TokenInput = z.object({ event_id: z.string().uuid() });
+const JoinInput = z.object({ event_id: z.string().uuid() });
 
-export const getLiveKitToken = createServerFn({ method: "POST" })
+/** Returns the Google Meet (or Zoom/Teams) link for an event to authenticated users. */
+export const getMeetingLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => TokenInput.parse(d))
+  .inputValidator((d: unknown) => JoinInput.parse(d))
   .handler(async ({ data, context }) => {
-    const apiKey = process.env.LIVEKIT_API_KEY;
-    const apiSecret = process.env.LIVEKIT_API_SECRET;
-    const wsUrl = process.env.LIVEKIT_URL;
-    if (!apiKey || !apiSecret || !wsUrl) throw new Error("LiveKit not configured");
-
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: event, error } = await supabaseAdmin
       .from("live_events")
-      .select("id, room_name, host_id")
+      .select("id, host_id, meeting_url, status")
       .eq("id", data.event_id)
       .maybeSingle();
     if (error || !event) throw new Error("Event not found");
@@ -119,27 +125,10 @@ export const getLiveKitToken = createServerFn({ method: "POST" })
       _user_id: context.userId,
       _role: "admin",
     });
-    const isHost = event.host_id === context.userId || !!isAdmin;
-
-    const { data: prof } = await context.supabase
-      .from("profiles")
-      .select("full_name, display_name, email")
-      .eq("id", context.userId)
-      .maybeSingle();
-    const name = prof?.display_name || prof?.full_name || prof?.email || "Guest";
-
-    const at = new AccessToken(apiKey, apiSecret, {
-      identity: context.userId,
-      name,
-      ttl: 60 * 60 * 4,
-    });
-    at.addGrant({
-      room: event.room_name,
-      roomJoin: true,
-      canPublish: isHost,
-      canPublishData: true,
-      canSubscribe: true,
-    });
-    const token = await at.toJwt();
-    return { token, wsUrl, isHost, roomName: event.room_name };
+    const isHost = (event as { host_id: string }).host_id === context.userId || !!isAdmin;
+    return {
+      meetingUrl: (event as { meeting_url: string | null }).meeting_url ?? null,
+      isHost,
+      status: (event as { status: string }).status,
+    };
   });
