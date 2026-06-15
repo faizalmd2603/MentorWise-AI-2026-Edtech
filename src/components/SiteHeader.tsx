@@ -74,7 +74,11 @@ export function SiteHeader() {
             )}
 
             {/* Bold, force-pinned auth CTA */}
-            {authed ? (
+            {!isReady ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-sm font-semibold text-muted-foreground shadow-sm">
+                Account
+              </span>
+            ) : authed ? (
               <Link
                 to="/feed"
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98]"
@@ -129,7 +133,7 @@ export function SiteHeader() {
                 <ShieldCheck className="h-4 w-4" /> Admin Console
               </Link>
             )}
-            {!authed && (
+            {isReady && !authed && (
               <Link
                 to="/auth"
                 onClick={() => setOpen(false)}
