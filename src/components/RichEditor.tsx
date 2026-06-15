@@ -75,7 +75,6 @@ export function RichEditor({ value, onChange, placeholder }: Props) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [showColor, setShowColor] = useState(false);
   const [showHi, setShowHi] = useState(false);
-  const [showMore, setShowMore] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
