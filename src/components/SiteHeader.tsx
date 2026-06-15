@@ -132,6 +132,15 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-amber-500/15 px-4 py-2.5 text-sm font-semibold text-amber-700 dark:text-amber-300"
+              >
+                <ShieldCheck className="h-4 w-4" /> Admin Console
+              </Link>
+            )}
             {!authed && (
               <Link
                 to="/auth"
