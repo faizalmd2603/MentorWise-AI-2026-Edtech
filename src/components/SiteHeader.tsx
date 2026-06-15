@@ -76,6 +76,15 @@ export function SiteHeader() {
               <Sparkles className="h-4 w-4" /> AI Studio
             </Link>
 
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-700 hover:bg-amber-500/25 dark:text-amber-300"
+              >
+                <ShieldCheck className="h-3.5 w-3.5" /> Admin
+              </Link>
+            )}
+
             {/* Bold, force-pinned auth CTA */}
             {authed ? (
               <Link
