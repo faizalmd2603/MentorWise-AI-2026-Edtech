@@ -121,8 +121,48 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           foundingLocation: { "@type": "Place", name: "Chennai, Tamil Nadu, India" },
           areaServed: "Worldwide",
           founder: [
-            { "@type": "Person", name: "Mohammed Faizal. M", jobTitle: "Founder & CEO", alumniOf: "The New College, Chennai" },
-            { "@type": "Person", name: "Saif Ahmed. Z", jobTitle: "Co-Founder", alumniOf: "The New College, Chennai" },
+            {
+              "@type": "Person",
+              "@id": "https://mentorwiseaiedtechservice.lovable.app/founders#faizal",
+              name: "Mohammed Faizal. M",
+              jobTitle: "Founder & CEO",
+              description: "Founder and Chief Executive Officer of MentorWise AI. B.Com (General), Shift-I, Aided Batch 2024–2027 at The New College (Autonomous), Chennai.",
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "Department of Commerce — B.Com (General), Shift-I, Aided Batch",
+                address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+              },
+              affiliation: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "B.Com (General), Shift-I, Aided Batch (2024–2027)",
+              },
+              worksFor: { "@id": "https://mentorwiseaiedtechservice.lovable.app/#organization" },
+            },
+            {
+              "@type": "Person",
+              "@id": "https://mentorwiseaiedtechservice.lovable.app/founders#saif",
+              name: "Saif Ahmed. Z",
+              jobTitle: "Co-Founder",
+              description: "Co-Founder of MentorWise AI. B.Com (General), Shift-I, Aided Batch 2024–2027 at The New College (Autonomous), Chennai.",
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "Department of Commerce — B.Com (General), Shift-I, Aided Batch",
+                address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+              },
+              affiliation: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "B.Com (General), Shift-I, Aided Batch (2024–2027)",
+              },
+              worksFor: { "@id": "https://mentorwiseaiedtechservice.lovable.app/#organization" },
+            },
+          ],
+          employee: [
+            { "@type": "Person", name: "Mohammed Faizal. M", jobTitle: "Founder & CEO" },
+            { "@type": "Person", name: "Saif Ahmed. Z", jobTitle: "Co-Founder" },
           ],
           knowsAbout: [
             "Artificial Intelligence",
