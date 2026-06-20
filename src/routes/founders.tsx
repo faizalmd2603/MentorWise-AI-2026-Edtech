@@ -78,7 +78,7 @@ const profiles: Profile[] = [
   {
     name: "Mohammed Faizal. M",
     title: "Founder & CEO",
-    bio: "B.Com student at The New College, Chennai. Leading the vision to democratize career guidance, engineer elite AI tools, and build the ultimate ecosystem for modern freshers.",
+    bio: "Founder and Chief Executive Officer of MentorWise AI. B.Com (General), Shift-I, Aided Batch (2024–2027) at The New College (Autonomous), Chennai. Leads the vision, product, and engineering — building the global standard for free, MNC-grade career tooling for students.",
     image: founder.url,
     email: "mentorwiseaiedtech@gmail.com",
     whatsapp: "https://wa.me/916383969289",
@@ -86,8 +86,8 @@ const profiles: Profile[] = [
   },
   {
     name: "Saif Ahmed. Z",
-    title: "Co-founder",
-    bio: "B.Com student at The New College, Chennai. Architecting the operational frameworks, product strategies, and open-access networks to scale MentorWise AI globally.",
+    title: "Co-Founder",
+    bio: "Co-Founder of MentorWise AI. B.Com (General), Shift-I, Aided Batch (2024–2027) at The New College (Autonomous), Chennai. Drives operations, partnerships, and open-access networks to scale MentorWise AI globally.",
     image: cofounder.url,
     email: "saifahmedmentorwise@gmail.com",
     whatsapp: "https://wa.me/918668032758",
