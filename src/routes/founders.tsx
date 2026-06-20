@@ -104,7 +104,7 @@ function Founders() {
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
             Meet the <span className="text-gradient">Founders</span>
           </h1>
-          <p className="mt-3 text-muted-foreground">Two students from Chennai engineering the global standard for fresher career tooling.</p>
+          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai.</p>
         </div>
 
         <div className="mt-12 grid gap-8 md:grid-cols-2">
