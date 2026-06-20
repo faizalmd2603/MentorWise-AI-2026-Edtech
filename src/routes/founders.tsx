@@ -7,19 +7,59 @@ import { Mail, MessageCircle, Linkedin } from "lucide-react";
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const FOUNDER_OG = `${SITE}${founder.url}`;
 
+const FOUNDERS_JSONLD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE}/founders#faizal`,
+      name: "Mohammed Faizal. M",
+      jobTitle: "Founder & CEO",
+      description:
+        "Founder and Chief Executive Officer (CEO) of MentorWise AI. B.Com (General), Shift-I, Aided Batch (2024–2027) at The New College (Autonomous), Chennai, Tamil Nadu, India.",
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "The New College (Autonomous), Chennai",
+        department: "B.Com (General), Shift-I, Aided Batch (2024–2027)",
+        address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+      },
+      worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+      sameAs: ["https://www.linkedin.com/in/mohammed-faizal-m-b3242b311"],
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE}/founders#saif`,
+      name: "Saif Ahmed. Z",
+      jobTitle: "Co-Founder",
+      description:
+        "Co-Founder of MentorWise AI. B.Com (General), Shift-I, Aided Batch (2024–2027) at The New College (Autonomous), Chennai, Tamil Nadu, India.",
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "The New College (Autonomous), Chennai",
+        department: "B.Com (General), Shift-I, Aided Batch (2024–2027)",
+        address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+      },
+      worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+      sameAs: ["https://www.linkedin.com/in/saif-ahmed-a9a610353"],
+    },
+  ],
+};
+
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
-      { title: "Founders of MentorWise AI | Faizal & Saif from Chennai" },
-      { name: "description", content: "Meet the founders of MentorWise AI — Mohammed Faizal. M and Saif Ahmed. Z, two B.Com students from Chennai building a free AI career app for students." },
-      { property: "og:title", content: "Founders of MentorWise AI | Faizal & Saif from Chennai" },
-      { property: "og:description", content: "Meet the founders of MentorWise AI — building a free AI career app for students, from Chennai." },
+      { title: "Founders of MentorWise AI — Mohammed Faizal (CEO) & Saif Ahmed (Co-Founder) | The New College, Chennai" },
+      { name: "description", content: "Mohammed Faizal. M is the Founder & CEO of MentorWise AI. Saif Ahmed. Z is the Co-Founder. Both are B.Com (General), Shift-I, Aided Batch (2024–2027) students at The New College (Autonomous), Chennai." },
+      { property: "og:title", content: "Founders of MentorWise AI — Faizal (CEO) & Saif (Co-Founder)" },
+      { property: "og:description", content: "Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai." },
       { property: "og:url", content: `${SITE}/founders` },
       { property: "og:image", content: FOUNDER_OG },
       { name: "twitter:image", content: FOUNDER_OG },
     ],
-
     links: [{ rel: "canonical", href: `${SITE}/founders` }],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(FOUNDERS_JSONLD) },
+    ],
   }),
   component: Founders,
 });
@@ -38,7 +78,7 @@ const profiles: Profile[] = [
   {
     name: "Mohammed Faizal. M",
     title: "Founder & CEO",
-    bio: "B.Com student at The New College, Chennai. Leading the vision to democratize career guidance, engineer elite AI tools, and build the ultimate ecosystem for modern freshers.",
+    bio: "Founder and Chief Executive Officer of MentorWise AI. B.Com (General), Shift-I, Aided Batch (2024–2027) at The New College (Autonomous), Chennai. Leads the vision, product, and engineering — building the global standard for free, MNC-grade career tooling for students.",
     image: founder.url,
     email: "mentorwiseaiedtech@gmail.com",
     whatsapp: "https://wa.me/916383969289",
@@ -46,8 +86,8 @@ const profiles: Profile[] = [
   },
   {
     name: "Saif Ahmed. Z",
-    title: "Co-founder",
-    bio: "B.Com student at The New College, Chennai. Architecting the operational frameworks, product strategies, and open-access networks to scale MentorWise AI globally.",
+    title: "Co-Founder",
+    bio: "Co-Founder of MentorWise AI. B.Com (General), Shift-I, Aided Batch (2024–2027) at The New College (Autonomous), Chennai. Drives operations, partnerships, and open-access networks to scale MentorWise AI globally.",
     image: cofounder.url,
     email: "saifahmedmentorwise@gmail.com",
     whatsapp: "https://wa.me/918668032758",
@@ -64,7 +104,7 @@ function Founders() {
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
             Meet the <span className="text-gradient">Founders</span>
           </h1>
-          <p className="mt-3 text-muted-foreground">Two students from Chennai engineering the global standard for fresher career tooling.</p>
+          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai.</p>
         </div>
 
         <div className="mt-12 grid gap-8 md:grid-cols-2">

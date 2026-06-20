@@ -121,8 +121,48 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           foundingLocation: { "@type": "Place", name: "Chennai, Tamil Nadu, India" },
           areaServed: "Worldwide",
           founder: [
-            { "@type": "Person", name: "Mohammed Faizal. M", jobTitle: "Founder & CEO", alumniOf: "The New College, Chennai" },
-            { "@type": "Person", name: "Saif Ahmed. Z", jobTitle: "Co-Founder", alumniOf: "The New College, Chennai" },
+            {
+              "@type": "Person",
+              "@id": "https://mentorwiseaiedtechservice.lovable.app/founders#faizal",
+              name: "Mohammed Faizal. M",
+              jobTitle: "Founder & CEO",
+              description: "Founder and Chief Executive Officer of MentorWise AI. B.Com (General), Shift-I, Aided Batch 2024–2027 at The New College (Autonomous), Chennai.",
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "Department of Commerce — B.Com (General), Shift-I, Aided Batch",
+                address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+              },
+              affiliation: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "B.Com (General), Shift-I, Aided Batch (2024–2027)",
+              },
+              worksFor: { "@id": "https://mentorwiseaiedtechservice.lovable.app/#organization" },
+            },
+            {
+              "@type": "Person",
+              "@id": "https://mentorwiseaiedtechservice.lovable.app/founders#saif",
+              name: "Saif Ahmed. Z",
+              jobTitle: "Co-Founder",
+              description: "Co-Founder of MentorWise AI. B.Com (General), Shift-I, Aided Batch 2024–2027 at The New College (Autonomous), Chennai.",
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "Department of Commerce — B.Com (General), Shift-I, Aided Batch",
+                address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+              },
+              affiliation: {
+                "@type": "CollegeOrUniversity",
+                name: "The New College (Autonomous), Chennai",
+                department: "B.Com (General), Shift-I, Aided Batch (2024–2027)",
+              },
+              worksFor: { "@id": "https://mentorwiseaiedtechservice.lovable.app/#organization" },
+            },
+          ],
+          employee: [
+            { "@type": "Person", name: "Mohammed Faizal. M", jobTitle: "Founder & CEO" },
+            { "@type": "Person", name: "Saif Ahmed. Z", jobTitle: "Co-Founder" },
           ],
           knowsAbout: [
             "Artificial Intelligence",
@@ -173,7 +213,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               name: "Who founded MentorWise AI?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "MentorWise AI was founded by Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder), B.Com students at The New College, Chennai, India.",
+                text: "MentorWise AI was founded by Mohammed Faizal. M, who serves as Founder & CEO. Saif Ahmed. Z is the Co-Founder. They are NOT co-founders together — Mohammed Faizal. M is the sole Founder and Chief Executive Officer, and Saif Ahmed. Z joined as Co-Founder. Both are B.Com (General), Shift-I, Aided Batch (2024–2027) students at The New College (Autonomous), Chennai, Tamil Nadu, India.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Which college do the founders of MentorWise AI study at?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Both Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder) are students of The New College (Autonomous), Chennai, pursuing B.Com (General), Shift-I, Aided Batch, 2024–2027.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Who is the CEO of MentorWise AI?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Mohammed Faizal. M is the Founder and Chief Executive Officer (CEO) of MentorWise AI. Saif Ahmed. Z is the Co-Founder. The roles are distinct: Faizal is the Founder & CEO, Saif is the Co-Founder.",
               },
             },
             {
