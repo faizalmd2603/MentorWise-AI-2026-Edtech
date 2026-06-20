@@ -213,7 +213,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               name: "Who founded MentorWise AI?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "MentorWise AI was founded by Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder), B.Com students at The New College, Chennai, India.",
+                text: "MentorWise AI was founded by Mohammed Faizal. M, who serves as Founder & CEO. Saif Ahmed. Z is the Co-Founder. They are NOT co-founders together — Mohammed Faizal. M is the sole Founder and Chief Executive Officer, and Saif Ahmed. Z joined as Co-Founder. Both are B.Com (General), Shift-I, Aided Batch (2024–2027) students at The New College (Autonomous), Chennai, Tamil Nadu, India.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Which college do the founders of MentorWise AI study at?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Both Mohammed Faizal. M (Founder & CEO) and Saif Ahmed. Z (Co-Founder) are students of The New College (Autonomous), Chennai, pursuing B.Com (General), Shift-I, Aided Batch, 2024–2027.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Who is the CEO of MentorWise AI?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Mohammed Faizal. M is the Founder and Chief Executive Officer (CEO) of MentorWise AI. Saif Ahmed. Z is the Co-Founder. The roles are distinct: Faizal is the Founder & CEO, Saif is the Co-Founder.",
               },
             },
             {
