@@ -16,7 +16,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const today = new Date().toISOString().slice(0, 10);
-        // bumped after persistent-session, feed/events performance, and live-event UI updates
+        // bumped: founder role + college (The New College Autonomous, B.Com General, Shift-I, Aided, 2024–2027) clarifications
 
 
         const entries: SitemapEntry[] = [
