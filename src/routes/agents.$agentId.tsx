@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
+import { useAuthReady } from "@/hooks/use-auth-ready";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -84,6 +85,7 @@ function readFileAsDataURL(file: File): Promise<string> {
 function AgentChat() {
   const { agentId } = useParams({ from: "/agents/$agentId" });
   const agent = AGENTS.find((a) => a.id === agentId);
+  const { isReady, user } = useAuthReady();
   const chat = useServerFn(chatWithAgent);
   const imgFn = useServerFn(generateImage);
 
@@ -229,6 +231,16 @@ function AgentChat() {
   async function send(textOverride?: string) {
     const text = (textOverride ?? input).trim();
     if ((!text && attach.length === 0) || loading) return;
+    if (!user) {
+      setMessages((m) => [
+        ...m,
+        { role: "user", content: text || "(see attached)", attachments: attach.length ? attach : undefined },
+        { role: "assistant", content: "Please sign in to chat with this agent. Tap the Sign in button below to continue — it's free." },
+      ]);
+      setInput("");
+      setAttach([]);
+      return;
+    }
     const userMsg: Msg = { role: "user", content: text || "(see attached)", attachments: attach.length ? attach : undefined };
     const newMessages: Msg[] = [...messages, userMsg];
     setMessages(newMessages);
@@ -251,9 +263,15 @@ function AgentChat() {
     } catch (e) {
       console.error(e, "sent with", sentAttachments.length, "attachments");
       const msg = e instanceof Error ? e.message : "";
+      const isAuth = /unauthor/i.test(msg) || /authorization/i.test(msg);
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: `I ran into a problem reaching the AI service. ${msg ? `(${msg}) ` : ""}Please try again in a moment.` },
+        {
+          role: "assistant",
+          content: isAuth
+            ? "You need to sign in to chat with this agent. Tap the Sign in button below — it's free and only takes a moment."
+            : `I ran into a problem reaching the AI service. ${msg ? `(${msg}) ` : ""}Please try again in a moment.`,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -404,6 +422,22 @@ function AgentChat() {
                 </button>
               )}
             </header>
+
+            {isReady && !user && (
+              <div className="border-b border-border/50 bg-gradient-to-r from-cyber/15 via-magenta/10 to-transparent px-5 py-3 flex items-center gap-3">
+                <Lock className="h-4 w-4 text-cyber shrink-0" />
+                <div className="flex-1 text-xs sm:text-sm text-muted-foreground">
+                  Sign in to chat with <span className="text-foreground font-medium">{agent.name}</span> — it's free.
+                </div>
+                <Link
+                  to="/auth"
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-cyber to-magenta px-3 py-1.5 text-xs font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+                >
+                  Sign in
+                </Link>
+              </div>
+            )}
+
 
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-6 sm:px-6 space-y-4">
