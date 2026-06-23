@@ -263,9 +263,15 @@ function AgentChat() {
     } catch (e) {
       console.error(e, "sent with", sentAttachments.length, "attachments");
       const msg = e instanceof Error ? e.message : "";
+      const isAuth = /unauthor/i.test(msg) || /authorization/i.test(msg);
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: `I ran into a problem reaching the AI service. ${msg ? `(${msg}) ` : ""}Please try again in a moment.` },
+        {
+          role: "assistant",
+          content: isAuth
+            ? "You need to sign in to chat with this agent. Tap the Sign in button below — it's free and only takes a moment."
+            : `I ran into a problem reaching the AI service. ${msg ? `(${msg}) ` : ""}Please try again in a moment.`,
+        },
       ]);
     } finally {
       setLoading(false);
