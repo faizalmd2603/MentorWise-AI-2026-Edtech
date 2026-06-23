@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
+import { useAuthReady } from "@/hooks/use-auth-ready";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
