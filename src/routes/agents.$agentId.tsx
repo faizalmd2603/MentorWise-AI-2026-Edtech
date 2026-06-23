@@ -85,6 +85,7 @@ function readFileAsDataURL(file: File): Promise<string> {
 function AgentChat() {
   const { agentId } = useParams({ from: "/agents/$agentId" });
   const agent = AGENTS.find((a) => a.id === agentId);
+  const { isReady, user } = useAuthReady();
   const chat = useServerFn(chatWithAgent);
   const imgFn = useServerFn(generateImage);
 
