@@ -423,6 +423,22 @@ function AgentChat() {
               )}
             </header>
 
+            {isReady && !user && (
+              <div className="border-b border-border/50 bg-gradient-to-r from-cyber/15 via-magenta/10 to-transparent px-5 py-3 flex items-center gap-3">
+                <Lock className="h-4 w-4 text-cyber shrink-0" />
+                <div className="flex-1 text-xs sm:text-sm text-muted-foreground">
+                  Sign in to chat with <span className="text-foreground font-medium">{agent.name}</span> — it's free.
+                </div>
+                <Link
+                  to="/auth"
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-cyber to-magenta px-3 py-1.5 text-xs font-semibold text-primary-foreground glow-cyan hover:brightness-110 transition"
+                >
+                  Sign in
+                </Link>
+              </div>
+            )}
+
+
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-6 sm:px-6 space-y-4">
               {messages.map((m, i) => (
