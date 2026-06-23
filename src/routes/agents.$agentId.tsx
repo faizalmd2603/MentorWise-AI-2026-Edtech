@@ -231,6 +231,16 @@ function AgentChat() {
   async function send(textOverride?: string) {
     const text = (textOverride ?? input).trim();
     if ((!text && attach.length === 0) || loading) return;
+    if (!user) {
+      setMessages((m) => [
+        ...m,
+        { role: "user", content: text || "(see attached)", attachments: attach.length ? attach : undefined },
+        { role: "assistant", content: "Please sign in to chat with this agent. Tap the Sign in button below to continue — it's free." },
+      ]);
+      setInput("");
+      setAttach([]);
+      return;
+    }
     const userMsg: Msg = { role: "user", content: text || "(see attached)", attachments: attach.length ? attach : undefined };
     const newMessages: Msg[] = [...messages, userMsg];
     setMessages(newMessages);
