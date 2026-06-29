@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import logo from "@/assets/mw-logo.jpeg.asset.json";
+import logo from "@/assets/mw-logo.png.asset.json";
 import { Menu, X, LogIn, Sparkles, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useAuthReady } from "@/hooks/use-auth-ready";

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/mw-logo.jpeg.asset.json";
+import logo from "@/assets/mw-logo.png.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
 
 export function SiteFooter() {

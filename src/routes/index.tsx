@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
-import banner from "@/assets/mw-banner.jpeg.asset.json";
+import banner from "@/assets/mw-banner.png.asset.json";
 import { ArrowRight, Sparkles, ShieldCheck, Zap, ExternalLink, Crown } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
