@@ -16,7 +16,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const today = new Date().toISOString().slice(0, 10);
-        // bumped: founder role + college (The New College Autonomous, B.Com General, Shift-I, Aided, 2024–2027) clarifications
+        // bumped: new MentorWise AI logo + banner (PNG) for favicon, social share image, and organization JSON-LD
 
 
         const entries: SitemapEntry[] = [
