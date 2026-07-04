@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "mentorwise-ai-mcp",
+      "version": "0.1.0",
+      "title": "MentorWise AI"
+    },
+    "tools": [
+      {
+        "name": "list_agents",
+        "title": "List MentorWise AI agents",
+        "description": "List all MentorWise AI career agents with their id, name, short tagline, description, and availability status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "includeComingSoon": {
+              "description": "Include agents that are coming soon. Defaults to true.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_agent_prompts",
+        "title": "Get MentorWise agent starter prompts",
+        "description": "Return the starter prompts and system persona for a specific MentorWise AI agent by id.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "agentId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Agent id, e.g. 'resume', 'interview', 'linkedin'."
+            }
+          },
+          "required": [
+            "agentId"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
