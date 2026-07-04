@@ -15,6 +15,7 @@
     "@elevenlabs/react": "^1.6.6",
     "@hookform/resolvers": "^5.2.2",
     "@lovable.dev/email-js": "^0.0.4",
+    "@lovable.dev/mcp-js": "^0.20.0",
     "@lovable.dev/webhooks-js": "^0.0.1",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -83,11 +84,11 @@
     "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^6.0.2",
     "xss": "^1.0.15",
-    "zod": "^3.24.2"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
-    "@lovable.dev/vite-tanstack-config": "2.6.2",
+    "@lovable.dev/vite-tanstack-config": "2.7.0",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

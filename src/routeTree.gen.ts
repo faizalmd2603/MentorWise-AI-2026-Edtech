@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as MentorlinkRouteImport } from './routes/mentorlink'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InterviewRouteImport } from './routes/interview'
 import { Route as InternshipsRouteImport } from './routes/internships'
 import { Route as FoundersRouteImport } from './routes/founders'
@@ -29,7 +30,10 @@ import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -45,6 +49,11 @@ const ResumeRoute = ResumeRouteImport.update({
 const MentorlinkRoute = MentorlinkRouteImport.update({
   id: '/mentorlink',
   path: '/mentorlink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InterviewRoute = InterviewRouteImport.update({
@@ -132,10 +141,28 @@ const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
   path: '/admin/announcements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiElevenlabsMentorTokenRoute =
   ApiElevenlabsMentorTokenRouteImport.update({
     id: '/api/elevenlabs/mentor-token',
     path: '/api/elevenlabs/mentor-token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailQueueProcessRoute =
@@ -154,9 +181,12 @@ export interface FileRoutesByFullPath {
   '/founders': typeof FoundersRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
+  '/mcp': typeof McpRoute
   '/mentorlink': typeof MentorlinkRoute
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -166,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -178,9 +209,12 @@ export interface FileRoutesByTo {
   '/founders': typeof FoundersRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
+  '/mcp': typeof McpRoute
   '/mentorlink': typeof MentorlinkRoute
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -190,6 +224,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/agents': typeof AgentsIndexRoute
   '/events': typeof EventsIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -203,9 +238,12 @@ export interface FileRoutesById {
   '/founders': typeof FoundersRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
+  '/mcp': typeof McpRoute
   '/mentorlink': typeof MentorlinkRoute
   '/resume': typeof ResumeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -215,6 +253,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -229,9 +268,12 @@ export interface FileRouteTypes {
     | '/founders'
     | '/internships'
     | '/interview'
+    | '/mcp'
     | '/mentorlink'
     | '/resume'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/announcements'
     | '/admin/reports'
     | '/admin/users'
@@ -241,6 +283,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/agents/'
     | '/events/'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
     | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
@@ -253,9 +296,12 @@ export interface FileRouteTypes {
     | '/founders'
     | '/internships'
     | '/interview'
+    | '/mcp'
     | '/mentorlink'
     | '/resume'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/announcements'
     | '/admin/reports'
     | '/admin/users'
@@ -265,6 +311,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agents'
     | '/events'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
     | '/lovable/email/queue/process'
   id:
@@ -277,9 +324,12 @@ export interface FileRouteTypes {
     | '/founders'
     | '/internships'
     | '/interview'
+    | '/mcp'
     | '/mentorlink'
     | '/resume'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/announcements'
     | '/admin/reports'
     | '/admin/users'
@@ -289,6 +339,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/agents/'
     | '/events/'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
     | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
@@ -302,9 +353,12 @@ export interface RootRouteChildren {
   FoundersRoute: typeof FoundersRoute
   InternshipsRoute: typeof InternshipsRoute
   InterviewRoute: typeof InterviewRoute
+  McpRoute: typeof McpRoute
   MentorlinkRoute: typeof MentorlinkRoute
   ResumeRoute: typeof ResumeRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -314,6 +368,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
@@ -339,6 +394,13 @@ declare module '@tanstack/react-router' {
       path: '/mentorlink'
       fullPath: '/mentorlink'
       preLoaderRoute: typeof MentorlinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/interview': {
@@ -460,11 +522,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnnouncementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/elevenlabs/mentor-token': {
       id: '/api/elevenlabs/mentor-token'
       path: '/api/elevenlabs/mentor-token'
       fullPath: '/api/elevenlabs/mentor-token'
       preLoaderRoute: typeof ApiElevenlabsMentorTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/queue/process': {
@@ -486,9 +569,13 @@ const rootRouteChildren: RootRouteChildren = {
   FoundersRoute: FoundersRoute,
   InternshipsRoute: InternshipsRoute,
   InterviewRoute: InterviewRoute,
+  McpRoute: McpRoute,
   MentorlinkRoute: MentorlinkRoute,
   ResumeRoute: ResumeRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminUsersRoute: AdminUsersRoute,
@@ -498,9 +585,20 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
