@@ -12,6 +12,7 @@ const links = [
   { to: "/about" as const, label: "About" },
   { to: "/founders" as const, label: "Founders" },
   { to: "/resources/job-search-sites" as const, label: "Resources" },
+  { to: "/blog" as const, label: "Blog" },
   { to: "/contact" as const, label: "Contact" },
 ];
 
