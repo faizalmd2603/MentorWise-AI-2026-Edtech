@@ -28,13 +28,13 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as ApiVellumupRouteImport } from './routes/api/vellumup'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as ApiPublicVellumupRouteImport } from './routes/api/public.vellumup'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -135,11 +135,6 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiVellumupRoute = ApiVellumupRouteImport.update({
-  id: '/api/vellumup',
-  path: '/api/vellumup',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
   id: '/agents/$agentId',
   path: '/agents/$agentId',
@@ -172,6 +167,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicVellumupRoute = ApiPublicVellumupRouteImport.update({
+  id: '/api/public/vellumup',
+  path: '/api/public/vellumup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiElevenlabsMentorTokenRoute =
   ApiElevenlabsMentorTokenRouteImport.update({
     id: '/api/elevenlabs/mentor-token',
@@ -215,7 +215,6 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
-  '/api/vellumup': typeof ApiVellumupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -226,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
+  '/api/public/vellumup': typeof ApiPublicVellumupRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
@@ -247,7 +247,6 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
-  '/api/vellumup': typeof ApiVellumupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -258,6 +257,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
+  '/api/public/vellumup': typeof ApiPublicVellumupRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
@@ -280,7 +280,6 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
-  '/api/vellumup': typeof ApiVellumupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -291,6 +290,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
+  '/api/public/vellumup': typeof ApiPublicVellumupRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
@@ -314,7 +314,6 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
-    | '/api/vellumup'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -325,6 +324,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
+    | '/api/public/vellumup'
     | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -346,7 +346,6 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
-    | '/api/vellumup'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -357,6 +356,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
+    | '/api/public/vellumup'
     | '/lovable/email/queue/process'
   id:
     | '__root__'
@@ -378,7 +378,6 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
-    | '/api/vellumup'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -389,6 +388,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
+    | '/api/public/vellumup'
     | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
@@ -411,7 +411,6 @@ export interface RootRouteChildren {
   AdminReportsRoute: typeof AdminReportsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
-  ApiVellumupRoute: typeof ApiVellumupRoute
   BlogSlugRoute: typeof BlogSlugRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
@@ -422,6 +421,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
+  ApiPublicVellumupRoute: typeof ApiPublicVellumupRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
@@ -560,13 +560,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/vellumup': {
-      id: '/api/vellumup'
-      path: '/api/vellumup'
-      fullPath: '/api/vellumup'
-      preLoaderRoute: typeof ApiVellumupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/agents/$agentId': {
       id: '/agents/$agentId'
       path: '/agents/$agentId'
@@ -607,6 +600,13 @@ declare module '@tanstack/react-router' {
       path: '/.mcp/list-tools'
       fullPath: '/.mcp/list-tools'
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/vellumup': {
+      id: '/api/public/vellumup'
+      path: '/api/public/vellumup'
+      fullPath: '/api/public/vellumup'
+      preLoaderRoute: typeof ApiPublicVellumupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/elevenlabs/mentor-token': {
@@ -660,7 +660,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReportsRoute: AdminReportsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
-  ApiVellumupRoute: ApiVellumupRoute,
   BlogSlugRoute: BlogSlugRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
@@ -671,6 +670,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
+  ApiPublicVellumupRoute: ApiPublicVellumupRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport

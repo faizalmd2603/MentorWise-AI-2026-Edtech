@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
 
-export const Route = createFileRoute("/api/vellumup")({
+export const Route = createFileRoute("/api/public/vellumup")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secret = process.env.VELLUMUP_WEBHOOK_SECRET;
+        const secret =
+          process.env.VELLUMUP_WEBHOOK_SECRET ?? process.env.WEBHOOK_SECRET;
         if (!secret) {
-          console.error("[vellumup] missing VELLUMUP_WEBHOOK_SECRET");
+          console.error("[vellumup] missing WEBHOOK_SECRET env var");
           return new Response("Server misconfigured", { status: 500 });
         }
 
