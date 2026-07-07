@@ -37,6 +37,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiElevenlabsMentorTokenRouteImport } from './routes/api/elevenlabs.mentor-token'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -183,6 +184,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
   '/events': typeof EventsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -313,6 +322,7 @@ export interface FileRouteTypes {
     | '/agents/'
     | '/blog/'
     | '/events/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
     | '/lovable/email/queue/process'
@@ -344,6 +354,7 @@ export interface FileRouteTypes {
     | '/agents'
     | '/blog'
     | '/events'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
     | '/lovable/email/queue/process'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/agents/'
     | '/blog/'
     | '/events/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
     | '/lovable/email/queue/process'
@@ -407,6 +419,7 @@ export interface RootRouteChildren {
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -610,6 +623,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
       path: '/lovable/email/queue/process'
@@ -648,6 +668,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
