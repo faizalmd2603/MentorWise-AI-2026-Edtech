@@ -3,7 +3,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { BookOpen, Clock, FileText, ArrowLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getArticleBySlug } from "@/lib/articles.functions";
+import { getArticleBySlug, type ArticleSummary } from "@/lib/articles.functions";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
