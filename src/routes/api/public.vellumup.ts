@@ -45,10 +45,13 @@ export const Route = createFileRoute("/api/public/vellumup")({
           return new Response("Invalid JSON", { status: 400 });
         }
 
-        // Process asynchronously so we can respond fast
-        processDelivery(payload).catch((err) => {
+        try {
+          await processDelivery(payload);
+        } catch (err) {
           console.error("[vellumup] process error", err);
-        });
+          return new Response("Processing error", { status: 500 });
+        }
+
 
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
@@ -77,12 +80,14 @@ async function processDelivery(payload: {
   data: any;
 }) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const eventType = (payload.type ?? payload.event) as Event | undefined;
-  const d = payload.data ?? {};
+  const eventType = (payload.type ?? payload.event ?? (payload as any).event_type) as Event | undefined;
+  const d = payload.data ?? (payload as any).article ?? payload ?? {};
+  console.log("[vellumup] payload keys:", Object.keys(payload ?? {}), "data keys:", Object.keys(d ?? {}), "event:", eventType);
   if (!d?.slug) {
-    console.warn("[vellumup] missing slug in payload", payload.id);
+    console.warn("[vellumup] missing slug in payload", payload.id, JSON.stringify(payload).slice(0, 500));
     return;
   }
+
 
   const language_code = (d.language_code as string) || "en";
   const isUnpublish = eventType === "article.unpublished";
