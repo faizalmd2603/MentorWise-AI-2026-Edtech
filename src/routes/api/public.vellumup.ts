@@ -45,10 +45,13 @@ export const Route = createFileRoute("/api/public/vellumup")({
           return new Response("Invalid JSON", { status: 400 });
         }
 
-        // Process asynchronously so we can respond fast
-        processDelivery(payload).catch((err) => {
+        try {
+          await processDelivery(payload);
+        } catch (err) {
           console.error("[vellumup] process error", err);
-        });
+          return new Response("Processing error", { status: 500 });
+        }
+
 
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
