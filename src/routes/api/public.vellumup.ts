@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
 
-export const Route = createFileRoute("/api/vellumup")({
+export const Route = createFileRoute("/api/public/vellumup")({
   server: {
     handlers: {
       POST: async ({ request }) => {
