@@ -22,10 +22,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiVellumupRouteImport } from './routes/api/vellumup'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -101,6 +104,11 @@ const EventsIndexRoute = EventsIndexRouteImport.update({
   path: '/events/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentsIndexRoute = AgentsIndexRouteImport.update({
   id: '/agents/',
   path: '/agents/',
@@ -119,6 +127,16 @@ const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
 const EventsEventIdRoute = EventsEventIdRouteImport.update({
   id: '/events/$eventId',
   path: '/events/$eventId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiVellumupRoute = ApiVellumupRouteImport.update({
+  id: '/api/vellumup',
+  path: '/api/vellumup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
@@ -191,10 +209,13 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/api/vellumup': typeof ApiVellumupRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/events/': typeof EventsIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -219,10 +240,13 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/api/vellumup': typeof ApiVellumupRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin': typeof AdminIndexRoute
   '/agents': typeof AgentsIndexRoute
+  '/blog': typeof BlogIndexRoute
   '/events': typeof EventsIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -248,10 +272,13 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/api/vellumup': typeof ApiVellumupRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/events/': typeof EventsIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -278,10 +305,13 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
+    | '/api/vellumup'
+    | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/admin/'
     | '/agents/'
+    | '/blog/'
     | '/events/'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
@@ -306,10 +336,13 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
+    | '/api/vellumup'
+    | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/admin'
     | '/agents'
+    | '/blog'
     | '/events'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
@@ -334,10 +367,13 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
+    | '/api/vellumup'
+    | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/admin/'
     | '/agents/'
+    | '/blog/'
     | '/events/'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
@@ -363,10 +399,13 @@ export interface RootRouteChildren {
   AdminReportsRoute: typeof AdminReportsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
+  ApiVellumupRoute: typeof ApiVellumupRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
@@ -466,6 +505,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agents/': {
       id: '/agents/'
       path: '/agents'
@@ -492,6 +538,20 @@ declare module '@tanstack/react-router' {
       path: '/events/$eventId'
       fullPath: '/events/$eventId'
       preLoaderRoute: typeof EventsEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/vellumup': {
+      id: '/api/vellumup'
+      path: '/api/vellumup'
+      fullPath: '/api/vellumup'
+      preLoaderRoute: typeof ApiVellumupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/agents/$agentId': {
@@ -580,10 +640,13 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReportsRoute: AdminReportsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
+  ApiVellumupRoute: ApiVellumupRoute,
+  BlogSlugRoute: BlogSlugRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AdminIndexRoute: AdminIndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
+  BlogIndexRoute: BlogIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
