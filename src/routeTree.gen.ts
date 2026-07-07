@@ -28,6 +28,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiVellumupRouteImport } from './routes/api/vellumup'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -135,6 +136,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiVellumupRoute = ApiVellumupRouteImport.update({
+  id: '/api/vellumup',
+  path: '/api/vellumup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentsAgentIdRoute = AgentsAgentIdRouteImport.update({
   id: '/agents/$agentId',
   path: '/agents/$agentId',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/api/vellumup': typeof ApiVellumupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -247,6 +254,7 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/api/vellumup': typeof ApiVellumupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
+  '/api/vellumup': typeof ApiVellumupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -314,6 +323,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
+    | '/api/vellumup'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -346,6 +356,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
+    | '/api/vellumup'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -378,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/users'
     | '/agents/$agentId'
+    | '/api/vellumup'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -411,6 +423,7 @@ export interface RootRouteChildren {
   AdminReportsRoute: typeof AdminReportsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
+  ApiVellumupRoute: typeof ApiVellumupRoute
   BlogSlugRoute: typeof BlogSlugRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
@@ -560,6 +573,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/vellumup': {
+      id: '/api/vellumup'
+      path: '/api/vellumup'
+      fullPath: '/api/vellumup'
+      preLoaderRoute: typeof ApiVellumupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agents/$agentId': {
       id: '/agents/$agentId'
       path: '/agents/$agentId'
@@ -660,6 +680,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReportsRoute: AdminReportsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AgentsAgentIdRoute: AgentsAgentIdRoute,
+  ApiVellumupRoute: ApiVellumupRoute,
   BlogSlugRoute: BlogSlugRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
