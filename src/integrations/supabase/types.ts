@@ -82,6 +82,78 @@ export type Database = {
         }
         Relationships: []
       }
+      articles: {
+        Row: {
+          content: string
+          cover_image: string | null
+          created_at: string
+          excerpt: string | null
+          focus_keyword: string | null
+          id: string
+          internal_link_slugs: Json
+          key_takeaways: Json
+          language_code: string
+          language_name: string | null
+          meta_description: string | null
+          og_description: string | null
+          og_title: string | null
+          reading_time_minutes: number
+          secondary_keywords: Json
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+          website_domain: string | null
+          word_count: number
+        }
+        Insert: {
+          content?: string
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          focus_keyword?: string | null
+          id?: string
+          internal_link_slugs?: Json
+          key_takeaways?: Json
+          language_code?: string
+          language_name?: string | null
+          meta_description?: string | null
+          og_description?: string | null
+          og_title?: string | null
+          reading_time_minutes?: number
+          secondary_keywords?: Json
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+          website_domain?: string | null
+          word_count?: number
+        }
+        Update: {
+          content?: string
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          focus_keyword?: string | null
+          id?: string
+          internal_link_slugs?: Json
+          key_takeaways?: Json
+          language_code?: string
+          language_name?: string | null
+          meta_description?: string | null
+          og_description?: string | null
+          og_title?: string | null
+          reading_time_minutes?: number
+          secondary_keywords?: Json
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          website_domain?: string | null
+          word_count?: number
+        }
+        Relationships: []
+      }
       contact_rate_limit: {
         Row: {
           count: number
