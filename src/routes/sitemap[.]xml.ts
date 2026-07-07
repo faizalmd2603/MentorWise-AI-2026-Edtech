@@ -35,6 +35,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/founders", changefreq: "monthly", priority: "0.75", lastmod: today },
           { path: "/contact", changefreq: "monthly", priority: "0.6", lastmod: today },
           { path: "/resources/job-search-sites", changefreq: "monthly", priority: "0.7", lastmod: today },
+          { path: "/blog", changefreq: "weekly", priority: "0.8", lastmod: today },
 
           ...AGENTS.map((a) => ({
             path: `/agents/${a.id}`,
@@ -43,6 +44,34 @@ export const Route = createFileRoute("/sitemap.xml")({
             lastmod: today,
           })),
         ];
+
+        // Add published blog articles from the database
+        try {
+          const url = process.env.SUPABASE_URL;
+          const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+          if (url && key) {
+            const sb = createClient<Database>(url, key, {
+              auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+            });
+            const { data } = await sb
+              .from("articles")
+              .select("slug,updated_at")
+              .eq("status", "published")
+              .eq("language_code", "en")
+              .order("updated_at", { ascending: false })
+              .limit(1000);
+            for (const row of data ?? []) {
+              entries.push({
+                path: `/blog/${row.slug}`,
+                changefreq: "monthly",
+                priority: "0.9",
+                lastmod: (row.updated_at ?? today).slice(0, 10),
+              });
+            }
+          }
+        } catch (err) {
+          console.error("[sitemap] articles fetch failed", err);
+        }
 
         const urls = entries.map((e) =>
           [
