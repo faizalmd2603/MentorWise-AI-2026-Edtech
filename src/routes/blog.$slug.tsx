@@ -191,7 +191,7 @@ function ArticlePage() {
           <section className="mt-16">
             <h2 className="font-display text-xl font-bold">Related articles</h2>
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
-              {related.map((r) => (
+              {(related as ArticleSummary[]).map((r) => (
                 <Link
                   key={r.slug}
                   to="/blog/$slug"
