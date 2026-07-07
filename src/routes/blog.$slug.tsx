@@ -109,11 +109,15 @@ function ArticleNotFound() {
   );
 }
 
+type Takeaway = { takeaway?: string; _heading?: string };
+
 function ArticlePage() {
   const { article, related } = Route.useLoaderData();
-  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways : [];
+  const takeaways: Takeaway[] = Array.isArray(article.key_takeaways)
+    ? (article.key_takeaways as Takeaway[])
+    : [];
   const takeawayHeading =
-    takeaways.find((t) => t?._heading)?._heading ?? "Key Takeaways";
+    takeaways.find((t: Takeaway) => t?._heading)?._heading ?? "Key Takeaways";
 
   return (
     <SiteLayout>
