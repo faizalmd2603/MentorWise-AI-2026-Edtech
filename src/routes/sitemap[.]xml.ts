@@ -18,7 +18,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const today = new Date().toISOString().slice(0, 10);
-        // bumped: new MentorWise AI logo + banner (PNG) for favicon, social share image, and organization JSON-LD
+        // bumped: added LaunchBuff "Featured On" badge to homepage
 
 
         const entries: SitemapEntry[] = [
