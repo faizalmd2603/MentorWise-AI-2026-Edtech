@@ -57,6 +57,31 @@ function Home() {
   );
 }
 
+function LaunchBuffBadge() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6">
+      <div className="flex justify-center animate-fade-up">
+        <a
+          href="https://launchbuff.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Featured on LaunchBuff"
+          className="inline-block transition hover:scale-[1.03] hover:brightness-110"
+          aria-label="Featured on LaunchBuff"
+        >
+          <img
+            src="https://launchbuff.com/badge-featured-dark.svg"
+            alt="Featured on LaunchBuff"
+            width={256}
+            height={80}
+            loading="lazy"
+          />
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function NexoraShowcase() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6">
