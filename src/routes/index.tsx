@@ -49,6 +49,7 @@ function Home() {
     <SiteLayout>
       {show && <SplashScreen />}
       <Hero />
+      <LaunchBuffBadge />
       <NexoraShowcase />
       <Highlights />
       <CTA />
