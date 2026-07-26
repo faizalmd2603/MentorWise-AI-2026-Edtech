@@ -294,12 +294,12 @@ function LaunchBuffBadge() {
 }
 
 const FEATURES = [
-  { icon: FileText, tint: "coral", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
-  { icon: MessagesSquare, tint: "lilac", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
-  { icon: Briefcase, tint: "mint", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
-  { icon: GraduationCap, tint: "butter", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
-  { icon: Linkedin, tint: "lilac", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
-  { icon: PenTool, tint: "coral", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
+  { img: agentResume, tint: "coral", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
+  { img: agentInterview, tint: "lilac", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
+  { img: agentInternship, tint: "mint", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
+  { img: agentCourses, tint: "butter", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
+  { img: agentLinkedin, tint: "lilac", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
+  { img: agentHumaniser, tint: "coral", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
 ];
 
 function FeatureGrid() {
@@ -319,29 +319,35 @@ function FeatureGrid() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f, i) => {
-          const Icon = f.icon;
-          return (
-            <Link
-              key={f.title}
-              to={f.to}
-              className="motion-card group animate-pop-in rounded-3xl border border-border bg-card p-6"
-              style={{ animationDelay: `${i * 60}ms` }}
+        {FEATURES.map((f, i) => (
+          <Link
+            key={f.title}
+            to={f.to}
+            className="motion-card group animate-pop-in overflow-hidden rounded-3xl border border-border bg-card"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div
+              className="relative aspect-[16/10] overflow-hidden"
+              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 25%, white)` }}
             >
-              <div
-                className="grid h-11 w-11 place-items-center rounded-2xl"
-                style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 55%, white)` }}
-              >
-                <Icon className="h-5 w-5 text-foreground" />
-              </div>
-              <div className="mt-5 font-display text-xl font-semibold">{f.title}</div>
+              <img
+                src={f.img.url}
+                alt={f.title}
+                width={800}
+                height={500}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+            </div>
+            <div className="p-6">
+              <div className="font-display text-xl font-semibold">{f.title}</div>
               <p className="mt-1.5 text-sm text-muted-foreground">{f.desc}</p>
               <div className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-foreground/70 group-hover:text-foreground">
                 Open agent <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </div>
-            </Link>
-          );
-        })}
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
