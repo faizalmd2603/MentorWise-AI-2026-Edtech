@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import banner from "@/assets/mw-banner.png.asset.json";
-import { ArrowRight, Sparkles, ExternalLink, Crown, FileText, MessagesSquare, GraduationCap, Briefcase, Linkedin, PenTool, Bot, Star, Wand2, Rocket, Shapes, Palette, Play, Layers } from "lucide-react";
+import heroHome from "@/assets/hero-home.jpg.asset.json";
+import agentResume from "@/assets/agents/agent-02-resume.jpg.asset.json";
+import agentInterview from "@/assets/agents/agent-03-interview.jpg.asset.json";
+import agentLinkedin from "@/assets/agents/agent-04-linkedin.jpg.asset.json";
+import agentInternship from "@/assets/agents/agent-05-internship.jpg.asset.json";
+import agentCourses from "@/assets/agents/agent-06-courses.jpg.asset.json";
+import agentHumaniser from "@/assets/agents/agent-10-humaniser.jpg.asset.json";
+import { ArrowRight, Sparkles, ExternalLink, Crown, Bot, Star, Play, Layers } from "lucide-react";
 
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
