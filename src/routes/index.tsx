@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import banner from "@/assets/mw-banner.png.asset.json";
-import { ArrowRight, Sparkles, ExternalLink, Crown, FileText, MessagesSquare, GraduationCap, Briefcase, Linkedin, PenTool, Bot, Star, Wand2, Rocket, Shapes, Palette, Play, Layers } from "lucide-react";
+import heroHome from "@/assets/hero-home.jpg.asset.json";
+import agentResume from "@/assets/agents/agent-02-resume.jpg.asset.json";
+import agentInterview from "@/assets/agents/agent-03-interview.jpg.asset.json";
+import agentLinkedin from "@/assets/agents/agent-04-linkedin.jpg.asset.json";
+import agentInternship from "@/assets/agents/agent-05-internship.jpg.asset.json";
+import agentCourses from "@/assets/agents/agent-06-courses.jpg.asset.json";
+import agentHumaniser from "@/assets/agents/agent-10-humaniser.jpg.asset.json";
+import { ArrowRight, Sparkles, ExternalLink, Crown, Bot, Star, Play, Layers } from "lucide-react";
 
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
@@ -158,7 +165,6 @@ function HeroMosaic() {
 
       {/* Canvas-style artboard */}
       <div className="relative rounded-[2rem] border border-border bg-card/80 p-4 shadow-[0_30px_80px_-40px_color-mix(in_oklab,var(--color-foreground)_35%,transparent)] backdrop-blur">
-        {/* Faux app chrome */}
         <div className="flex items-center justify-between px-2 pb-3">
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--color-coral)_60%,white)]" />
@@ -171,55 +177,15 @@ function HeroMosaic() {
         </div>
 
         <div className="grid grid-cols-6 gap-3">
-          {/* Big typography tile */}
-          <div className="tile col-span-6 row-span-2 aspect-[16/9] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-lilac)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
-            <div className="flex h-full flex-col justify-between p-6 sm:p-8">
-              <div className="flex items-center justify-between">
-                <div className="pill !py-1 text-[10px]"><Wand2 className="h-3 w-3" /> AI Studio</div>
-                <div className="flex -space-x-2">
-                  {["coral","mint","lilac","butter"].map((c) => (
-                    <span key={c} className="h-6 w-6 rounded-full border-2 border-white" style={{ background: `var(--color-${c})` }} />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div className="font-display text-4xl font-semibold leading-[1] tracking-tight sm:text-5xl">
-                  Design your
-                  <br />
-                  <span className="shimmer-text italic">career story.</span>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {["Resume", "Interview", "LinkedIn", "Courses"].map((t) => (
-                    <span key={t} className="rounded-full border border-border bg-white/70 px-2.5 py-1 text-[11px] font-medium text-foreground/80 backdrop-blur">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Palette tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:120ms] bg-white p-5">
-            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              <Palette className="h-3.5 w-3.5" /> Brand
-            </div>
-            <div className="mt-3 grid grid-cols-4 gap-1.5">
-              {[
-                "var(--color-primary)",
-                "var(--color-lilac)",
-                "var(--color-mint)",
-                "var(--color-butter)",
-              ].map((bg, i) => (
-                <div key={i} className="aspect-square rounded-lg" style={{ background: bg }} />
-              ))}
-            </div>
-            <div className="mt-4 space-y-1.5">
-              <div className="h-2 w-3/4 rounded-full bg-foreground/80" />
-              <div className="h-2 w-1/2 rounded-full bg-foreground/30" />
-              <div className="h-2 w-2/3 rounded-full bg-foreground/20" />
-            </div>
-            <div className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold text-foreground/70">
-              <Sparkles className="h-3 w-3 text-primary" /> Auto-styled
-            </div>
+          {/* Hero illustration tile */}
+          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-butter)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
+            <img
+              src={heroHome.url}
+              alt="MentorWise AI — friendly career companion"
+              width={1600}
+              height={1200}
+              className="h-full w-full object-cover"
+            />
           </div>
 
           {/* Chat tile */}
@@ -240,28 +206,16 @@ function HeroMosaic() {
             </div>
           </div>
 
-          {/* Progress tile */}
-          <div className="tile col-span-6 aspect-[16/5] animate-pop-in [animation-delay:280ms] bg-white p-5">
-            <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5"><Rocket className="h-3.5 w-3.5" /> Launch checklist</span>
-              <span>72%</span>
-            </div>
-            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary">
-              <div className="h-full w-[72%] rounded-full bg-gradient-to-r from-primary via-lilac to-mint" />
-            </div>
-            <div className="mt-3 grid grid-cols-4 gap-2 text-[11px]">
-              {[
-                { l: "Resume", ok: true },
-                { l: "LinkedIn", ok: true },
-                { l: "Interview", ok: true },
-                { l: "Apply", ok: false },
-              ].map((s) => (
-                <div key={s.l} className="flex items-center gap-1.5 rounded-lg border border-border bg-card/70 px-2 py-1.5">
-                  <span className={`h-2 w-2 rounded-full ${s.ok ? "bg-mint" : "bg-foreground/20"}`} />
-                  <span className="font-medium text-foreground/80">{s.l}</span>
-                </div>
-              ))}
-            </div>
+          {/* Resume preview tile */}
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-white">
+            <img
+              src={agentResume.url}
+              alt="Resume Agent"
+              width={512}
+              height={512}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
       </div>
@@ -281,11 +235,6 @@ function HeroMosaic() {
             <Play className="h-3 w-3 fill-current" />
           </span>
           Try an agent
-        </div>
-      </div>
-      <div className="absolute left-1/2 -bottom-4 hidden -translate-x-1/2 sm:block">
-        <div className="pill bg-white">
-          <Shapes className="h-3.5 w-3.5 text-lilac" /> Drag · Drop · Ship
         </div>
       </div>
     </div>
@@ -345,12 +294,12 @@ function LaunchBuffBadge() {
 }
 
 const FEATURES = [
-  { icon: FileText, tint: "coral", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
-  { icon: MessagesSquare, tint: "lilac", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
-  { icon: Briefcase, tint: "mint", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
-  { icon: GraduationCap, tint: "butter", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
-  { icon: Linkedin, tint: "lilac", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
-  { icon: PenTool, tint: "coral", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
+  { img: agentResume, tint: "coral", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
+  { img: agentInterview, tint: "lilac", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
+  { img: agentInternship, tint: "mint", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
+  { img: agentCourses, tint: "butter", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
+  { img: agentLinkedin, tint: "lilac", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
+  { img: agentHumaniser, tint: "coral", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
 ];
 
 function FeatureGrid() {
@@ -370,29 +319,35 @@ function FeatureGrid() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f, i) => {
-          const Icon = f.icon;
-          return (
-            <Link
-              key={f.title}
-              to={f.to}
-              className="motion-card group animate-pop-in rounded-3xl border border-border bg-card p-6"
-              style={{ animationDelay: `${i * 60}ms` }}
+        {FEATURES.map((f, i) => (
+          <Link
+            key={f.title}
+            to={f.to}
+            className="motion-card group animate-pop-in overflow-hidden rounded-3xl border border-border bg-card"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div
+              className="relative aspect-[16/10] overflow-hidden"
+              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 25%, white)` }}
             >
-              <div
-                className="grid h-11 w-11 place-items-center rounded-2xl"
-                style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 55%, white)` }}
-              >
-                <Icon className="h-5 w-5 text-foreground" />
-              </div>
-              <div className="mt-5 font-display text-xl font-semibold">{f.title}</div>
+              <img
+                src={f.img.url}
+                alt={f.title}
+                width={800}
+                height={500}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+            </div>
+            <div className="p-6">
+              <div className="font-display text-xl font-semibold">{f.title}</div>
               <p className="mt-1.5 text-sm text-muted-foreground">{f.desc}</p>
               <div className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-foreground/70 group-hover:text-foreground">
                 Open agent <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </div>
-            </Link>
-          );
-        })}
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
