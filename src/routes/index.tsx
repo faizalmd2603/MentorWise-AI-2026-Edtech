@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Free AI career help for students. Build a resume, practice mock interviews, find free internships, learn from free online courses and get LinkedIn help — all free, in one app." },
       { name: "keywords", content: "free resume builder, free mock interview, free internships for students, free online courses with certificate, LinkedIn help, AI career app, college students, freshers, MentorWise AI" },
       { property: "og:title", content: "MentorWise AI — Free AI Career App for Students" },
-      { property: "og:description", content: "Free AI career app for students. Resume help, mock interviews, free internships, free courses and LinkedIn tips — all free." },
+      { property: "og:description", content: "Free AI career help for students. Build a resume, practice mock interviews, find free internships, learn from free online courses and get LinkedIn help — all free, in one app." },
       { property: "og:url", content: `${SITE}/` },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
