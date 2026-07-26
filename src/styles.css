@@ -41,42 +41,44 @@
 }
 
 :root {
-  /* Warm cream + soft pastel accents — friendly editorial palette.
-     Legacy tokens (cyber/magenta/purple-glow) remap to the new pastel
-     accents so existing components pick up the new look automatically. */
+  /* Editorial cream canvas with a blue-forward accent family.
+     No pinks / magentas — legacy tokens (cyber/magenta/coral/lilac)
+     remap onto blues, mint and butter so every component picks up
+     the new professional palette automatically. */
   --radius: 1.25rem;
   --background: oklch(0.975 0.012 85);           /* warm cream canvas */
-  --foreground: oklch(0.22 0.02 60);             /* warm near-black ink */
+  --foreground: oklch(0.20 0.03 260);            /* deep navy ink */
   --card: oklch(0.995 0.005 85);
-  --card-foreground: oklch(0.22 0.02 60);
+  --card-foreground: oklch(0.20 0.03 260);
   --popover: oklch(0.995 0.005 85);
-  --popover-foreground: oklch(0.22 0.02 60);
-  --primary: oklch(0.24 0.03 60);                /* deep ink for CTAs */
+  --popover-foreground: oklch(0.20 0.03 260);
+  --primary: oklch(0.42 0.18 260);               /* royal blue CTA */
   --primary-foreground: oklch(0.98 0.01 85);
-  --secondary: oklch(0.94 0.02 80);
-  --secondary-foreground: oklch(0.28 0.03 60);
-  --muted: oklch(0.94 0.015 80);
-  --muted-foreground: oklch(0.5 0.02 60);
-  --accent: oklch(0.93 0.05 30);                 /* soft coral tint */
-  --accent-foreground: oklch(0.32 0.1 30);
+  --secondary: oklch(0.94 0.02 240);
+  --secondary-foreground: oklch(0.28 0.06 260);
+  --muted: oklch(0.94 0.015 240);
+  --muted-foreground: oklch(0.5 0.02 260);
+  --accent: oklch(0.92 0.06 235);                /* soft sky */
+  --accent-foreground: oklch(0.30 0.14 260);
   --destructive: oklch(0.6 0.18 27);
   --destructive-foreground: oklch(0.98 0.01 85);
-  --border: oklch(0.9 0.015 80);
-  --input: oklch(0.94 0.015 80);
-  --ring: oklch(0.72 0.14 30);
+  --border: oklch(0.9 0.015 240);
+  --input: oklch(0.94 0.015 240);
+  --ring: oklch(0.62 0.16 255);
 
-  /* Pastel accent family */
+  /* Accent family — blues, mint, butter (no pinks) */
   --cream: oklch(0.96 0.02 85);
-  --coral: oklch(0.75 0.15 30);                  /* warm coral */
-  --mint: oklch(0.82 0.09 165);                  /* soft mint */
-  --lilac: oklch(0.78 0.09 300);                 /* soft lilac */
+  --coral: oklch(0.55 0.19 255);                 /* remapped: royal blue */
+  --mint: oklch(0.78 0.10 190);                  /* soft teal-mint */
+  --lilac: oklch(0.72 0.13 230);                 /* remapped: sky blue */
   --butter: oklch(0.9 0.11 95);                  /* buttery yellow */
 
-  /* Legacy token remaps -> pastel accents */
-  --cyber: oklch(0.75 0.15 30);                  /* was navy, now coral */
-  --magenta: oklch(0.78 0.09 300);               /* was teal, now lilac */
-  --purple-glow: oklch(0.82 0.09 165);           /* now mint */
+  /* Legacy token remaps -> blue accents */
+  --cyber: oklch(0.42 0.18 260);                 /* deep royal blue */
+  --magenta: oklch(0.72 0.13 230);               /* sky blue (was pink) */
+  --purple-glow: oklch(0.78 0.10 190);           /* mint */
 }
+
 
 @layer base {
   * {
