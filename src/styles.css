@@ -31,38 +31,51 @@
   --color-cyber: var(--cyber);
   --color-magenta: var(--magenta);
   --color-purple-glow: var(--purple-glow);
-  --font-display: "Google Sans", "Product Sans", "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Google Sans Text", "Inter", system-ui, sans-serif;
+  --color-cream: var(--cream);
+  --color-coral: var(--coral);
+  --color-mint: var(--mint);
+  --color-lilac: var(--lilac);
+  --color-butter: var(--butter);
+  --font-display: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
 }
 
 :root {
-  /* MentorWise AI — Google-for-Education inspired clean theme.
-     Token names preserved (cyber/magenta/purple-glow) so all existing
-     components remap automatically. Values changed: light surfaces,
-     Google blue / red / green / yellow accents. */
-  --radius: 0.875rem;
-  --background: oklch(0.99 0.005 250);          /* near-white canvas */
-  --foreground: oklch(0.22 0.02 260);           /* near-black ink */
-  --card: oklch(1 0 0);                          /* pure white card */
-  --card-foreground: oklch(0.22 0.02 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.02 260);
-  --primary: oklch(0.42 0.12 250);               /* corporate navy */
-  --primary-foreground: oklch(0.99 0.005 250);
-  --secondary: oklch(0.96 0.01 250);             /* soft grey chip */
-  --secondary-foreground: oklch(0.28 0.03 260);
-  --muted: oklch(0.96 0.01 250);
-  --muted-foreground: oklch(0.48 0.02 260);
-  --accent: oklch(0.95 0.04 256);                /* light blue tint */
-  --accent-foreground: oklch(0.32 0.12 256);
-  --destructive: oklch(0.55 0.18 27);            /* corporate red */
-  --destructive-foreground: oklch(0.99 0.005 250);
-  --border: oklch(0.9 0.01 250);
-  --input: oklch(0.94 0.01 250);
-  --ring: oklch(0.42 0.12 250);
-  --cyber: oklch(0.42 0.12 250);                 /* corporate navy */
-  --magenta: oklch(0.55 0.11 215);               /* steel teal */
-  --purple-glow: oklch(0.62 0.11 200);           /* soft cyan-teal */
+  /* Warm cream + soft pastel accents — friendly editorial palette.
+     Legacy tokens (cyber/magenta/purple-glow) remap to the new pastel
+     accents so existing components pick up the new look automatically. */
+  --radius: 1.25rem;
+  --background: oklch(0.975 0.012 85);           /* warm cream canvas */
+  --foreground: oklch(0.22 0.02 60);             /* warm near-black ink */
+  --card: oklch(0.995 0.005 85);
+  --card-foreground: oklch(0.22 0.02 60);
+  --popover: oklch(0.995 0.005 85);
+  --popover-foreground: oklch(0.22 0.02 60);
+  --primary: oklch(0.24 0.03 60);                /* deep ink for CTAs */
+  --primary-foreground: oklch(0.98 0.01 85);
+  --secondary: oklch(0.94 0.02 80);
+  --secondary-foreground: oklch(0.28 0.03 60);
+  --muted: oklch(0.94 0.015 80);
+  --muted-foreground: oklch(0.5 0.02 60);
+  --accent: oklch(0.93 0.05 30);                 /* soft coral tint */
+  --accent-foreground: oklch(0.32 0.1 30);
+  --destructive: oklch(0.6 0.18 27);
+  --destructive-foreground: oklch(0.98 0.01 85);
+  --border: oklch(0.9 0.015 80);
+  --input: oklch(0.94 0.015 80);
+  --ring: oklch(0.72 0.14 30);
+
+  /* Pastel accent family */
+  --cream: oklch(0.96 0.02 85);
+  --coral: oklch(0.75 0.15 30);                  /* warm coral */
+  --mint: oklch(0.82 0.09 165);                  /* soft mint */
+  --lilac: oklch(0.78 0.09 300);                 /* soft lilac */
+  --butter: oklch(0.9 0.11 95);                  /* buttery yellow */
+
+  /* Legacy token remaps -> pastel accents */
+  --cyber: oklch(0.75 0.15 30);                  /* was navy, now coral */
+  --magenta: oklch(0.78 0.09 300);               /* was teal, now lilac */
+  --purple-glow: oklch(0.82 0.09 165);           /* now mint */
 }
 
 @layer base {
@@ -70,7 +83,7 @@
     border-color: var(--color-border);
   }
   *:focus-visible {
-    outline: 2px solid color-mix(in oklab, var(--color-primary) 70%, transparent);
+    outline: 2px solid color-mix(in oklab, var(--color-coral) 70%, transparent);
     outline-offset: 3px;
   }
   html, body {
@@ -83,72 +96,110 @@
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     color: var(--color-foreground);
+    font-weight: 600;
   }
 }
 
 @utility glass {
-  background: color-mix(in oklab, white 78%, transparent);
-  backdrop-filter: blur(16px) saturate(140%);
+  background: color-mix(in oklab, var(--color-card) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
   border: 1px solid color-mix(in oklab, var(--color-foreground) 8%, transparent);
 }
 
 @utility glass-strong {
-  background: color-mix(in oklab, white 92%, transparent);
+  background: color-mix(in oklab, var(--color-card) 94%, transparent);
   backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid color-mix(in oklab, var(--color-foreground) 10%, transparent);
   box-shadow: 0 1px 0 color-mix(in oklab, var(--color-foreground) 4%, transparent);
 }
 
 @utility glow-cyan {
-  box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--color-cyber) 45%, transparent),
-              0 0 0 1px color-mix(in oklab, var(--color-cyber) 18%, transparent);
+  box-shadow: 0 10px 28px -12px color-mix(in oklab, var(--color-coral) 55%, transparent),
+              0 0 0 1px color-mix(in oklab, var(--color-coral) 18%, transparent);
 }
 
 @utility glow-magenta {
-  box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--color-magenta) 45%, transparent);
+  box-shadow: 0 10px 28px -12px color-mix(in oklab, var(--color-lilac) 55%, transparent);
 }
 
 @utility text-gradient {
   background: linear-gradient(120deg,
-    oklch(0.42 0.12 250),
-    oklch(0.55 0.11 215),
-    oklch(0.62 0.11 200));
+    oklch(0.35 0.05 60),
+    oklch(0.62 0.15 30),
+    oklch(0.55 0.12 300));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 @utility grid-bg {
-  background-image:
-    radial-gradient(circle at 15% 10%, color-mix(in oklab, var(--color-cyber) 12%, transparent) 0%, transparent 45%),
-    radial-gradient(circle at 85% 85%, color-mix(in oklab, var(--color-purple-glow) 10%, transparent) 0%, transparent 45%),
-    radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--color-magenta) 8%, transparent) 0%, transparent 35%),
-    linear-gradient(to bottom, var(--color-background), var(--color-background));
+  background:
+    radial-gradient(1200px 600px at 8% -10%, color-mix(in oklab, var(--color-coral) 22%, transparent), transparent 55%),
+    radial-gradient(900px 500px at 100% 10%, color-mix(in oklab, var(--color-lilac) 22%, transparent), transparent 55%),
+    radial-gradient(700px 400px at 50% 100%, color-mix(in oklab, var(--color-mint) 22%, transparent), transparent 55%),
+    var(--color-background);
 }
 
-/* Brand accent bar (corporate navy → teal gradient) */
+/* Cream accent bar */
 @utility google-bar {
   background: linear-gradient(to right,
-    oklch(0.42 0.12 250),
-    oklch(0.5 0.12 230),
-    oklch(0.6 0.11 205),
-    oklch(0.7 0.09 195));
+    var(--color-coral),
+    var(--color-butter),
+    var(--color-mint),
+    var(--color-lilac));
   height: 3px;
   border-radius: 9999px;
+  opacity: 0.55;
+}
+
+/* Hand-drawn underline sweep, schoolai-style */
+@utility handline {
+  position: relative;
+  display: inline-block;
+}
+@utility handline-swash {
+  display: block;
+  height: 14px;
+  margin-top: -6px;
+  color: var(--color-butter);
+}
+
+/* Chip pill used across new hero */
+@utility pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: color-mix(in oklab, var(--color-card) 90%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 8%, transparent);
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--color-foreground) 5%, transparent);
+}
+
+/* Mosaic tile — used in hero collage */
+@utility tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--color-foreground) 6%, transparent),
+    0 30px 60px -40px color-mix(in oklab, var(--color-foreground) 30%, transparent);
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s ease;
+}
+@utility tile:hover {
+  transform: translateY(-4px) rotate(-.4deg);
 }
 
 @keyframes float-glow {
-  0%, 100% { transform: translateY(0px); opacity: 0.7; }
-  50% { transform: translateY(-8px); opacity: 1; }
-}
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-cyber) 40%, transparent); }
-  100% { box-shadow: 0 0 0 12px transparent; }
+  0%, 100% { transform: translateY(0px); opacity: 0.9; }
+  50% { transform: translateY(-10px); opacity: 1; }
 }
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes scale-in {
@@ -161,59 +212,73 @@
   100% { background-position: 0% 50%; }
 }
 @keyframes float-y {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
 }
 @keyframes soft-sheen {
   0% { transform: translateX(-120%); opacity: 0; }
-  20% { opacity: 0.45; }
-  60% { opacity: 0.15; }
+  30% { opacity: 0.5; }
   100% { transform: translateX(120%); opacity: 0; }
 }
 @keyframes route-blur-in {
-  from { opacity: 0; filter: blur(10px); transform: translateY(10px) scale(0.995); }
-  to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+  from { opacity: 0; filter: blur(8px); transform: translateY(10px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
 }
 @keyframes orb-drift {
   0%, 100% { transform: translate3d(0,0,0) scale(1); }
   33% { transform: translate3d(18px,-22px,0) scale(1.06); }
   66% { transform: translate3d(-20px,16px,0) scale(0.96); }
 }
+@keyframes draw-line {
+  from { stroke-dashoffset: 400; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
 
-.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2,0.8,0.2,1) both; }
+.animate-fade-up { animation: fade-up 0.75s cubic-bezier(0.2,0.8,0.2,1) both; }
 .animate-scale-in { animation: scale-in 0.6s cubic-bezier(0.2,0.8,0.2,1) both; }
-.animate-float-glow { animation: float-glow 4s ease-in-out infinite; }
-.animate-float-y { animation: float-y 3.5s ease-in-out infinite; }
+.animate-float-glow { animation: float-glow 5s ease-in-out infinite; }
+.animate-float-y { animation: float-y 4s ease-in-out infinite; }
 .animate-orb { animation: orb-drift 18s ease-in-out infinite; }
+.animate-draw-line { stroke-dasharray: 400; animation: draw-line 1.2s .3s ease-out both; }
+.animate-marquee { animation: marquee 40s linear infinite; }
+.animate-wiggle { animation: wiggle 3s ease-in-out infinite; }
 
 .motion-card {
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
-  transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
 }
 .motion-card::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, transparent 20%, color-mix(in oklab, white 22%, transparent) 45%, transparent 70%);
+  background: linear-gradient(110deg, transparent 20%, color-mix(in oklab, white 30%, transparent) 45%, transparent 70%);
   transform: translateX(-120%);
   pointer-events: none;
 }
 .motion-card:hover {
-  transform: perspective(900px) translateY(-3px) rotateX(1deg);
-  box-shadow: 0 18px 42px -28px color-mix(in oklab, var(--color-primary) 45%, transparent);
-  border-color: color-mix(in oklab, var(--color-primary) 28%, var(--color-border));
+  transform: perspective(900px) translateY(-4px) rotateX(1deg);
+  box-shadow: 0 24px 50px -30px color-mix(in oklab, var(--color-foreground) 40%, transparent);
+  border-color: color-mix(in oklab, var(--color-coral) 30%, var(--color-border));
 }
 .motion-card:hover::after { animation: soft-sheen 1.2s ease; }
 
 .shimmer-text {
-  background: linear-gradient(90deg, oklch(0.42 0.12 250), oklch(0.55 0.11 215), oklch(0.65 0.10 200), oklch(0.42 0.12 250));
+  background: linear-gradient(90deg, oklch(0.35 0.05 60), oklch(0.62 0.15 30), oklch(0.55 0.12 300), oklch(0.35 0.05 60));
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: shimmer-bg 6s ease-in-out infinite;
+  animation: shimmer-bg 8s ease-in-out infinite;
 }
 
 .tilt-3d {
@@ -222,11 +287,9 @@
 }
 .tilt-3d:hover { transform: perspective(900px) rotateX(0deg) translateY(-2px); }
 
-/* Typewriter caret */
 @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 .animate-blink { animation: blink 1s steps(1) infinite; }
 
-/* Scroll mouse dot */
 @keyframes scroll-dot {
   0% { transform: translate(-50%, 0); opacity: 0; }
   30% { opacity: 1; }
@@ -235,7 +298,6 @@
 }
 .animate-scroll-dot { animation: scroll-dot 1.6s cubic-bezier(0.4,0,0.2,1) infinite; }
 
-/* Card pop on enter */
 @keyframes pop-in {
   0% { opacity: 0; transform: translateY(20px) scale(0.94); }
   60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
@@ -243,25 +305,17 @@
 }
 .animate-pop-in { animation: pop-in 0.55s cubic-bezier(0.2,0.8,0.2,1) both; }
 
-/* Logo subtle spin/breathe */
 @keyframes logo-breathe {
-  0%, 100% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 0 transparent); }
-  50% { transform: rotate(3deg) scale(1.05); filter: drop-shadow(0 4px 16px color-mix(in oklab, var(--color-cyber) 35%, transparent)); }
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(2deg) scale(1.04); }
 }
-.animate-logo { animation: logo-breathe 4.5s ease-in-out infinite; }
+.animate-logo { animation: logo-breathe 5s ease-in-out infinite; }
 
-/* Page transition */
-@keyframes page-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.page-transition { animation: route-blur-in 0.48s cubic-bezier(0.2,0.8,0.2,1) both; }
+.page-transition { animation: route-blur-in 0.5s cubic-bezier(0.2,0.8,0.2,1) both; }
 
-/* Reveal on scroll helper (pairs with IntersectionObserver class swap) */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(0.2,0.8,0.2,1); }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-/* Smooth-scrolling root for in-page anchors */
 html { scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
