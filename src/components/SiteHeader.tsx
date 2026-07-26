@@ -110,8 +110,9 @@ export function SiteHeader() {
           </div>
         </div>
 
-        {/* Google-style 4-color thin bar under nav */}
-        <div className="google-bar opacity-90" />
+        {/* Cream accent bar under nav */}
+        <div className="google-bar" />
+
 
         {open && (
           <nav className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-1 bg-card">
