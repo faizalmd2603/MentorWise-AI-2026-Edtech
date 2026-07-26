@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import banner from "@/assets/mw-banner.png.asset.json";
-import heroIllustration from "@/assets/hero-illustration.png";
-import sceneResume from "@/assets/scene-resume.png";
-import sceneInterview from "@/assets/scene-interview.png";
-import sceneLearn from "@/assets/scene-learn.png";
-import { ArrowRight, Sparkles, ExternalLink, Crown, FileText, MessagesSquare, GraduationCap, Briefcase, Linkedin, PenTool, Bot, Star } from "lucide-react";
+import { ArrowRight, Sparkles, ExternalLink, Crown, FileText, MessagesSquare, GraduationCap, Briefcase, Linkedin, PenTool, Bot, Star, Wand2, Rocket, Shapes, Palette, Play, Layers } from "lucide-react";
+
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${banner.url}`;
