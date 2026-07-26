@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import banner from "@/assets/mw-banner.png.asset.json";
-import heroIllustration from "@/assets/hero-illustration.png";
-import sceneResume from "@/assets/scene-resume.png";
-import sceneInterview from "@/assets/scene-interview.png";
-import sceneLearn from "@/assets/scene-learn.png";
-import { ArrowRight, Sparkles, ExternalLink, Crown, FileText, MessagesSquare, GraduationCap, Briefcase, Linkedin, PenTool, Bot, Star } from "lucide-react";
+import { ArrowRight, Sparkles, ExternalLink, Crown, FileText, MessagesSquare, GraduationCap, Briefcase, Linkedin, PenTool, Bot, Star, Wand2, Rocket, Shapes, Palette, Play, Layers } from "lucide-react";
+
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${banner.url}`;
@@ -154,25 +151,123 @@ function Hero() {
 function HeroMosaic() {
   return (
     <div className="relative animate-fade-up [animation-delay:120ms]">
-      <div aria-hidden className="absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-br from-[color-mix(in_oklab,var(--color-coral)_35%,transparent)] via-[color-mix(in_oklab,var(--color-butter)_25%,transparent)] to-[color-mix(in_oklab,var(--color-lilac)_35%,transparent)] blur-3xl animate-orb" />
+      <div
+        aria-hidden
+        className="absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-[color-mix(in_oklab,var(--color-lilac)_45%,transparent)] via-[color-mix(in_oklab,var(--color-butter)_25%,transparent)] to-[color-mix(in_oklab,var(--color-mint)_45%,transparent)] blur-3xl animate-orb"
+      />
 
-      <div className="grid grid-cols-6 gap-3 sm:gap-4">
-        <div className="tile col-span-6 row-span-2 aspect-[16/10] animate-pop-in">
-          <img src={heroIllustration} alt="AI mentor helping students" className="h-full w-full object-cover" loading="eager" />
+      {/* Canvas-style artboard */}
+      <div className="relative rounded-[2rem] border border-border bg-card/80 p-4 shadow-[0_30px_80px_-40px_color-mix(in_oklab,var(--color-foreground)_35%,transparent)] backdrop-blur">
+        {/* Faux app chrome */}
+        <div className="flex items-center justify-between px-2 pb-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--color-coral)_60%,white)]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-butter" />
+            <span className="h-2.5 w-2.5 rounded-full bg-mint" />
+          </div>
+          <div className="pill !py-1 text-[10px]">
+            <Layers className="h-3 w-3" /> Studio · Untitled
+          </div>
         </div>
-        <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:120ms] animate-float-y">
-          <img src={sceneResume} alt="AI resume builder" className="h-full w-full object-cover" loading="lazy" />
-        </div>
-        <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y [animation-delay:400ms]">
-          <img src={sceneInterview} alt="AI mock interview" className="h-full w-full object-cover" loading="lazy" />
-        </div>
-        <div className="tile col-span-6 aspect-[16/6] animate-pop-in [animation-delay:280ms]">
-          <img src={sceneLearn} alt="AI courses and certifications" className="h-full w-full object-cover" loading="lazy" />
+
+        <div className="grid grid-cols-6 gap-3">
+          {/* Big typography tile */}
+          <div className="tile col-span-6 row-span-2 aspect-[16/9] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-lilac)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
+            <div className="flex h-full flex-col justify-between p-6 sm:p-8">
+              <div className="flex items-center justify-between">
+                <div className="pill !py-1 text-[10px]"><Wand2 className="h-3 w-3" /> AI Studio</div>
+                <div className="flex -space-x-2">
+                  {["coral","mint","lilac","butter"].map((c) => (
+                    <span key={c} className="h-6 w-6 rounded-full border-2 border-white" style={{ background: `var(--color-${c})` }} />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="font-display text-4xl font-semibold leading-[1] tracking-tight sm:text-5xl">
+                  Design your
+                  <br />
+                  <span className="shimmer-text italic">career story.</span>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {["Resume", "Interview", "LinkedIn", "Courses"].map((t) => (
+                    <span key={t} className="rounded-full border border-border bg-white/70 px-2.5 py-1 text-[11px] font-medium text-foreground/80 backdrop-blur">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Palette tile */}
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:120ms] bg-white p-5">
+            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <Palette className="h-3.5 w-3.5" /> Brand
+            </div>
+            <div className="mt-3 grid grid-cols-4 gap-1.5">
+              {[
+                "var(--color-primary)",
+                "var(--color-lilac)",
+                "var(--color-mint)",
+                "var(--color-butter)",
+              ].map((bg, i) => (
+                <div key={i} className="aspect-square rounded-lg" style={{ background: bg }} />
+              ))}
+            </div>
+            <div className="mt-4 space-y-1.5">
+              <div className="h-2 w-3/4 rounded-full bg-foreground/80" />
+              <div className="h-2 w-1/2 rounded-full bg-foreground/30" />
+              <div className="h-2 w-2/3 rounded-full bg-foreground/20" />
+            </div>
+            <div className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold text-foreground/70">
+              <Sparkles className="h-3 w-3 text-primary" /> Auto-styled
+            </div>
+          </div>
+
+          {/* Chat tile */}
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y bg-gradient-to-br from-[color-mix(in_oklab,var(--color-mint)_35%,white)] to-white p-5">
+            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <Bot className="h-3.5 w-3.5" /> Agent
+            </div>
+            <div className="mt-3 space-y-2">
+              <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-white/90 p-2.5 text-[11px] shadow-sm">
+                Rewrite my intro for a data internship?
+              </div>
+              <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-primary p-2.5 text-[11px] text-primary-foreground shadow-sm">
+                On it — punchier, ATS-friendly, one line.
+              </div>
+              <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-mint" /> Typing…
+              </div>
+            </div>
+          </div>
+
+          {/* Progress tile */}
+          <div className="tile col-span-6 aspect-[16/5] animate-pop-in [animation-delay:280ms] bg-white p-5">
+            <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5"><Rocket className="h-3.5 w-3.5" /> Launch checklist</span>
+              <span>72%</span>
+            </div>
+            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary">
+              <div className="h-full w-[72%] rounded-full bg-gradient-to-r from-primary via-lilac to-mint" />
+            </div>
+            <div className="mt-3 grid grid-cols-4 gap-2 text-[11px]">
+              {[
+                { l: "Resume", ok: true },
+                { l: "LinkedIn", ok: true },
+                { l: "Interview", ok: true },
+                { l: "Apply", ok: false },
+              ].map((s) => (
+                <div key={s.l} className="flex items-center gap-1.5 rounded-lg border border-border bg-card/70 px-2 py-1.5">
+                  <span className={`h-2 w-2 rounded-full ${s.ok ? "bg-mint" : "bg-foreground/20"}`} />
+                  <span className="font-medium text-foreground/80">{s.l}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Floating badge */}
-      <div className="absolute -left-3 top-6 hidden rotate-[-6deg] animate-float-y sm:block">
+      {/* Floating badges */}
+      <div className="absolute -left-3 top-10 hidden rotate-[-6deg] animate-float-y sm:block">
         <div className="pill bg-white">
           <span className="grid h-5 w-5 place-items-center rounded-full bg-mint">
             <Sparkles className="h-3 w-3 text-foreground" />
@@ -182,15 +277,21 @@ function HeroMosaic() {
       </div>
       <div className="absolute -right-2 bottom-8 hidden rotate-[4deg] animate-wiggle sm:block">
         <div className="pill bg-white">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-coral text-white">
-            <Star className="h-3 w-3 fill-current" />
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-white">
+            <Play className="h-3 w-3 fill-current" />
           </span>
-          Loved by freshers
+          Try an agent
+        </div>
+      </div>
+      <div className="absolute left-1/2 -bottom-4 hidden -translate-x-1/2 sm:block">
+        <div className="pill bg-white">
+          <Shapes className="h-3.5 w-3.5 text-lilac" /> Drag · Drop · Ship
         </div>
       </div>
     </div>
   );
 }
+
 
 function Marquee() {
   const items = [
