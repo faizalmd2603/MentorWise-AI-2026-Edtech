@@ -128,13 +128,14 @@
 
 @utility text-gradient {
   background: linear-gradient(120deg,
-    oklch(0.35 0.05 60),
-    oklch(0.62 0.15 30),
-    oklch(0.55 0.12 300));
+    oklch(0.28 0.08 260),
+    oklch(0.48 0.18 255),
+    oklch(0.62 0.13 220));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+
 
 @utility grid-bg {
   background:
