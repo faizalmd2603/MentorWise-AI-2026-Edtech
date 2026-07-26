@@ -165,7 +165,6 @@ function HeroMosaic() {
 
       {/* Canvas-style artboard */}
       <div className="relative rounded-[2rem] border border-border bg-card/80 p-4 shadow-[0_30px_80px_-40px_color-mix(in_oklab,var(--color-foreground)_35%,transparent)] backdrop-blur">
-        {/* Faux app chrome */}
         <div className="flex items-center justify-between px-2 pb-3">
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--color-coral)_60%,white)]" />
@@ -178,55 +177,15 @@ function HeroMosaic() {
         </div>
 
         <div className="grid grid-cols-6 gap-3">
-          {/* Big typography tile */}
-          <div className="tile col-span-6 row-span-2 aspect-[16/9] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-lilac)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
-            <div className="flex h-full flex-col justify-between p-6 sm:p-8">
-              <div className="flex items-center justify-between">
-                <div className="pill !py-1 text-[10px]"><Wand2 className="h-3 w-3" /> AI Studio</div>
-                <div className="flex -space-x-2">
-                  {["coral","mint","lilac","butter"].map((c) => (
-                    <span key={c} className="h-6 w-6 rounded-full border-2 border-white" style={{ background: `var(--color-${c})` }} />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div className="font-display text-4xl font-semibold leading-[1] tracking-tight sm:text-5xl">
-                  Design your
-                  <br />
-                  <span className="shimmer-text italic">career story.</span>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {["Resume", "Interview", "LinkedIn", "Courses"].map((t) => (
-                    <span key={t} className="rounded-full border border-border bg-white/70 px-2.5 py-1 text-[11px] font-medium text-foreground/80 backdrop-blur">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Palette tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:120ms] bg-white p-5">
-            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              <Palette className="h-3.5 w-3.5" /> Brand
-            </div>
-            <div className="mt-3 grid grid-cols-4 gap-1.5">
-              {[
-                "var(--color-primary)",
-                "var(--color-lilac)",
-                "var(--color-mint)",
-                "var(--color-butter)",
-              ].map((bg, i) => (
-                <div key={i} className="aspect-square rounded-lg" style={{ background: bg }} />
-              ))}
-            </div>
-            <div className="mt-4 space-y-1.5">
-              <div className="h-2 w-3/4 rounded-full bg-foreground/80" />
-              <div className="h-2 w-1/2 rounded-full bg-foreground/30" />
-              <div className="h-2 w-2/3 rounded-full bg-foreground/20" />
-            </div>
-            <div className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold text-foreground/70">
-              <Sparkles className="h-3 w-3 text-primary" /> Auto-styled
-            </div>
+          {/* Hero illustration tile */}
+          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-butter)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
+            <img
+              src={heroHome.url}
+              alt="MentorWise AI — friendly career companion"
+              width={1600}
+              height={1200}
+              className="h-full w-full object-cover"
+            />
           </div>
 
           {/* Chat tile */}
@@ -247,28 +206,16 @@ function HeroMosaic() {
             </div>
           </div>
 
-          {/* Progress tile */}
-          <div className="tile col-span-6 aspect-[16/5] animate-pop-in [animation-delay:280ms] bg-white p-5">
-            <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5"><Rocket className="h-3.5 w-3.5" /> Launch checklist</span>
-              <span>72%</span>
-            </div>
-            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary">
-              <div className="h-full w-[72%] rounded-full bg-gradient-to-r from-primary via-lilac to-mint" />
-            </div>
-            <div className="mt-3 grid grid-cols-4 gap-2 text-[11px]">
-              {[
-                { l: "Resume", ok: true },
-                { l: "LinkedIn", ok: true },
-                { l: "Interview", ok: true },
-                { l: "Apply", ok: false },
-              ].map((s) => (
-                <div key={s.l} className="flex items-center gap-1.5 rounded-lg border border-border bg-card/70 px-2 py-1.5">
-                  <span className={`h-2 w-2 rounded-full ${s.ok ? "bg-mint" : "bg-foreground/20"}`} />
-                  <span className="font-medium text-foreground/80">{s.l}</span>
-                </div>
-              ))}
-            </div>
+          {/* Resume preview tile */}
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-white">
+            <img
+              src={agentResume.url}
+              alt="Resume Agent"
+              width={512}
+              height={512}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
       </div>
@@ -288,11 +235,6 @@ function HeroMosaic() {
             <Play className="h-3 w-3 fill-current" />
           </span>
           Try an agent
-        </div>
-      </div>
-      <div className="absolute left-1/2 -bottom-4 hidden -translate-x-1/2 sm:block">
-        <div className="pill bg-white">
-          <Shapes className="h-3.5 w-3.5 text-lilac" /> Drag · Drop · Ship
         </div>
       </div>
     </div>
