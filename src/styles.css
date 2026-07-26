@@ -189,10 +189,11 @@
     0 1px 0 color-mix(in oklab, var(--color-foreground) 6%, transparent),
     0 30px 60px -40px color-mix(in oklab, var(--color-foreground) 30%, transparent);
   transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s ease;
+  &:hover {
+    transform: translateY(-4px) rotate(-.4deg);
+  }
 }
-@utility tile:hover {
-  transform: translateY(-4px) rotate(-.4deg);
-}
+
 
 @keyframes float-glow {
   0%, 100% { transform: translateY(0px); opacity: 0.9; }
