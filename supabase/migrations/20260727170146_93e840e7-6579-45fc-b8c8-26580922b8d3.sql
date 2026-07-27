@@ -1,0 +1,2 @@
+CREATE POLICY "event_messages_update_own" ON public.event_messages FOR UPDATE TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
+CREATE POLICY "event_messages_delete_own_or_admin" ON public.event_messages FOR DELETE TO authenticated USING (user_id = auth.uid() OR public.has_role(auth.uid(), 'admin'));
