@@ -328,7 +328,7 @@ function FeatureGrid() {
           >
             <div
               className="relative aspect-[16/10] overflow-hidden"
-              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 25%, white)` }}
+              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 35%, var(--color-card))` }}
             >
               <img
                 src={f.img.url}
