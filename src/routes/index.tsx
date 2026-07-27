@@ -194,7 +194,7 @@ function HeroMosaic() {
               <Bot className="h-3.5 w-3.5" /> Agent
             </div>
             <div className="mt-3 space-y-2">
-              <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-white/90 p-2.5 text-[11px] shadow-sm">
+              <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-secondary/80 p-2.5 text-[11px] text-foreground shadow-sm">
                 Rewrite my intro for a data internship?
               </div>
               <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-primary p-2.5 text-[11px] text-primary-foreground shadow-sm">
@@ -207,7 +207,7 @@ function HeroMosaic() {
           </div>
 
           {/* Resume preview tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-white">
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-card">
             <img
               src={agentResume.url}
               alt="Resume Agent"
