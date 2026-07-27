@@ -178,7 +178,7 @@ function HeroMosaic() {
 
         <div className="grid grid-cols-6 gap-3">
           {/* Hero illustration tile */}
-          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-butter)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
+          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-primary/25 via-lilac/15 to-mint/25">
             <img
               src={heroHome.url}
               alt="MentorWise AI — friendly career companion"
@@ -189,12 +189,12 @@ function HeroMosaic() {
           </div>
 
           {/* Chat tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y bg-gradient-to-br from-[color-mix(in_oklab,var(--color-mint)_35%,white)] to-white p-5">
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y bg-gradient-to-br from-primary/25 to-card p-5">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
               <Bot className="h-3.5 w-3.5" /> Agent
             </div>
             <div className="mt-3 space-y-2">
-              <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-white/90 p-2.5 text-[11px] shadow-sm">
+              <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-secondary/80 p-2.5 text-[11px] text-foreground shadow-sm">
                 Rewrite my intro for a data internship?
               </div>
               <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-primary p-2.5 text-[11px] text-primary-foreground shadow-sm">
@@ -207,7 +207,7 @@ function HeroMosaic() {
           </div>
 
           {/* Resume preview tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-white">
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-card">
             <img
               src={agentResume.url}
               alt="Resume Agent"
@@ -222,16 +222,16 @@ function HeroMosaic() {
 
       {/* Floating badges */}
       <div className="absolute -left-3 top-10 hidden rotate-[-6deg] animate-float-y sm:block">
-        <div className="pill bg-white">
+        <div className="pill">
           <span className="grid h-5 w-5 place-items-center rounded-full bg-mint">
-            <Sparkles className="h-3 w-3 text-foreground" />
+            <Sparkles className="h-3 w-3 text-background" />
           </span>
           Free forever
         </div>
       </div>
       <div className="absolute -right-2 bottom-8 hidden rotate-[4deg] animate-wiggle sm:block">
-        <div className="pill bg-white">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-white">
+        <div className="pill">
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
             <Play className="h-3 w-3 fill-current" />
           </span>
           Try an agent
@@ -328,7 +328,7 @@ function FeatureGrid() {
           >
             <div
               className="relative aspect-[16/10] overflow-hidden"
-              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 25%, white)` }}
+              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 35%, var(--color-card))` }}
             >
               <img
                 src={f.img.url}
