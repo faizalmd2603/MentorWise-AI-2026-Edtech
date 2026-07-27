@@ -178,7 +178,7 @@ function HeroMosaic() {
 
         <div className="grid grid-cols-6 gap-3">
           {/* Hero illustration tile */}
-          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-[color-mix(in_oklab,var(--color-butter)_35%,white)] via-white to-[color-mix(in_oklab,var(--color-mint)_35%,white)]">
+          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-primary/25 via-lilac/15 to-mint/25">
             <img
               src={heroHome.url}
               alt="MentorWise AI — friendly career companion"
@@ -189,7 +189,7 @@ function HeroMosaic() {
           </div>
 
           {/* Chat tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y bg-gradient-to-br from-[color-mix(in_oklab,var(--color-mint)_35%,white)] to-white p-5">
+          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y bg-gradient-to-br from-primary/25 to-card p-5">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
               <Bot className="h-3.5 w-3.5" /> Agent
             </div>
