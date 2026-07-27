@@ -222,16 +222,16 @@ function HeroMosaic() {
 
       {/* Floating badges */}
       <div className="absolute -left-3 top-10 hidden rotate-[-6deg] animate-float-y sm:block">
-        <div className="pill bg-white">
+        <div className="pill">
           <span className="grid h-5 w-5 place-items-center rounded-full bg-mint">
-            <Sparkles className="h-3 w-3 text-foreground" />
+            <Sparkles className="h-3 w-3 text-background" />
           </span>
           Free forever
         </div>
       </div>
       <div className="absolute -right-2 bottom-8 hidden rotate-[4deg] animate-wiggle sm:block">
-        <div className="pill bg-white">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-white">
+        <div className="pill">
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
             <Play className="h-3 w-3 fill-current" />
           </span>
           Try an agent
