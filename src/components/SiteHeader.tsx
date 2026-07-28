@@ -81,7 +81,7 @@ export function SiteHeader() {
               </span>
             ) : authed ? (
               <Link
-                to="/feed"
+                to="/account"
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98]"
               >
                 <span className="hidden sm:inline">My Account</span>
@@ -89,7 +89,7 @@ export function SiteHeader() {
               </Link>
             ) : (
               <Link
-                to="/auth"
+                to="/account"
                 className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_6px_16px_-6px_oklch(0.58_0.18_256_/_0.55)] transition hover:brightness-110 active:scale-[0.98] sm:px-5"
                 aria-label="Sign in or Sign up"
               >

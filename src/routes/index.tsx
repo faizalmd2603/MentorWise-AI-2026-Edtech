@@ -2,15 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
 import banner from "@/assets/mw-banner.png.asset.json";
-import heroHome from "@/assets/hero-home.jpg.asset.json";
-import agentResume from "@/assets/agents/agent-02-resume.jpg.asset.json";
-import agentInterview from "@/assets/agents/agent-03-interview.jpg.asset.json";
-import agentLinkedin from "@/assets/agents/agent-04-linkedin.jpg.asset.json";
-import agentInternship from "@/assets/agents/agent-05-internship.jpg.asset.json";
-import agentCourses from "@/assets/agents/agent-06-courses.jpg.asset.json";
-import agentHumaniser from "@/assets/agents/agent-10-humaniser.jpg.asset.json";
+import { STOCK_AGENT_IMAGES, STOCK_PAGE_HEROES } from "@/lib/stock-images";
 import { ArrowRight, Sparkles, ExternalLink, Crown, Bot, Star, Play, Layers } from "lucide-react";
+
+const heroHome = { url: STOCK_PAGE_HEROES.home };
+const agentResume = { url: STOCK_AGENT_IMAGES.resume };
+const agentInterview = { url: STOCK_AGENT_IMAGES.interview };
+const agentLinkedin = { url: STOCK_AGENT_IMAGES.linkedin };
+const agentInternship = { url: STOCK_AGENT_IMAGES.internship };
+const agentCourses = { url: STOCK_AGENT_IMAGES.courses };
+const agentHumaniser = { url: STOCK_AGENT_IMAGES.humaniser };
 
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
@@ -150,6 +153,21 @@ function Hero() {
           {/* Right — mosaic collage */}
           <HeroMosaic />
         </div>
+
+        {/* Full banner reveal */}
+        <div className="mt-16 animate-fade-up [animation-delay:220ms]">
+          <div className="relative overflow-hidden rounded-[2.25rem] border border-border bg-card/60 shadow-[0_40px_100px_-60px_color-mix(in_oklab,var(--color-primary)_60%,transparent)]">
+            <img
+              src={banner.url}
+              alt="MentorWise AI — official banner"
+              className="h-auto w-full object-contain"
+              loading="eager"
+            />
+            <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+          </div>
+        </div>
+
+        <ScrollIndicator label="Keep scrolling" />
       </div>
     </section>
   );
