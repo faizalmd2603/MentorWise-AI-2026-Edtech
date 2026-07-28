@@ -3,33 +3,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { AGENTS, COMING_SECTIONS } from "@/lib/agents";
 import * as Icons from "lucide-react";
 import { Lock, Sparkles } from "lucide-react";
-import imgCore from "@/assets/agents/agent-01-core.jpg.asset.json";
-import imgResume from "@/assets/agents/agent-02-resume.jpg.asset.json";
-import imgInterview from "@/assets/agents/agent-03-interview.jpg.asset.json";
-import imgLinkedin from "@/assets/agents/agent-04-linkedin.jpg.asset.json";
-import imgInternship from "@/assets/agents/agent-05-internship.jpg.asset.json";
-import imgCourses from "@/assets/agents/agent-06-courses.jpg.asset.json";
-import imgProjects from "@/assets/agents/agent-07-projects.jpg.asset.json";
-import imgExam from "@/assets/agents/agent-08-exam.jpg.asset.json";
-import imgEmail from "@/assets/agents/agent-09-email.jpg.asset.json";
-import imgHumaniser from "@/assets/agents/agent-10-humaniser.jpg.asset.json";
-import imgInstagram from "@/assets/agents/agent-11-instagram.jpg.asset.json";
-import imgMentor from "@/assets/agents/agent-12-mentor.jpg.asset.json";
-
-const AGENT_IMAGES: Record<string, string> = {
-  core: imgCore.url,
-  resume: imgResume.url,
-  interview: imgInterview.url,
-  linkedin: imgLinkedin.url,
-  internship: imgInternship.url,
-  courses: imgCourses.url,
-  projects: imgProjects.url,
-  exam: imgExam.url,
-  email: imgEmail.url,
-  humaniser: imgHumaniser.url,
-  instagram: imgInstagram.url,
-  mentor: imgMentor.url,
-};
+import { STOCK_AGENT_IMAGES as AGENT_IMAGES } from "@/lib/stock-images";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 

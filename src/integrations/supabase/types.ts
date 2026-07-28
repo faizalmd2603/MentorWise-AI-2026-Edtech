@@ -374,37 +374,58 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_type: string
           age: number | null
+          avatar_url: string | null
           contact_number: string | null
           created_at: string
+          degree: string | null
+          designation: string | null
           display_name: string | null
           email: string
           full_name: string | null
           id: string
           institute: string | null
+          linkedin_url: string | null
+          phone: string | null
           updated_at: string
+          year_of_study: string | null
         }
         Insert: {
+          account_type?: string
           age?: number | null
+          avatar_url?: string | null
           contact_number?: string | null
           created_at?: string
+          degree?: string | null
+          designation?: string | null
           display_name?: string | null
           email: string
           full_name?: string | null
           id: string
           institute?: string | null
+          linkedin_url?: string | null
+          phone?: string | null
           updated_at?: string
+          year_of_study?: string | null
         }
         Update: {
+          account_type?: string
           age?: number | null
+          avatar_url?: string | null
           contact_number?: string | null
           created_at?: string
+          degree?: string | null
+          designation?: string | null
           display_name?: string | null
           email?: string
           full_name?: string | null
           id?: string
           institute?: string | null
+          linkedin_url?: string | null
+          phone?: string | null
           updated_at?: string
+          year_of_study?: string | null
         }
         Relationships: []
       }
