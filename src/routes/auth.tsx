@@ -55,7 +55,7 @@ function AuthPage() {
   const [otp, setOtp] = useState("");
 
   useEffect(() => {
-    if (auth.isReady && auth.user) navigate({ to: "/feed", replace: true });
+    if (auth.isReady && auth.user) navigate({ to: "/account", replace: true });
   }, [auth.isReady, auth.user, navigate]);
 
   function reset() {
@@ -73,7 +73,7 @@ function AuthPage() {
         password,
       });
       if (err) throw new Error(err.message);
-      navigate({ to: "/feed" });
+      navigate({ to: "/account" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not sign in.");
     } finally {
@@ -115,7 +115,7 @@ function AuthPage() {
       });
       if (err) throw new Error(err.message);
       if (data.session) {
-        navigate({ to: "/feed" });
+        navigate({ to: "/account" });
       } else {
         setInfo("Account created. Check your email to verify, then sign in.");
         setMode("signin");
@@ -156,7 +156,7 @@ function AuthPage() {
         type: "magiclink",
       });
       if (vErr) throw new Error(vErr.message);
-      navigate({ to: "/feed" });
+      navigate({ to: "/account" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not verify code.");
     } finally {

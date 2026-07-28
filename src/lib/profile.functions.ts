@@ -30,14 +30,14 @@ export const updateMyProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => ProfileSchema.parse(raw))
   .handler(async ({ context, data }) => {
-    const payload: Record<string, unknown> = { ...data, updated_at: new Date().toISOString() };
-    // Normalise empty strings to null
+    const payload = { ...data, updated_at: new Date().toISOString() } as Record<string, unknown>;
     for (const k of Object.keys(payload)) {
       if (payload[k] === "") payload[k] = null;
     }
     const { data: row, error } = await context.supabase
       .from("profiles")
-      .update(payload)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .update(payload as any)
       .eq("id", context.userId)
       .select()
       .single();
