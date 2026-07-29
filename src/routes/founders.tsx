@@ -44,8 +44,25 @@ const FOUNDERS_JSONLD = {
       worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
       sameAs: ["https://www.linkedin.com/in/saif-ahmed-a9a610353"],
     },
+    {
+      "@type": "Person",
+      "@id": `${SITE}/founders#aqhib`,
+      name: "Mohammed Aqhib. K",
+      jobTitle: "Administrator & Chief Communications Officer (CCO)",
+      description:
+        "Administrator and Chief Communications Officer of MentorWise AI. Final-year B.Com student at The New College (Autonomous), Chennai — Day Shift, Government-Aided.",
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "The New College (Autonomous), Chennai",
+        department: "B.Com — Day Shift, Government-Aided",
+        address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+      },
+      worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+      sameAs: ["https://www.linkedin.com/in/mohammed-aqhib-6639902a5"],
+    },
   ],
 };
+
 
 export const Route = createFileRoute("/founders")({
   head: () => ({
