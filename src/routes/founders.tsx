@@ -67,14 +67,15 @@ const FOUNDERS_JSONLD = {
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
-      { title: "Founders of MentorWise AI — Mohammed Faizal (CEO) & Saif Ahmed (Co-Founder) | The New College, Chennai" },
-      { name: "description", content: "Mohammed Faizal. M is the Founder & CEO of MentorWise AI. Saif Ahmed. Z is the Co-Founder. Both are B.Com (General), Shift-I, Aided Batch (2024–2027) students at The New College (Autonomous), Chennai." },
-      { property: "og:title", content: "Founders of MentorWise AI — Faizal (CEO) & Saif (Co-Founder)" },
-      { property: "og:description", content: "Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai." },
+      { title: "Core Team — MentorWise AI | Founder Faizal, Co-Founder Saif, CCO Aqhib" },
+      { name: "description", content: "The MentorWise AI core team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, and Administrator & CCO Mohammed Aqhib. K. Students of The New College (Autonomous), Chennai." },
+      { property: "og:title", content: "Core Team — MentorWise AI" },
+      { property: "og:description", content: "Meet the core team of MentorWise AI — Founder Faizal, Co-Founder Saif and CCO Aqhib from The New College (Autonomous), Chennai." },
       { property: "og:url", content: `${SITE}/founders` },
       { property: "og:image", content: FOUNDER_OG },
       { name: "twitter:image", content: FOUNDER_OG },
     ],
+
     links: [{ rel: "canonical", href: `${SITE}/founders` }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(FOUNDERS_JSONLD) },
