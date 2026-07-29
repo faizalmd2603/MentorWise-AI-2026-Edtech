@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import founder from "@/assets/founder-faizal.jpeg.asset.json";
 import cofounder from "@/assets/cofounder-saif.jpeg.asset.json";
+import aqhib from "@/assets/aqhib.jpeg.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
+
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const FOUNDER_OG = `${SITE}${founder.url}`;
@@ -42,20 +44,38 @@ const FOUNDERS_JSONLD = {
       worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
       sameAs: ["https://www.linkedin.com/in/saif-ahmed-a9a610353"],
     },
+    {
+      "@type": "Person",
+      "@id": `${SITE}/founders#aqhib`,
+      name: "Mohammed Aqhib. K",
+      jobTitle: "Administrator & Chief Communications Officer (CCO)",
+      description:
+        "Administrator and Chief Communications Officer of MentorWise AI. Final-year B.Com student at The New College (Autonomous), Chennai — Day Shift, Government-Aided.",
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "The New College (Autonomous), Chennai",
+        department: "B.Com — Day Shift, Government-Aided",
+        address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+      },
+      worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+      sameAs: ["https://www.linkedin.com/in/mohammed-aqhib-6639902a5"],
+    },
   ],
 };
+
 
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
-      { title: "Founders of MentorWise AI — Mohammed Faizal (CEO) & Saif Ahmed (Co-Founder) | The New College, Chennai" },
-      { name: "description", content: "Mohammed Faizal. M is the Founder & CEO of MentorWise AI. Saif Ahmed. Z is the Co-Founder. Both are B.Com (General), Shift-I, Aided Batch (2024–2027) students at The New College (Autonomous), Chennai." },
-      { property: "og:title", content: "Founders of MentorWise AI — Faizal (CEO) & Saif (Co-Founder)" },
-      { property: "og:description", content: "Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai." },
+      { title: "Core Team — MentorWise AI | Founder Faizal, Co-Founder Saif, CCO Aqhib" },
+      { name: "description", content: "The MentorWise AI core team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, and Administrator & CCO Mohammed Aqhib. K. Students of The New College (Autonomous), Chennai." },
+      { property: "og:title", content: "Core Team — MentorWise AI" },
+      { property: "og:description", content: "Meet the core team of MentorWise AI — Founder Faizal, Co-Founder Saif and CCO Aqhib from The New College (Autonomous), Chennai." },
       { property: "og:url", content: `${SITE}/founders` },
       { property: "og:image", content: FOUNDER_OG },
       { name: "twitter:image", content: FOUNDER_OG },
     ],
+
     links: [{ rel: "canonical", href: `${SITE}/founders` }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(FOUNDERS_JSONLD) },
@@ -93,6 +113,15 @@ const profiles: Profile[] = [
     whatsapp: "https://wa.me/918668032758",
     linkedin: "https://www.linkedin.com/in/saif-ahmed-a9a610353?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
+  {
+    name: "Mohammed Aqhib. K",
+    title: "Administrator & CCO",
+    bio: "Administrator and Chief Communications Officer (CCO) at MentorWise AI. Final-year B.Com student at The New College (Autonomous), Chennai — Day Shift, Government-Aided. Leads communications, community and administrative operations.",
+    image: aqhib.url,
+    email: "author.aqhib.7@gmail.com",
+    whatsapp: "https://wa.me/919176771119",
+    linkedin: "https://www.linkedin.com/in/mohammed-aqhib-6639902a5?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+  },
 ];
 
 function Founders() {
@@ -102,13 +131,14 @@ function Founders() {
         <div className="text-center max-w-2xl mx-auto animate-fade-up">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs text-cyber">Leadership</div>
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
-            Meet the <span className="text-gradient">Founders</span>
+            Meet the <span className="text-gradient">Core Team</span>
           </h1>
-          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai.</p>
+          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z and Administrator &amp; CCO Mohammed Aqhib. K — The New College (Autonomous), Chennai.</p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2">
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {profiles.map((p, i) => (
+
             <article key={p.name} className="relative rounded-3xl glass-strong p-6 sm:p-8 animate-fade-up" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-cyber/20 via-transparent to-magenta/20 pointer-events-none opacity-50" />
               <div className="relative flex flex-col items-center text-center">
