@@ -113,6 +113,15 @@ const profiles: Profile[] = [
     whatsapp: "https://wa.me/918668032758",
     linkedin: "https://www.linkedin.com/in/saif-ahmed-a9a610353?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
+  {
+    name: "Mohammed Aqhib. K",
+    title: "Administrator & CCO",
+    bio: "Administrator and Chief Communications Officer (CCO) at MentorWise AI. Final-year B.Com student at The New College (Autonomous), Chennai — Day Shift, Government-Aided. Leads communications, community and administrative operations.",
+    image: aqhib.url,
+    email: "author.aqhib.7@gmail.com",
+    whatsapp: "https://wa.me/919176771119",
+    linkedin: "https://www.linkedin.com/in/mohammed-aqhib-6639902a5?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+  },
 ];
 
 function Founders() {
@@ -122,13 +131,14 @@ function Founders() {
         <div className="text-center max-w-2xl mx-auto animate-fade-up">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs text-cyber">Leadership</div>
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
-            Meet the <span className="text-gradient">Founders</span>
+            Meet the <span className="text-gradient">Core Team</span>
           </h1>
-          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — B.Com (General), Shift-I, Aided Batch (2024–2027), The New College (Autonomous), Chennai.</p>
+          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z and Administrator &amp; CCO Mohammed Aqhib. K — The New College (Autonomous), Chennai.</p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2">
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {profiles.map((p, i) => (
+
             <article key={p.name} className="relative rounded-3xl glass-strong p-6 sm:p-8 animate-fade-up" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-cyber/20 via-transparent to-magenta/20 pointer-events-none opacity-50" />
               <div className="relative flex flex-col items-center text-center">
