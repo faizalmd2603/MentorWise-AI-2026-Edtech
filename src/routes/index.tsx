@@ -138,7 +138,7 @@ function Hero() {
                 to="/founders"
                 className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition hover:bg-secondary hover:translate-y-[-1px]"
               >
-                Meet the founders
+                Meet the core team
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
