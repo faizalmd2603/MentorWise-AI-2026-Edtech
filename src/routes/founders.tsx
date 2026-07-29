@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import founder from "@/assets/founder-faizal.jpeg.asset.json";
 import cofounder from "@/assets/cofounder-saif.jpeg.asset.json";
+import aqhib from "@/assets/aqhib.jpeg.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
+
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const FOUNDER_OG = `${SITE}${founder.url}`;
