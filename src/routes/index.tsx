@@ -5,7 +5,7 @@ import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { Reveal } from "@/components/Reveal";
 import banner from "@/assets/mw-banner.png.asset.json";
-import { STOCK_AGENT_IMAGES, STOCK_PAGE_HEROES } from "@/lib/stock-images";
+import { STOCK_AGENT_IMAGES } from "@/lib/stock-images";
 import {
   ArrowRight,
   Sparkles,
@@ -19,7 +19,7 @@ import {
   Users,
 } from "lucide-react";
 
-const heroHome = { url: STOCK_PAGE_HEROES.home };
+const heroHome = { url: STOCK_AGENT_IMAGES.mentor };
 const agentResume = { url: STOCK_AGENT_IMAGES.resume };
 const agentInterview = { url: STOCK_AGENT_IMAGES.interview };
 const agentLinkedin = { url: STOCK_AGENT_IMAGES.linkedin };
