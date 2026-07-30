@@ -36,9 +36,10 @@
   --color-mint: var(--mint);
   --color-lilac: var(--lilac);
   --color-butter: var(--butter);
-  --font-display: "Outfit", "Figtree", system-ui, sans-serif;
-  --font-sans: "Figtree", "Outfit", "Inter", system-ui, sans-serif;
+  --font-display: "Sora", "Manrope", system-ui, sans-serif;
+  --font-sans: "Manrope", "Sora", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
 }
 
 :root {
