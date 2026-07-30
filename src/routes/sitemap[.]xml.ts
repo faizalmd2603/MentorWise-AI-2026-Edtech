@@ -17,31 +17,29 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const today = new Date().toISOString().slice(0, 10);
-        // bumped: added LaunchBuff "Featured On" badge to homepage
-
+        // lastmod is only emitted for content with a real per-page timestamp
+        // (published articles). Static routes intentionally omit it.
 
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "daily", priority: "1.0", lastmod: today },
-          { path: "/agents", changefreq: "daily", priority: "0.95", lastmod: today },
-          { path: "/events", changefreq: "daily", priority: "0.95", lastmod: today },
-          { path: "/feed", changefreq: "daily", priority: "0.9", lastmod: today },
-          { path: "/auth", changefreq: "yearly", priority: "0.3", lastmod: today },
-          { path: "/resume", changefreq: "weekly", priority: "0.9", lastmod: today },
-          { path: "/interview", changefreq: "weekly", priority: "0.9", lastmod: today },
-          { path: "/internships", changefreq: "weekly", priority: "0.9", lastmod: today },
-          { path: "/mentorlink", changefreq: "weekly", priority: "0.9", lastmod: today },
-          { path: "/about", changefreq: "monthly", priority: "0.75", lastmod: today },
-          { path: "/founders", changefreq: "monthly", priority: "0.75", lastmod: today },
-          { path: "/contact", changefreq: "monthly", priority: "0.6", lastmod: today },
-          { path: "/resources/job-search-sites", changefreq: "monthly", priority: "0.7", lastmod: today },
-          { path: "/blog", changefreq: "weekly", priority: "0.8", lastmod: today },
+          { path: "/", changefreq: "daily", priority: "1.0" },
+          { path: "/agents", changefreq: "daily", priority: "0.95" },
+          { path: "/events", changefreq: "daily", priority: "0.95" },
+          { path: "/feed", changefreq: "daily", priority: "0.9" },
+          { path: "/auth", changefreq: "yearly", priority: "0.3" },
+          { path: "/resume", changefreq: "weekly", priority: "0.9" },
+          { path: "/interview", changefreq: "weekly", priority: "0.9" },
+          { path: "/internships", changefreq: "weekly", priority: "0.9" },
+          { path: "/mentorlink", changefreq: "weekly", priority: "0.9" },
+          { path: "/about", changefreq: "monthly", priority: "0.75" },
+          { path: "/founders", changefreq: "monthly", priority: "0.75" },
+          { path: "/contact", changefreq: "monthly", priority: "0.6" },
+          { path: "/resources/job-search-sites", changefreq: "monthly", priority: "0.7" },
+          { path: "/blog", changefreq: "weekly", priority: "0.8" },
 
           ...AGENTS.map((a) => ({
             path: `/agents/${a.id}`,
             changefreq: "weekly" as const,
             priority: "0.85",
-            lastmod: today,
           })),
         ];
 
@@ -65,7 +63,7 @@ export const Route = createFileRoute("/sitemap.xml")({
                 path: `/blog/${row.slug}`,
                 changefreq: "monthly",
                 priority: "0.9",
-                lastmod: (row.updated_at ?? today).slice(0, 10),
+                lastmod: row.updated_at ? row.updated_at.slice(0, 10) : undefined,
               });
             }
           }
