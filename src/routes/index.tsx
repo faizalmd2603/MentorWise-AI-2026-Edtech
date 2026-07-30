@@ -3,9 +3,21 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
+import { Reveal } from "@/components/Reveal";
 import banner from "@/assets/mw-banner.png.asset.json";
 import { STOCK_AGENT_IMAGES, STOCK_PAGE_HEROES } from "@/lib/stock-images";
-import { ArrowRight, Sparkles, ExternalLink, Crown, Bot, Star, Play, Layers } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  ExternalLink,
+  Crown,
+  Bot,
+  Star,
+  FileText,
+  BookOpen,
+  CalendarDays,
+  Users,
+} from "lucide-react";
 
 const heroHome = { url: STOCK_PAGE_HEROES.home };
 const agentResume = { url: STOCK_AGENT_IMAGES.resume };
@@ -14,7 +26,6 @@ const agentLinkedin = { url: STOCK_AGENT_IMAGES.linkedin };
 const agentInternship = { url: STOCK_AGENT_IMAGES.internship };
 const agentCourses = { url: STOCK_AGENT_IMAGES.courses };
 const agentHumaniser = { url: STOCK_AGENT_IMAGES.humaniser };
-
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${banner.url}`;
@@ -27,6 +38,8 @@ export const Route = createFileRoute("/")({
       { name: "keywords", content: "free resume builder, free mock interview, free internships for students, free online courses with certificate, LinkedIn help, AI career app, college students, freshers, MentorWise AI" },
       { property: "og:title", content: "MentorWise AI — Free AI Career App for Students" },
       { property: "og:description", content: "Free AI career help for students. Build a resume, practice mock interviews, find free internships, learn from free online courses and get LinkedIn help — all free, in one app." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: `${SITE}/` },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
@@ -36,21 +49,21 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const AUDIENCES = ["Students", "Freshers", "Job Seekers", "Interns", "Everyone"] as const;
-
 function Home() {
   const [show, setShow] = useState(true);
   useEffect(() => {
-    const t = setTimeout(() => setShow(false), 1800);
+    const t = setTimeout(() => setShow(false), 1600);
     return () => clearTimeout(t);
   }, []);
   return (
     <SiteLayout>
       {show && <SplashScreen />}
       <Hero />
+      <BentoDeck />
+      <BannerReveal />
       <Marquee />
       <LaunchBuffBadge />
-      <FeatureGrid />
+      <AgentBento />
       <NexoraShowcase />
       <Testimonial />
       <CTA />
@@ -70,101 +83,61 @@ function SplashScreen() {
   );
 }
 
+/* ---------------------------------- Hero --------------------------------- */
+
 function Hero() {
-  const [audience, setAudience] = useState<(typeof AUDIENCES)[number]>("Students");
   return (
-    <section className="relative">
-      <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 sm:px-6 lg:pt-16">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
-          {/* Left column */}
-          <div className="animate-fade-up">
-            <div className="pill">
-              <span className="text-muted-foreground">MentorWise AI for…</span>
-              <div className="flex items-center gap-1">
-                {AUDIENCES.map((a) => (
-                  <button
-                    key={a}
-                    onClick={() => setAudience(a)}
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
-                      audience === a
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "text-foreground/70 hover:text-foreground"
-                    }`}
-                  >
-                    {a}
-                  </button>
-                ))}
-              </div>
-            </div>
+    <section className="relative overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-[-18%] h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-primary/15 blur-[130px] animate-aurora" />
+        <div className="absolute right-[-10%] top-[30%] h-[26rem] w-[26rem] rounded-full bg-lilac/12 blur-[120px] animate-orb" />
+      </div>
 
-            <h1 className="mt-6 font-display text-[2.6rem] font-semibold leading-[1.02] tracking-tight sm:text-6xl lg:text-[4.5rem]">
-              AI that helps{" "}
-              <span className="handline">
-                {audience.toLowerCase()}
-                <svg className="handline-swash" viewBox="0 0 320 14" fill="none" preserveAspectRatio="none">
-                  <path
-                    className="animate-draw-line"
-                    d="M4 9 C 80 2, 160 14, 316 5"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-              <br />
-              land the{" "}
-              <span className="italic text-foreground/90">
-                <Typewriter
-                  className=""
-                  phrases={["career", "internship", "first job", "confidence", "resume"]}
-                />
-              </span>{" "}
-              they deserve.
-            </h1>
-
-            <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
-              MentorWise AI is a free, all-in-one career app. Build a resume, practice mock interviews, find internships and courses — with 12 friendly AI agents guiding you step by step.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/agents"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 hover:translate-y-[-1px]"
-              >
-                I'm a student
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/founders"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition hover:bg-secondary hover:translate-y-[-1px]"
-              >
-                Meet the core team
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-coral" /> Always 100% free</span>
-              <span className="inline-flex items-center gap-1.5"><Bot className="h-3.5 w-3.5 text-lilac" /> 12 friendly AI agents</span>
-              <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-butter fill-current" /> Made in Chennai</span>
-            </div>
-          </div>
-
-          {/* Right — mosaic collage */}
-          <HeroMosaic />
+      <div className="mx-auto flex max-w-5xl flex-col items-center px-4 pt-16 pb-14 text-center sm:px-6 lg:pt-24">
+        <div className="pill animate-fade-up">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+          </span>
+          <span className="tracking-wide">New · 12 AI mentors, always free</span>
         </div>
 
-        {/* Full banner reveal */}
-        <div className="mt-16 animate-fade-up [animation-delay:220ms]">
-          <div className="relative overflow-hidden rounded-[2.25rem] border border-border bg-card/60 shadow-[0_40px_100px_-60px_color-mix(in_oklab,var(--color-primary)_60%,transparent)]">
-            <img
-              src={banner.url}
-              alt="MentorWise AI — official banner"
-              className="h-auto w-full object-contain"
-              loading="eager"
-            />
-            <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
-          </div>
+        <h1 className="mt-8 font-display text-[2.7rem] font-extrabold leading-[1.05] tracking-tight animate-fade-up [animation-delay:80ms] sm:text-6xl lg:text-[4.5rem]">
+          Master your career
+          <br />
+          <span className="bg-gradient-to-r from-primary via-lilac to-foreground bg-clip-text text-transparent">
+            with 12 AI Agents.
+          </span>
+        </h1>
+
+        <p className="mt-7 max-w-2xl text-base leading-relaxed text-muted-foreground animate-fade-up [animation-delay:160ms] sm:text-xl">
+          MentorWise AI blends personal mentorship with intelligent tools so students, freshers and
+          professionals move faster on{" "}
+          <span className="font-semibold text-foreground">
+            <Typewriter phrases={["resumes", "interviews", "internships", "courses", "confidence"]} />
+          </span>
+        </p>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 animate-fade-up [animation-delay:240ms]">
+          <Link
+            to="/agents"
+            className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_18px_40px_-18px_color-mix(in_oklab,var(--color-primary)_90%,transparent)] transition hover:-translate-y-0.5 hover:brightness-110"
+          >
+            Start free
+            <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            to="/founders"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-6 py-3.5 text-sm font-semibold text-foreground backdrop-blur transition hover:-translate-y-0.5 hover:bg-secondary"
+          >
+            Meet the core team
+          </Link>
+        </div>
+
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-xs text-muted-foreground animate-fade-up [animation-delay:320ms]">
+          <span className="inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-primary" /> Always 100% free</span>
+          <span className="inline-flex items-center gap-1.5"><Bot className="h-3.5 w-3.5 text-lilac" /> 12 specialised agents</span>
+          <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-butter fill-current" /> Built in Chennai</span>
         </div>
 
         <ScrollIndicator label="Keep scrolling" />
@@ -173,92 +146,137 @@ function Hero() {
   );
 }
 
-function HeroMosaic() {
+/* ------------------------------ Kinetic bento ----------------------------- */
+
+function BentoDeck() {
   return (
-    <div className="relative animate-fade-up [animation-delay:120ms]">
-      <div
-        aria-hidden
-        className="absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-[color-mix(in_oklab,var(--color-lilac)_45%,transparent)] via-[color-mix(in_oklab,var(--color-butter)_25%,transparent)] to-[color-mix(in_oklab,var(--color-mint)_45%,transparent)] blur-3xl animate-orb"
-      />
-
-      {/* Canvas-style artboard */}
-      <div className="relative rounded-[2rem] border border-border bg-card/80 p-4 shadow-[0_30px_80px_-40px_color-mix(in_oklab,var(--color-foreground)_35%,transparent)] backdrop-blur">
-        <div className="flex items-center justify-between px-2 pb-3">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--color-coral)_60%,white)]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-butter" />
-            <span className="h-2.5 w-2.5 rounded-full bg-mint" />
-          </div>
-          <div className="pill !py-1 text-[10px]">
-            <Layers className="h-3 w-3" /> Studio · Untitled
-          </div>
-        </div>
-
-        <div className="grid grid-cols-6 gap-3">
-          {/* Hero illustration tile */}
-          <div className="tile col-span-6 aspect-[4/3] animate-pop-in bg-gradient-to-br from-primary/25 via-lilac/15 to-mint/25">
-            <img
-              src={heroHome.url}
-              alt="MentorWise AI — friendly career companion"
-              width={1600}
-              height={1200}
-              className="h-full w-full object-cover"
-            />
-          </div>
-
-          {/* Chat tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:200ms] animate-float-y bg-gradient-to-br from-primary/25 to-card p-5">
-            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              <Bot className="h-3.5 w-3.5" /> Agent
+    <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+      <div className="grid auto-rows-[minmax(220px,auto)] grid-cols-1 gap-4 md:grid-cols-4 lg:h-[620px] lg:grid-rows-2">
+        {/* Large: the agent network */}
+        <Reveal className="md:col-span-2 md:row-span-2" delay={0}>
+          <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[2.5rem] border border-border bg-card p-8 transition-all duration-500 hover:border-primary/40 sm:p-10">
+            <div aria-hidden className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/12 blur-[80px]" />
+            <div className="relative z-10">
+              <div className="pill mb-6"><Users className="h-3.5 w-3.5 text-primary" /> The Agent Network</div>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl">
+                A dedicated team of 12 AI mentors.
+              </h2>
+              <p className="mt-4 max-w-sm text-base text-muted-foreground">
+                From resume rewrites and mock interviews to internships, courses and LinkedIn
+                branding — one agent per job, so you always know who to ask.
+              </p>
             </div>
-            <div className="mt-3 space-y-2">
-              <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-secondary/80 p-2.5 text-[11px] text-foreground shadow-sm">
-                Rewrite my intro for a data internship?
-              </div>
-              <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-primary p-2.5 text-[11px] text-primary-foreground shadow-sm">
-                On it — punchier, ATS-friendly, one line.
-              </div>
-              <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-mint" /> Typing…
-              </div>
+
+            <div className="relative z-10 mt-8 overflow-hidden rounded-3xl border border-border/70">
+              <img
+                src={heroHome.url}
+                alt="Students using MentorWise AI agents"
+                width={1600}
+                height={900}
+                className="h-40 w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] sm:h-48"
+              />
+            </div>
+
+            <div className="relative z-10 mt-6 flex flex-wrap gap-3">
+              <span className="rounded-xl border border-border bg-background/60 px-4 py-2 text-sm backdrop-blur-md transition-transform duration-500 group-hover:-translate-y-1">Resume Optimiser</span>
+              <span className="rounded-xl border border-border bg-background/60 px-4 py-2 text-sm backdrop-blur-md transition-transform delay-75 duration-500 group-hover:-translate-y-2">Mock Interviews</span>
+              <span className="rounded-xl border border-border bg-background/60 px-4 py-2 text-sm backdrop-blur-md transition-transform delay-100 duration-500 group-hover:-translate-y-0.5">Study Buddy</span>
+              <Link to="/agents" className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:brightness-110">
+                +9 more
+              </Link>
             </div>
           </div>
+        </Reveal>
 
-          {/* Resume preview tile */}
-          <div className="tile col-span-3 aspect-square animate-pop-in [animation-delay:280ms] bg-card">
-            <img
-              src={agentResume.url}
-              alt="Resume Agent"
-              width={512}
-              height={512}
-              loading="lazy"
-              className="h-full w-full object-cover"
+        {/* Medium: live events */}
+        <Reveal className="md:col-span-2" delay={90}>
+          <div className="group relative flex h-full flex-col justify-center overflow-hidden rounded-[2.5rem] border border-border bg-gradient-to-br from-card to-background p-8">
+            <CalendarDays
+              aria-hidden
+              className="pointer-events-none absolute -bottom-4 -right-4 h-40 w-40 rotate-12 text-primary/12 transition-transform duration-700 group-hover:rotate-0"
             />
+            <div className="relative z-10">
+              <h3 className="font-display text-2xl font-bold">Live Events</h3>
+              <p className="mt-2 max-w-md text-muted-foreground">
+                Join weekly workshops, AMA rooms and networking sessions hosted by the MentorWise team.
+              </p>
+              <Link to="/events" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                View schedule
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
+        </Reveal>
 
-      {/* Floating badges */}
-      <div className="absolute -left-3 top-10 hidden rotate-[-6deg] animate-float-y sm:block">
-        <div className="pill">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-mint">
-            <Sparkles className="h-3 w-3 text-background" />
-          </span>
-          Free forever
-        </div>
+        {/* Small: resume */}
+        <Reveal delay={160}>
+          <SmallTile
+            to="/resume"
+            icon={<FileText className="h-6 w-6 text-lilac" />}
+            title="Resume AI"
+            desc="Optimise your CV for modern ATS systems, step by step."
+          />
+        </Reveal>
+
+        {/* Small: blog */}
+        <Reveal delay={220}>
+          <SmallTile
+            to="/blog"
+            icon={<BookOpen className="h-6 w-6 text-lilac" />}
+            title="Career Blog"
+            desc="Insightful articles on jobs, skills and the future of work."
+          />
+        </Reveal>
       </div>
-      <div className="absolute -right-2 bottom-8 hidden rotate-[4deg] animate-wiggle sm:block">
-        <div className="pill">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
-            <Play className="h-3 w-3 fill-current" />
-          </span>
-          Try an agent
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }
 
+function SmallTile({
+  to,
+  icon,
+  title,
+  desc,
+}: {
+  to: string;
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}) {
+  return (
+    <Link
+      to={to}
+      className="group flex h-full flex-col rounded-[2.5rem] border border-border bg-card p-8 transition-colors hover:border-primary/40 hover:bg-secondary"
+    >
+      <div className="mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-primary/20 transition-transform duration-500 group-hover:-translate-y-1">
+        {icon}
+      </div>
+      <h3 className="font-display text-xl font-bold">{title}</h3>
+      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+      <span className="mt-auto pt-5 inline-flex items-center gap-1 text-sm font-medium text-foreground/70 group-hover:text-foreground">
+        Open <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+      </span>
+    </Link>
+  );
+}
+
+function BannerReveal() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6">
+      <Reveal>
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card/60 shadow-[0_40px_100px_-60px_color-mix(in_oklab,var(--color-primary)_70%,transparent)]">
+          <img
+            src={banner.url}
+            alt="MentorWise AI — official banner"
+            className="h-auto w-full object-contain"
+            loading="lazy"
+          />
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+        </div>
+      </Reveal>
+    </section>
+  );
+}
 
 function Marquee() {
   const items = [
@@ -275,11 +293,11 @@ function Marquee() {
   ];
   const row = [...items, ...items];
   return (
-    <section aria-hidden="true" className="mask-marquee overflow-hidden border-y border-border/60 bg-card/60 py-4">
+    <section aria-hidden="true" className="mask-marquee mt-10 overflow-hidden border-y border-border/60 bg-card/60 py-4">
       <div className="flex w-max animate-marquee gap-8 px-4 text-xs uppercase tracking-[0.3em] text-muted-foreground">
         {row.map((t, i) => (
           <span key={i} className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-coral" /> {t}
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" /> {t}
           </span>
         ))}
       </div>
@@ -290,7 +308,7 @@ function Marquee() {
 function LaunchBuffBadge() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6">
-      <div className="flex justify-center animate-fade-up">
+      <Reveal className="flex justify-center">
         <a
           href="https://launchbuff.com"
           target="_blank"
@@ -306,65 +324,63 @@ function LaunchBuffBadge() {
             loading="lazy"
           />
         </a>
-      </div>
+      </Reveal>
     </section>
   );
 }
 
 const FEATURES = [
-  { img: agentResume, tint: "coral", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
-  { img: agentInterview, tint: "lilac", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
-  { img: agentInternship, tint: "mint", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
-  { img: agentCourses, tint: "butter", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
-  { img: agentLinkedin, tint: "lilac", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
-  { img: agentHumaniser, tint: "coral", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
+  { img: agentResume, span: "lg:col-span-3", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
+  { img: agentInterview, span: "lg:col-span-3", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
+  { img: agentInternship, span: "lg:col-span-2", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
+  { img: agentCourses, span: "lg:col-span-2", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
+  { img: agentLinkedin, span: "lg:col-span-2", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
+  { img: agentHumaniser, span: "lg:col-span-6", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
 ];
 
-function FeatureGrid() {
+function AgentBento() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-      <div className="mb-12 max-w-3xl">
+      <Reveal className="mb-12 max-w-3xl">
         <div className="pill">
-          <span className="h-2 w-2 rounded-full bg-coral" /> The Studio
+          <span className="h-2 w-2 rounded-full bg-primary" /> The Studio
         </div>
-        <h2 className="mt-4 font-display text-4xl font-semibold sm:text-5xl">
+        <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
           Twelve friendly agents.{" "}
-          <span className="italic text-muted-foreground">One calm place.</span>
+          <span className="text-muted-foreground">One calm place.</span>
         </h2>
         <p className="mt-4 max-w-xl text-muted-foreground">
-          Each agent is trained for a single job — so you always know who to ask. No plans, no paywalls, no clutter.
+          Each agent is trained for a single job — so you always know who to ask. No plans, no
+          paywalls, no clutter.
         </p>
-      </div>
+      </Reveal>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         {FEATURES.map((f, i) => (
-          <Link
-            key={f.title}
-            to={f.to}
-            className="motion-card group animate-pop-in overflow-hidden rounded-3xl border border-border bg-card"
-            style={{ animationDelay: `${i * 60}ms` }}
-          >
-            <div
-              className="relative aspect-[16/10] overflow-hidden"
-              style={{ background: `color-mix(in oklab, var(--color-${f.tint}) 35%, var(--color-card))` }}
+          <Reveal key={f.title} className={f.span} delay={i * 70}>
+            <Link
+              to={f.to}
+              className="motion-card group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card"
             >
-              <img
-                src={f.img.url}
-                alt={f.title}
-                width={800}
-                height={500}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              />
-            </div>
-            <div className="p-6">
-              <div className="font-display text-xl font-semibold">{f.title}</div>
-              <p className="mt-1.5 text-sm text-muted-foreground">{f.desc}</p>
-              <div className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-foreground/70 group-hover:text-foreground">
-                Open agent <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              <div className="relative aspect-[16/10] overflow-hidden bg-primary/10">
+                <img
+                  src={f.img.url}
+                  alt={f.title}
+                  width={800}
+                  height={500}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                />
               </div>
-            </div>
-          </Link>
+              <div className="p-6">
+                <div className="font-display text-xl font-bold">{f.title}</div>
+                <p className="mt-1.5 text-sm text-muted-foreground">{f.desc}</p>
+                <div className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-foreground/70 group-hover:text-foreground">
+                  Open agent <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                </div>
+              </div>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -374,37 +390,40 @@ function FeatureGrid() {
 function NexoraShowcase() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6">
-      <a
-        href="https://nexora-sphere-ai.lovable.app/app"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="motion-card group relative block overflow-hidden rounded-[2rem] border border-border bg-card p-8 sm:p-12 animate-fade-up"
-      >
-        <div aria-hidden className="absolute -top-20 -right-16 h-72 w-72 rounded-full bg-coral/30 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-20 -left-16 h-64 w-64 rounded-full bg-lilac/30 blur-3xl" />
-        <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-center">
-          <div>
-            <div className="pill">
-              <Crown className="h-3.5 w-3.5 text-coral" /> Premium build · MentorWise AI Ecosystem
+      <Reveal>
+        <a
+          href="https://nexora-sphere-ai.lovable.app/app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="motion-card group relative block overflow-hidden rounded-[2.5rem] border border-border bg-card p-8 sm:p-12"
+        >
+          <div aria-hidden className="absolute -top-20 -right-16 h-72 w-72 rounded-full bg-primary/25 blur-3xl animate-orb" />
+          <div aria-hidden className="absolute -bottom-20 -left-16 h-64 w-64 rounded-full bg-lilac/25 blur-3xl animate-aurora" />
+          <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-center">
+            <div>
+              <div className="pill">
+                <Crown className="h-3.5 w-3.5 text-primary" /> Premium build · MentorWise AI Ecosystem
+              </div>
+              <h3 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+                Nexora <span className="text-muted-foreground">AI</span>
+              </h3>
+              <p className="mt-3 max-w-xl text-muted-foreground">
+                Our flagship education-grade LLM experience — a polished ChatGPT & Gemini-class web
+                app, engineered as the first premium product under the MentorWise AI ecosystem.
+              </p>
+              <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition group-hover:brightness-110">
+                Launch Nexora AI <ExternalLink className="h-4 w-4" />
+              </div>
             </div>
-            <h3 className="mt-4 font-display text-3xl font-semibold sm:text-4xl">
-              Nexora <span className="italic text-muted-foreground">AI</span>
-            </h3>
-            <p className="mt-3 max-w-xl text-muted-foreground">
-              Our flagship education-grade LLM experience — a polished ChatGPT & Gemini-class web app, engineered as the first premium product under the MentorWise AI ecosystem.
-            </p>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition group-hover:brightness-110">
-              Launch Nexora AI <ExternalLink className="h-4 w-4" />
+            <div className="relative mx-auto">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/40 to-lilac/40 blur-2xl" />
+              <div className="relative grid h-36 w-36 place-items-center rounded-3xl border border-border bg-card sm:h-44 sm:w-44">
+                <Sparkles className="h-14 w-14 text-primary animate-pulse" />
+              </div>
             </div>
           </div>
-          <div className="relative mx-auto">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-coral/40 to-lilac/40 blur-2xl" />
-            <div className="relative grid h-36 w-36 place-items-center rounded-3xl border border-border bg-card sm:h-44 sm:w-44">
-              <Sparkles className="h-14 w-14 text-coral animate-pulse" />
-            </div>
-          </div>
-        </div>
-      </a>
+        </a>
+      </Reveal>
     </section>
   );
 }
@@ -412,18 +431,22 @@ function NexoraShowcase() {
 function Testimonial() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-      <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card p-10 sm:p-14">
-        <div className="max-w-3xl">
-          <div className="pill">
-            <Star className="h-3.5 w-3.5 text-butter fill-current" /> From our students
+      <Reveal>
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card p-10 sm:p-14">
+          <div aria-hidden className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-[90px]" />
+          <div className="relative max-w-3xl">
+            <div className="pill">
+              <Star className="h-3.5 w-3.5 text-butter fill-current" /> From our students
+            </div>
+            <blockquote className="mt-6 font-display text-2xl leading-snug sm:text-3xl">
+              "It felt like having a senior sit beside me — telling me exactly what to fix on my
+              resume, what to say in the interview, and where to apply next.
+              <span className="text-muted-foreground"> All of that, for free.</span>"
+            </blockquote>
+            <div className="mt-6 text-sm text-muted-foreground">A B.Com fresher · Chennai</div>
           </div>
-          <blockquote className="mt-6 font-display text-2xl leading-snug sm:text-3xl">
-            "It felt like having a senior sit beside me — telling me exactly what to fix on my resume, what to say in the interview, and where to apply next.
-            <span className="italic text-muted-foreground"> All of that, for free.</span>"
-          </blockquote>
-          <div className="mt-6 text-sm text-muted-foreground">A B.Com fresher · Chennai</div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -431,35 +454,36 @@ function Testimonial() {
 function CTA() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-      <div className="relative overflow-hidden rounded-[2rem] bg-primary p-10 text-primary-foreground sm:p-14">
-        <div aria-hidden className="absolute -top-16 -right-10 h-64 w-64 rounded-full bg-coral/40 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-16 -left-10 h-64 w-64 rounded-full bg-lilac/40 blur-3xl" />
-        <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-end">
-          <div>
-            <h2 className="font-display text-4xl font-semibold sm:text-5xl">
-              Start your career{" "}
-              <span className="italic">for free</span> today.
-            </h2>
-            <p className="mt-3 max-w-xl text-primary-foreground/75">
-              Open your first AI agent in under 10 seconds. No card, no signup wall.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 sm:justify-end">
-            <Link
-              to="/agents"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-primary shadow-sm transition hover:brightness-110"
-            >
-              Open the Studio <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-transparent px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-white/10"
-            >
-              Talk to founders
-            </Link>
+      <Reveal>
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-primary p-10 text-primary-foreground sm:p-14">
+          <div aria-hidden className="absolute -top-16 -right-10 h-64 w-64 rounded-full bg-lilac/40 blur-3xl animate-orb" />
+          <div aria-hidden className="absolute -bottom-16 -left-10 h-64 w-64 rounded-full bg-mint/30 blur-3xl animate-aurora" />
+          <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-end">
+            <div>
+              <h2 className="font-display text-4xl font-bold sm:text-5xl">
+                Start your career for free today.
+              </h2>
+              <p className="mt-3 max-w-xl text-primary-foreground/75">
+                Open your first AI agent in under 10 seconds. No card, no signup wall.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 sm:justify-end">
+              <Link
+                to="/agents"
+                className="inline-flex items-center gap-2 rounded-full bg-background px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition hover:-translate-y-0.5"
+              >
+                Open the Studio <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/30 bg-transparent px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
+              >
+                Talk to the team
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
