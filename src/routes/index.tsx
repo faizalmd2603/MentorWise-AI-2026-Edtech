@@ -362,7 +362,7 @@ function AgentBento() {
               to={f.to}
               className="motion-card group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-primary/10">
+              <div className="relative aspect-[16/10] max-h-56 overflow-hidden bg-primary/10">
                 <img
                   src={f.img.url}
                   alt={f.title}
