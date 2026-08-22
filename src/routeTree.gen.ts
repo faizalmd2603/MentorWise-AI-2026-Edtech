@@ -16,6 +16,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as FoundersRouteImport } from './routes/founders'
+import { Route as HallOfFameRouteImport } from './routes/hall-of-fame'
 import { Route as InternshipsRouteImport } from './routes/internships'
 import { Route as InterviewRouteImport } from './routes/interview'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -75,6 +76,11 @@ const FeedRoute = FeedRouteImport.update({
 const FoundersRoute = FoundersRouteImport.update({
   id: '/founders',
   path: '/founders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HallOfFameRoute = HallOfFameRouteImport.update({
+  id: '/hall-of-fame',
+  path: '/hall-of-fame',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternshipsRoute = InternshipsRouteImport.update({
@@ -216,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
+  '/hall-of-fame': typeof HallOfFameRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
   '/mcp': typeof McpRoute
@@ -250,6 +257,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
+  '/hall-of-fame': typeof HallOfFameRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
   '/mcp': typeof McpRoute
@@ -285,6 +293,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
+  '/hall-of-fame': typeof HallOfFameRoute
   '/internships': typeof InternshipsRoute
   '/interview': typeof InterviewRoute
   '/mcp': typeof McpRoute
@@ -321,6 +330,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/feed'
     | '/founders'
+    | '/hall-of-fame'
     | '/internships'
     | '/interview'
     | '/mcp'
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/feed'
     | '/founders'
+    | '/hall-of-fame'
     | '/internships'
     | '/interview'
     | '/mcp'
@@ -389,6 +400,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/feed'
     | '/founders'
+    | '/hall-of-fame'
     | '/internships'
     | '/interview'
     | '/mcp'
@@ -424,6 +436,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FeedRoute: typeof FeedRoute
   FoundersRoute: typeof FoundersRoute
+  HallOfFameRoute: typeof HallOfFameRoute
   InternshipsRoute: typeof InternshipsRoute
   InterviewRoute: typeof InterviewRoute
   McpRoute: typeof McpRoute
@@ -500,6 +513,13 @@ declare module '@tanstack/react-router' {
       path: '/founders'
       fullPath: '/founders'
       preLoaderRoute: typeof FoundersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hall-of-fame': {
+      id: '/hall-of-fame'
+      path: '/hall-of-fame'
+      fullPath: '/hall-of-fame'
+      preLoaderRoute: typeof HallOfFameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internships': {
@@ -688,6 +708,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FeedRoute: FeedRoute,
   FoundersRoute: FoundersRoute,
+  HallOfFameRoute: HallOfFameRoute,
   InternshipsRoute: InternshipsRoute,
   InterviewRoute: InterviewRoute,
   McpRoute: McpRoute,
