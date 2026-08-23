@@ -330,12 +330,12 @@ function LaunchBuffBadge() {
 }
 
 const FEATURES = [
-  { img: agentResume, span: "lg:col-span-3", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", to: "/agents/resume" as const },
-  { img: agentInterview, span: "lg:col-span-3", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", to: "/agents/interview" as const },
-  { img: agentInternship, span: "lg:col-span-2", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", to: "/agents/internship" as const },
-  { img: agentCourses, span: "lg:col-span-2", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", to: "/agents/courses" as const },
-  { img: agentLinkedin, span: "lg:col-span-2", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", to: "/agents/linkedin" as const },
-  { img: agentHumaniser, span: "lg:col-span-6", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", to: "/agents/humaniser" as const },
+  { img: agentResume, span: "lg:col-span-3", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", agentId: "resume" as const },
+  { img: agentInterview, span: "lg:col-span-3", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", agentId: "interview" as const },
+  { img: agentInternship, span: "lg:col-span-2", title: "Free Internships", desc: "Curated openings and one-click apply guidance.", agentId: "internship" as const },
+  { img: agentCourses, span: "lg:col-span-2", title: "Free Courses", desc: "Certificate-worthy roadmaps from the world's best sources.", agentId: "courses" as const },
+  { img: agentLinkedin, span: "lg:col-span-2", title: "LinkedIn Branding", desc: "Turn your profile into an opportunity magnet.", agentId: "linkedin" as const },
+  { img: agentHumaniser, span: "lg:col-span-6", title: "AI Humaniser", desc: "Rewrite anything with warmth, clarity and confidence.", agentId: "humaniser" as const },
 ];
 
 function AgentBento() {
@@ -359,7 +359,7 @@ function AgentBento() {
         {FEATURES.map((f, i) => (
           <Reveal key={f.title} className={f.span} delay={i * 70}>
             <Link
-              to={f.to}
+              to="/agents/$agentId" params={{ agentId: f.agentId }}
               className="motion-card group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card"
             >
               <div className="relative aspect-[16/10] max-h-56 overflow-hidden bg-primary/10">
