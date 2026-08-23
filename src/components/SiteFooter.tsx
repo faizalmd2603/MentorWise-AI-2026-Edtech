@@ -27,6 +27,7 @@ export function SiteFooter() {
             <li><Link to="/agents" className="hover:text-foreground">The Ecosystem</Link></li>
             <li><Link to="/about" className="hover:text-foreground">About Us</Link></li>
             <li><Link to="/founders" className="hover:text-foreground">Core team</Link></li>
+            <li><Link to="/hall-of-fame" className="hover:text-foreground">Hall of Fame</Link></li>
             <li><Link to="/resources/job-search-sites" className="hover:text-foreground">Resources</Link></li>
             <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
           </ul>
