@@ -11,6 +11,7 @@ const links = [
   { to: "/feed" as const, label: "Feed" },
   { to: "/about" as const, label: "About" },
   { to: "/founders" as const, label: "Core team" },
+  { to: "/hall-of-fame" as const, label: "Hall of Fame" },
   { to: "/resources/job-search-sites" as const, label: "Resources" },
   { to: "/blog" as const, label: "Blog" },
   { to: "/contact" as const, label: "Contact" },
