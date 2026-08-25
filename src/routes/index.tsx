@@ -63,6 +63,7 @@ function Home() {
       <BannerReveal />
       <Marquee />
       <LaunchBuffBadge />
+      <ToolIndexBadge />
       <AgentBento />
       <NexoraShowcase />
       <Testimonial />
@@ -70,6 +71,7 @@ function Home() {
     </SiteLayout>
   );
 }
+
 
 function SplashScreen() {
   return (
