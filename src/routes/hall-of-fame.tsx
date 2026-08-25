@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Reveal } from "@/components/Reveal";
-import { Trophy, Sparkles, Award, Flag } from "lucide-react";
+import { Trophy, Sparkles, Award, Flag, FileText, Download, AudioLines } from "lucide-react";
 
 import aadhiray from "@/assets/hof/Aadhiray_Sharojani.jpeg.asset.json";
 import aasiya from "@/assets/hof/Aasiya_Mufridha.jpeg.asset.json";
@@ -13,6 +13,15 @@ import mahdhiya from "@/assets/hof/Fathima_Mahdhiya.jpeg.asset.json";
 import shahana from "@/assets/hof/Fathima_Shahana.jpeg.asset.json";
 import geerthana from "@/assets/hof/Geerthana-_L.jpeg.asset.json";
 import jack from "@/assets/hof/Jack-_J.jpeg.asset.json";
+import zoya from "@/assets/hof/Zoya_Javed_Khan.jpeg.asset.json";
+import gnana from "@/assets/hof/Gnana_Muthu_Lakshmi.jpeg.asset.json";
+import muavvidh from "@/assets/hof/Muavvidh_Buhary.jpeg.asset.json";
+import manisha from "@/assets/hof/Manisha_Catherine_Mary.jpeg.asset.json";
+import irfan from "@/assets/hof/Mohamed_Irfan_KA.jpeg.asset.json";
+import liyana from "@/assets/hof/Nooril_Liyana.jpeg.asset.json";
+import sabaAudio from "@/assets/hof/Saba_Ambareen.mpeg.asset.json";
+import sameeraDocx from "@/assets/hof/India_at_80_AI_Quiz_Research_Challenge.docx.asset.json";
+import sameeraPdf from "@/assets/hof/India_at_80_AI_Quiz_Research_Challenge.pdf.asset.json";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${dakshin.url}`;
@@ -117,6 +126,54 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 1 — AI Poster Design",
     tool: "Canva",
   },
+  {
+    name: "Zoya Javed Khan",
+    image: zoya.url,
+    college: "MHSSP",
+    study: "Final Year Diploma Student",
+    challenge: "Challenge 1 — AI Poster Design",
+    tool: "Gemini & ChatGPT",
+  },
+  {
+    name: "N Gnana Muthu Lakshmi",
+    image: gnana.url,
+    college: "Wavoo Wajeeha Women's College of Arts and Science, Kayalapatnam",
+    study: "I M.Sc",
+    challenge: "Challenge 6 — AI Greeting Card",
+    tool: "Gemini",
+  },
+  {
+    name: "Muavvidh Buhary S",
+    image: muavvidh.url,
+    college: "MEASI Institute of Management, Chennai",
+    study: "MBA — Final Year",
+    challenge: "Challenge 1 — AI Poster Design",
+    tool: "Leonardo AI",
+  },
+  {
+    name: "Manisha Catherine Mary A",
+    image: manisha.url,
+    college: "PSGR Krishnammal College for Women",
+    study: "B.Com — Final Year",
+    challenge: "Challenge 1 — AI Poster Design",
+    tool: "ChatGPT",
+  },
+  {
+    name: "Mohamed Irfan K A",
+    image: irfan.url,
+    college: "The New College, Chennai",
+    study: "BCA",
+    challenge: "Challenge 1 — AI Poster Design",
+    tool: "ChatGPT",
+  },
+  {
+    name: "Nooril Liyana S",
+    image: liyana.url,
+    college: "Arunachala College of Engineering for Women",
+    study: "B.Tech IT",
+    challenge: "Challenge 1 — AI Poster Design",
+    tool: "ChatGPT & Canva",
+  },
 ];
 
 const TEXT_HONOURS = [
@@ -126,6 +183,7 @@ const TEXT_HONOURS = [
     college: "Marudhar Kesari Jain College for Women (Autonomous)",
     challenge: "Challenge 4 — 80-Word Patriotic Story + AI Voice",
     note: "Spotlighted E.C.G. Sudarshan with the line: “Real independence is raising a generation the world can no longer ignore.”",
+    media: "audio" as const,
   },
   {
     title: "Overall Runner-up 2",
@@ -133,6 +191,7 @@ const TEXT_HONOURS = [
     college: "Arunachala College of Engineering for Women, Nagercoil",
     challenge: "Challenge 5 — AI Quiz + Research",
     note: "8/8 with sources — from the Green Revolution to Chandrayaan-3, a research-first map of India's innovation journey.",
+    media: "doc" as const,
   },
   {
     title: "Best Research Collage",
@@ -140,6 +199,7 @@ const TEXT_HONOURS = [
     college: "PSG College of Arts & Science, Coimbatore",
     challenge: "Challenge 3 — Prompt-to-Image",
     note: "Data-rich, ambitious and future-focused — a true Viksit Bharat blueprint.",
+    media: null,
   },
 ];
 
@@ -217,14 +277,15 @@ function HonourBadge({ label }: { label: string }) {
 
 function EntryCard({ e, index }: { e: Entry; index: number }) {
   return (
-    <Reveal delay={(index % 3) * 90} className="h-full">
-      <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/70 backdrop-blur transition duration-500 hover:-translate-y-1.5 hover:border-primary/50 hover:shadow-[0_28px_60px_-30px_oklch(0.58_0.18_275_/_0.55)]">
+    <Reveal delay={(index % 3) * 90} className="mb-6 break-inside-avoid">
+      <article className="group flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/70 backdrop-blur transition duration-500 hover:-translate-y-1.5 hover:border-primary/50 hover:shadow-[0_28px_60px_-30px_oklch(0.58_0.18_275_/_0.55)]">
         <div className="relative overflow-hidden bg-secondary/40">
+          {/* natural aspect ratio — never cropped or compressed */}
           <img
             src={e.image}
             alt={`${e.challenge} entry by ${e.name} — Bharat @ 80 challenge`}
             loading="lazy"
-            className="h-72 w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]"
+            className="block h-auto w-full transition duration-700 group-hover:scale-[1.02]"
           />
           {e.honour && (
             <div className="absolute left-4 top-4">
@@ -249,6 +310,60 @@ function EntryCard({ e, index }: { e: Entry; index: number }) {
   );
 }
 
+function AudioSubmission() {
+  return (
+    <div className="mt-4 rounded-2xl border border-border/60 bg-secondary/40 p-4">
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        <AudioLines className="h-4 w-4 text-primary" /> AI Voice Submission
+      </div>
+      <audio
+        controls
+        preload="none"
+        src={sabaAudio.url}
+        className="mt-3 w-full"
+        aria-label="Saba Ambareen — 80-word patriotic story, AI voice narration"
+      />
+      <a
+        href={sabaAudio.url}
+        download
+        className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+      >
+        <Download className="h-3.5 w-3.5" /> Download audio
+      </a>
+    </div>
+  );
+}
+
+function DocSubmission() {
+  return (
+    <div className="mt-4 rounded-2xl border border-border/60 bg-secondary/40 p-4">
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        <FileText className="h-4 w-4 text-primary" /> Research Document
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground">
+        India @ 80 — AI Quiz &amp; Research Challenge
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <a
+          href={sameeraPdf.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
+        >
+          <FileText className="h-3.5 w-3.5" /> Read document
+        </a>
+        <a
+          href={sameeraDocx.url}
+          download
+          className="inline-flex items-center gap-1.5 rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground"
+        >
+          <Download className="h-3.5 w-3.5" /> Download .docx
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function HallOfFame() {
   const featured = ENTRIES.filter((e) => e.honour);
   const rest = ENTRIES.filter((e) => !e.honour);
@@ -267,7 +382,7 @@ function HallOfFame() {
             </h1>
             <p className="mt-5 text-base text-muted-foreground sm:text-lg">
               A 24-hour virtual mini challenge by MentorWise AI, marking India's 80th
-              Independence Day. 18 submissions across 6 challenges — judged on creativity,
+              Independence Day. Submissions across 6 challenges — judged on creativity,
               research depth, relevance to Bharat @ 80 and quality of execution.
             </p>
           </div>
@@ -276,7 +391,7 @@ function HallOfFame() {
         <Reveal delay={120}>
           <dl className="mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-3 text-center">
             {[
-              ["18", "Submissions"],
+              [`${ENTRIES.length + TEXT_HONOURS.length}`, "Submissions"],
               ["6", "Challenges"],
               ["24h", "Build window"],
             ].map(([v, l]) => (
@@ -292,10 +407,10 @@ function HallOfFame() {
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
         <Reveal>
           <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
-            Winners & Category Highlights
+            Winners &amp; Category Highlights
           </h2>
         </Reveal>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:break-inside-avoid">
           {featured.map((e, i) => (
             <EntryCard key={e.name} e={e} index={i} />
           ))}
@@ -303,7 +418,7 @@ function HallOfFame() {
 
         <Reveal>
           <h2 className="mt-16 font-display text-2xl font-bold text-foreground sm:text-3xl">
-            Honoured for Writing & Research
+            Honoured for Writing &amp; Research
           </h2>
         </Reveal>
         <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -315,6 +430,8 @@ function HallOfFame() {
                 <p className="text-sm text-muted-foreground">{h.college}</p>
                 <p className="mt-2 text-sm font-medium text-foreground">{h.challenge}</p>
                 <p className="mt-2 text-sm italic text-muted-foreground">{h.note}</p>
+                {h.media === "audio" && <AudioSubmission />}
+                {h.media === "doc" && <DocSubmission />}
               </article>
             </Reveal>
           ))}
@@ -325,10 +442,11 @@ function HallOfFame() {
             All Prototypes
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Every entry submitted to Bharat @ 80, credited to its creator.
+            Every entry submitted to Bharat @ 80, shown at its original aspect ratio and credited
+            to its creator.
           </p>
         </Reveal>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:break-inside-avoid">
           {rest.map((e, i) => (
             <EntryCard key={e.name} e={e} index={i} />
           ))}
@@ -336,8 +454,8 @@ function HallOfFame() {
 
         <Reveal>
           <p className="mt-14 rounded-3xl border border-border/60 bg-card/60 p-6 text-center text-sm text-muted-foreground backdrop-blur">
-            To every one of the 18 participants — thank you. You proved that the strength of a
-            nation really does lie in its youth and the power of its ideas.
+            To every participant — thank you. You proved that the strength of a nation really does
+            lie in its youth and the power of its ideas.
             <span className="mt-2 block font-display font-semibold text-foreground">
               — Team MentorWise AI
             </span>
