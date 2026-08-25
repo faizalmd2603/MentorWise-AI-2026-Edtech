@@ -63,6 +63,7 @@ function Home() {
       <BannerReveal />
       <Marquee />
       <LaunchBuffBadge />
+      <ToolIndexBadge />
       <AgentBento />
       <NexoraShowcase />
       <Testimonial />
@@ -70,6 +71,7 @@ function Home() {
     </SiteLayout>
   );
 }
+
 
 function SplashScreen() {
   return (
@@ -328,6 +330,29 @@ function LaunchBuffBadge() {
     </section>
   );
 }
+
+function ToolIndexBadge() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
+      <Reveal className="flex justify-center">
+        <a
+          href="https://strategic-flow-audit.replit.app/directory"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block transition hover:scale-[1.03]"
+          aria-label="Listed on ToolIndex"
+        >
+          <span
+            className="inline-block rounded-[6px] border border-[rgba(0,212,200,0.6)] bg-[#0a1628] px-[14px] py-[6px] font-mono text-[12px] font-bold text-[#00d4c8]"
+          >
+            🔗 Listed on ToolIndex · DR 86 dofollow
+          </span>
+        </a>
+      </Reveal>
+    </section>
+  );
+}
+
 
 const FEATURES = [
   { img: agentResume, span: "lg:col-span-3", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", agentId: "resume" as const },
