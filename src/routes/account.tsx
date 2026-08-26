@@ -65,11 +65,24 @@ function AuthPanel() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email, password,
-          options: { data: { full_name: fullName }, emailRedirectTo: `${window.location.origin}/account` },
+          options: { data: { full_name: fullName }, emailRedirectTo: `${window.location.origin}/auth/confirm` },
         });
-        if (error) throw error;
+        if (error) {
+          if (/already regist|already exists|User already/i.test(error.message)) {
+            await supabase.auth.resend({
+              type: "signup",
+              email,
+              options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
+            });
+            setInfo("This email is already registered. We sent a fresh verification link — open it on this device, then sign in.");
+            setMode("signin");
+            return;
+          }
+          throw error;
+        }
+        if (data.session) { setInfo("Account created."); return; }
         setInfo("Check your email to confirm your account, then sign in.");
       }
     } catch (e: any) {

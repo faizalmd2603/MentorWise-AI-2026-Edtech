@@ -99,11 +99,12 @@ function AuthPage() {
     }
     setLoading(true);
     try {
+      const cleanEmail = email.trim().toLowerCase();
       const { data, error: err } = await supabase.auth.signUp({
-        email: email.trim().toLowerCase(),
+        email: cleanEmail,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/feed`,
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
           data: {
             full_name: fullName.trim(),
             display_name: fullName.trim(),
