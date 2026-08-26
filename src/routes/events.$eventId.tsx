@@ -40,7 +40,7 @@ function LiveEventRoom() {
     let mounted = true;
     (async () => {
       const { data: ev } = await supabase.from("live_events")
-        .select("id, title, description, host_id, host_name, scheduled_at, status, created_at, updated_at")
+        .select("id, title, description, host_name, scheduled_at, status, created_at, updated_at")
         .eq("id", eventId).maybeSingle();
       if (mounted) setEvent(ev);
       const { data: msgs } = await supabase
