@@ -32,6 +32,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as AgentsAgentIdRouteImport } from './routes/agents.$agentId'
 import { Route as ApiVellumupRouteImport } from './routes/api/vellumup'
+import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
@@ -160,6 +161,11 @@ const ApiVellumupRoute = ApiVellumupRouteImport.update({
   path: '/api/vellumup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthConfirmRoute = AuthConfirmRouteImport.update({
+  id: '/confirm',
+  path: '/confirm',
+  getParentRoute: () => AuthRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -218,7 +224,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/api/vellumup': typeof ApiVellumupRoute
+  '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -253,7 +260,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
@@ -271,6 +278,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/api/vellumup': typeof ApiVellumupRoute
+  '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -289,7 +297,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
@@ -307,6 +315,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/agents/$agentId': typeof AgentsAgentIdRoute
   '/api/vellumup': typeof ApiVellumupRoute
+  '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
@@ -344,6 +353,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/agents/$agentId'
     | '/api/vellumup'
+    | '/auth/confirm'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/agents/$agentId'
     | '/api/vellumup'
+    | '/auth/confirm'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -414,6 +425,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/agents/$agentId'
     | '/api/vellumup'
+    | '/auth/confirm'
     | '/blog/$slug'
     | '/events/$eventId'
     | '/resources/job-search-sites'
@@ -432,7 +444,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   ContactRoute: typeof ContactRoute
   FeedRoute: typeof FeedRoute
   FoundersRoute: typeof FoundersRoute
@@ -627,6 +639,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiVellumupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/confirm': {
+      id: '/auth/confirm'
+      path: '/confirm'
+      fullPath: '/auth/confirm'
+      preLoaderRoute: typeof AuthConfirmRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -700,11 +719,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthRouteChildren {
+  AuthConfirmRoute: typeof AuthConfirmRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthConfirmRoute: AuthConfirmRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   ContactRoute: ContactRoute,
   FeedRoute: FeedRoute,
   FoundersRoute: FoundersRoute,
