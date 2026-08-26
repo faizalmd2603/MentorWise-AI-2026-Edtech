@@ -114,11 +114,25 @@ function AuthPage() {
           },
         },
       });
-      if (err) throw new Error(err.message);
+      if (err) {
+        if (/already regist|already exists|User already/i.test(err.message)) {
+          await supabase.auth.resend({
+            type: "signup",
+            email: cleanEmail,
+            options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
+          });
+          setInfo(
+            "This email is already registered. We sent a fresh verification link — open it on this device. Already verified? Just sign in below, or use the 6-digit code option.",
+          );
+          setMode("signin");
+          return;
+        }
+        throw new Error(err.message);
+      }
       if (data.session) {
         navigate({ to: "/account" });
       } else {
-        setInfo("Account created. Check your email to verify, then sign in.");
+        setInfo("Account created. Open the verification link we emailed you on this device, then sign in.");
         setMode("signin");
       }
     } catch (err) {
