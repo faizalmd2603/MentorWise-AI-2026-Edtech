@@ -99,7 +99,7 @@ export const listEvents = createServerFn({ method: "GET" }).handler(async () => 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
     .from("live_events")
-    .select("id, host_id, host_name, title, description, scheduled_at, status, created_at, updated_at")
+    .select("id, host_name, title, description, scheduled_at, status, created_at, updated_at")
     .order("scheduled_at", { ascending: false })
     .limit(50);
   if (error) throw new Error(error.message);
