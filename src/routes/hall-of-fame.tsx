@@ -50,6 +50,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 2 — AI Meme: India Then vs Now @ 80",
     tool: "ChatGPT",
     honour: "Overall Winner",
+    rank: "gold",
     note: "In two frames, Dakshin captured 80 years of progress — witty, sharp and deeply relatable. Great ideas travel fastest when they are simple.",
   },
   {
@@ -60,6 +61,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 3 — Prompt-to-Image: India in 2047",
     tool: "ChatGPT",
     honour: "Best AI-Generated Image",
+    rank: "best",
     note: "A bold, hopeful vision of a tech-driven, research-first Bharat — hyperloop, AI labs and green cities.",
   },
   {
@@ -70,6 +72,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 6 — AI Greeting Card",
     tool: "ChatGPT",
     honour: "Best Greeting Card Design",
+    rank: "best",
     note: "From legacy to Viksit Bharat — 1947 to 2027 told as one open book.",
   },
   {
@@ -80,6 +83,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 6 — AI Greeting Card",
     tool: "ChatGPT",
     honour: "Best Greeting Card Design",
+    rank: "best",
     note: "United by purpose, inspired by freedom — a card that put people at the centre of the celebration.",
   },
   {
