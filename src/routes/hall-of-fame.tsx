@@ -187,6 +187,7 @@ const ENTRIES: Entry[] = [
 const TEXT_HONOURS = [
   {
     title: "Overall Runner-up 1",
+    rank: "silver" as Rank,
     name: "Saba Ambareen N",
     college: "Marudhar Kesari Jain College for Women (Autonomous)",
     challenge: "Challenge 4 — 80-Word Patriotic Story + AI Voice",
@@ -195,6 +196,7 @@ const TEXT_HONOURS = [
   },
   {
     title: "Overall Runner-up 2",
+    rank: "bronze" as Rank,
     name: "Sameera S",
     college: "Arunachala College of Engineering for Women, Nagercoil",
     challenge: "Challenge 5 — AI Quiz + Research",
@@ -203,6 +205,7 @@ const TEXT_HONOURS = [
   },
   {
     title: "Best Research Collage",
+    rank: "best" as Rank,
     name: "B. Braini",
     college: "PSG College of Arts & Science, Coimbatore",
     challenge: "Challenge 3 — Prompt-to-Image",
