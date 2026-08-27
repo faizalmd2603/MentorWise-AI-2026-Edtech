@@ -451,7 +451,7 @@ function HallOfFame() {
             Winners &amp; Category Highlights
           </h2>
         </Reveal>
-        <div className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:break-inside-avoid">
+        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((e, i) => (
             <EntryCard key={e.name} e={e} index={i} />
           ))}
@@ -462,20 +462,25 @@ function HallOfFame() {
             Honoured for Writing &amp; Research
           </h2>
         </Reveal>
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
-          {TEXT_HONOURS.map((h, i) => (
-            <Reveal key={h.name} delay={i * 90}>
-              <article className="h-full rounded-3xl border border-border/60 bg-card/70 p-6 backdrop-blur transition hover:-translate-y-1 hover:border-primary/50">
-                <HonourBadge label={h.title} />
-                <h3 className="mt-4 font-display text-lg font-bold text-foreground">{h.name}</h3>
-                <p className="text-sm text-muted-foreground">{h.college}</p>
-                <p className="mt-2 text-sm font-medium text-foreground">{h.challenge}</p>
-                <p className="mt-2 text-sm italic text-muted-foreground">{h.note}</p>
-                {h.media === "audio" && <AudioSubmission />}
-                {h.media === "doc" && <DocSubmission />}
-              </article>
-            </Reveal>
-          ))}
+        <div className="mt-6 grid items-stretch gap-6 md:grid-cols-3">
+          {TEXT_HONOURS.map((h, i) => {
+            const f = FRAME[h.rank];
+            return (
+              <Reveal key={h.name} delay={i * 90} className="h-full">
+                <div className={`h-full rounded-[26px] ${f.ring} ${f.glow}`}>
+                  <article className="flex h-full flex-col rounded-[23px] border border-border/40 bg-card/85 p-6 backdrop-blur transition hover:-translate-y-1">
+                    <HonourBadge label={h.title} rank={h.rank} />
+                    <h3 className="mt-4 font-display text-lg font-bold text-foreground">{h.name}</h3>
+                    <p className="text-sm text-muted-foreground">{h.college}</p>
+                    <p className="mt-2 text-sm font-medium text-foreground">{h.challenge}</p>
+                    <p className="mt-2 text-sm italic text-muted-foreground">{h.note}</p>
+                    {h.media === "audio" && <AudioSubmission />}
+                    {h.media === "doc" && <DocSubmission />}
+                  </article>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
 
         <Reveal>
@@ -483,15 +488,16 @@ function HallOfFame() {
             All Prototypes
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Every entry submitted to Bharat @ 80, shown at its original aspect ratio and credited
-            to its creator.
+            Every entry submitted to Bharat @ 80 — shelved in equal, perfectly aligned frames, each
+            artwork shown in full without cropping.
           </p>
         </Reveal>
-        <div className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:break-inside-avoid">
+        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {rest.map((e, i) => (
             <EntryCard key={e.name} e={e} index={i} />
           ))}
         </div>
+
 
         <Reveal>
           <p className="mt-14 rounded-3xl border border-border/60 bg-card/60 p-6 text-center text-sm text-muted-foreground backdrop-blur">
