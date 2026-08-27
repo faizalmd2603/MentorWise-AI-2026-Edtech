@@ -67,10 +67,12 @@ const FOUNDERS_JSONLD = {
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
-      { title: "Core Team — MentorWise AI | Founder Faizal, Co-Founder Saif, CCO Aqhib" },
-      { name: "description", content: "The MentorWise AI core team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, and Administrator & CCO Mohammed Aqhib. K. Students of The New College (Autonomous), Chennai." },
-      { property: "og:title", content: "Core Team — MentorWise AI" },
-      { property: "og:description", content: "Meet the core team of MentorWise AI — Founder Faizal, Co-Founder Saif and CCO Aqhib from The New College (Autonomous), Chennai." },
+      { title: "Elite Team — MentorWise AI | Core Team & Campus Leaders" },
+      { name: "description", content: "The MentorWise AI Elite Team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, CCO Mohammed Aqhib. K, and our Tier-1 Elite Campus Leaders across India." },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Elite Team — MentorWise AI" },
+      { property: "og:description", content: "Meet the MentorWise AI Elite Team — core team and Tier-1 Elite Campus Leaders." },
+
       { property: "og:url", content: `${SITE}/founders` },
       { property: "og:image", content: FOUNDER_OG },
       { name: "twitter:image", content: FOUNDER_OG },
