@@ -26,6 +26,8 @@ import sameeraPdf from "@/assets/hof/India_at_80_AI_Quiz_Research_Challenge.pdf.
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${dakshin.url}`;
 
+type Rank = "gold" | "silver" | "bronze" | "best";
+
 type Entry = {
   name: string;
   image: string;
@@ -34,10 +36,12 @@ type Entry = {
   challenge: string;
   tool: string;
   honour?: string;
+  rank?: Rank;
   note?: string;
 };
 
 const ENTRIES: Entry[] = [
+
   {
     name: "Dakshin Subhesh V S",
     image: dakshin.url,
