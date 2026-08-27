@@ -270,56 +270,86 @@ export const Route = createFileRoute("/hall-of-fame")({
   component: HallOfFame,
 });
 
-function HonourBadge({ label }: { label: string }) {
-  const isWinner = label === "Overall Winner";
+const FRAME: Record<Rank, { ring: string; badge: string; glow: string; label: string }> = {
+  gold: {
+    ring: "p-[3px] bg-[linear-gradient(135deg,#f7e08a,#c9971f,#fff3b8,#a9761a)]",
+    badge: "bg-[linear-gradient(135deg,#f5d271,#b8860b)] text-[#26200a]",
+    glow: "shadow-[0_30px_70px_-38px_rgba(201,151,31,0.9)]",
+    label: "Gold",
+  },
+  silver: {
+    ring: "p-[3px] bg-[linear-gradient(135deg,#eef2f6,#9aa6b2,#ffffff,#7d8894)]",
+    badge: "bg-[linear-gradient(135deg,#e6ebf0,#94a1ad)] text-[#1d2226]",
+    glow: "shadow-[0_30px_70px_-38px_rgba(148,161,173,0.85)]",
+    label: "Silver",
+  },
+  bronze: {
+    ring: "p-[3px] bg-[linear-gradient(135deg,#e6b58a,#a2643a,#f0cfae,#7d4a26)]",
+    badge: "bg-[linear-gradient(135deg,#dfa878,#9c5f36)] text-[#24160d]",
+    glow: "shadow-[0_30px_70px_-38px_rgba(162,100,58,0.85)]",
+    label: "Bronze",
+  },
+  best: {
+    ring: "p-[2px] bg-[linear-gradient(135deg,oklch(0.58_0.18_275_/_0.7),oklch(0.58_0.18_275_/_0.15))]",
+    badge: "bg-primary text-primary-foreground",
+    glow: "shadow-[0_24px_60px_-34px_oklch(0.58_0.18_275_/_0.7)]",
+    label: "Best",
+  },
+};
+
+function HonourBadge({ label, rank }: { label: string; rank?: Rank }) {
+  const f = rank ? FRAME[rank] : null;
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ${
-        isWinner
-          ? "bg-primary text-primary-foreground shadow-[0_8px_24px_-10px_oklch(0.58_0.18_275_/_0.8)]"
-          : "bg-accent text-accent-foreground"
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] shadow-sm ${
+        f ? f.badge : "bg-accent text-accent-foreground"
       }`}
     >
-      {isWinner ? <Trophy className="h-3.5 w-3.5" /> : <Award className="h-3.5 w-3.5" />}
+      {rank === "gold" ? <Trophy className="h-3.5 w-3.5" /> : <Award className="h-3.5 w-3.5" />}
       {label}
     </span>
   );
 }
 
+/** Uniform "library shelf" card — every card is the same height and the
+ *  image is letterboxed (object-contain) so no submission is cropped. */
 function EntryCard({ e, index }: { e: Entry; index: number }) {
+  const f = e.rank ? FRAME[e.rank] : null;
   return (
-    <Reveal delay={(index % 3) * 90} className="mb-6 break-inside-avoid">
-      <article className="group flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/70 backdrop-blur transition duration-500 hover:-translate-y-1.5 hover:border-primary/50 hover:shadow-[0_28px_60px_-30px_oklch(0.58_0.18_275_/_0.55)]">
-        <div className="relative overflow-hidden bg-secondary/40">
-          {/* natural aspect ratio — never cropped or compressed */}
-          <img
-            src={e.image}
-            alt={`${e.challenge} entry by ${e.name} — Bharat @ 80 challenge`}
-            loading="lazy"
-            className="block h-auto w-full transition duration-700 group-hover:scale-[1.02]"
-          />
-          {e.honour && (
-            <div className="absolute left-4 top-4">
-              <HonourBadge label={e.honour} />
-            </div>
-          )}
-        </div>
-        <div className="flex flex-1 flex-col gap-2 p-5">
-          <h3 className="font-display text-lg font-bold text-foreground">{e.name}</h3>
-          <p className="text-sm text-muted-foreground">{e.college}</p>
-          <p className="text-xs text-muted-foreground">{e.study}</p>
-          <p className="mt-2 text-sm font-medium text-foreground">{e.challenge}</p>
-          {e.note && <p className="text-sm text-muted-foreground italic">{e.note}</p>}
-          <div className="mt-auto pt-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-[11px] font-medium text-muted-foreground">
-              <Sparkles className="h-3 w-3 text-primary" /> Tool: {e.tool}
-            </span>
+    <Reveal delay={(index % 3) * 80} className="h-full">
+      <div className={`h-full rounded-[26px] ${f ? `${f.ring} ${f.glow}` : "p-[1px] bg-border/60"}`}>
+        <article className="group flex h-full flex-col overflow-hidden rounded-[23px] border border-border/40 bg-card/85 backdrop-blur transition duration-500 hover:-translate-y-1">
+          <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-secondary/50 p-3">
+            <img
+              src={e.image}
+              alt={`${e.challenge} entry by ${e.name} — Bharat @ 80 challenge`}
+              loading="lazy"
+              className="max-h-full max-w-full rounded-xl object-contain shadow-sm transition duration-700 group-hover:scale-[1.03]"
+            />
+            {e.honour && (
+              <div className="absolute left-3 top-3">
+                <HonourBadge label={e.honour} rank={e.rank} />
+              </div>
+            )}
           </div>
-        </div>
-      </article>
+          <div className="flex flex-1 flex-col gap-1.5 border-t border-border/40 p-5">
+            <h3 className="font-display text-base font-bold leading-snug text-foreground">{e.name}</h3>
+            <p className="line-clamp-2 text-sm text-muted-foreground">{e.college}</p>
+            <p className="text-xs text-muted-foreground">{e.study}</p>
+            <p className="mt-2 text-sm font-medium text-foreground">{e.challenge}</p>
+            {e.note && <p className="line-clamp-3 text-sm italic text-muted-foreground">{e.note}</p>}
+            <div className="mt-auto pt-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-[11px] font-medium text-muted-foreground">
+                <Sparkles className="h-3 w-3 text-primary" /> Tool: {e.tool}
+              </span>
+            </div>
+          </div>
+        </article>
+      </div>
     </Reveal>
   );
 }
+
 
 function AudioSubmission() {
   return (
