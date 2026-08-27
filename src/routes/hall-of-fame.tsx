@@ -26,6 +26,8 @@ import sameeraPdf from "@/assets/hof/India_at_80_AI_Quiz_Research_Challenge.pdf.
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 const OG_IMAGE = `${SITE}${dakshin.url}`;
 
+type Rank = "gold" | "silver" | "bronze" | "best";
+
 type Entry = {
   name: string;
   image: string;
@@ -34,10 +36,12 @@ type Entry = {
   challenge: string;
   tool: string;
   honour?: string;
+  rank?: Rank;
   note?: string;
 };
 
 const ENTRIES: Entry[] = [
+
   {
     name: "Dakshin Subhesh V S",
     image: dakshin.url,
@@ -46,6 +50,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 2 — AI Meme: India Then vs Now @ 80",
     tool: "ChatGPT",
     honour: "Overall Winner",
+    rank: "gold",
     note: "In two frames, Dakshin captured 80 years of progress — witty, sharp and deeply relatable. Great ideas travel fastest when they are simple.",
   },
   {
@@ -56,6 +61,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 3 — Prompt-to-Image: India in 2047",
     tool: "ChatGPT",
     honour: "Best AI-Generated Image",
+    rank: "best",
     note: "A bold, hopeful vision of a tech-driven, research-first Bharat — hyperloop, AI labs and green cities.",
   },
   {
@@ -66,6 +72,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 6 — AI Greeting Card",
     tool: "ChatGPT",
     honour: "Best Greeting Card Design",
+    rank: "best",
     note: "From legacy to Viksit Bharat — 1947 to 2027 told as one open book.",
   },
   {
@@ -76,6 +83,7 @@ const ENTRIES: Entry[] = [
     challenge: "Challenge 6 — AI Greeting Card",
     tool: "ChatGPT",
     honour: "Best Greeting Card Design",
+    rank: "best",
     note: "United by purpose, inspired by freedom — a card that put people at the centre of the celebration.",
   },
   {
@@ -179,6 +187,7 @@ const ENTRIES: Entry[] = [
 const TEXT_HONOURS = [
   {
     title: "Overall Runner-up 1",
+    rank: "silver" as Rank,
     name: "Saba Ambareen N",
     college: "Marudhar Kesari Jain College for Women (Autonomous)",
     challenge: "Challenge 4 — 80-Word Patriotic Story + AI Voice",
@@ -187,6 +196,7 @@ const TEXT_HONOURS = [
   },
   {
     title: "Overall Runner-up 2",
+    rank: "bronze" as Rank,
     name: "Sameera S",
     college: "Arunachala College of Engineering for Women, Nagercoil",
     challenge: "Challenge 5 — AI Quiz + Research",
@@ -195,6 +205,7 @@ const TEXT_HONOURS = [
   },
   {
     title: "Best Research Collage",
+    rank: "best" as Rank,
     name: "B. Braini",
     college: "PSG College of Arts & Science, Coimbatore",
     challenge: "Challenge 3 — Prompt-to-Image",
@@ -259,56 +270,86 @@ export const Route = createFileRoute("/hall-of-fame")({
   component: HallOfFame,
 });
 
-function HonourBadge({ label }: { label: string }) {
-  const isWinner = label === "Overall Winner";
+const FRAME: Record<Rank, { ring: string; badge: string; glow: string; label: string }> = {
+  gold: {
+    ring: "p-[3px] bg-[linear-gradient(135deg,#f7e08a,#c9971f,#fff3b8,#a9761a)]",
+    badge: "bg-[linear-gradient(135deg,#f5d271,#b8860b)] text-[#26200a]",
+    glow: "shadow-[0_30px_70px_-38px_rgba(201,151,31,0.9)]",
+    label: "Gold",
+  },
+  silver: {
+    ring: "p-[3px] bg-[linear-gradient(135deg,#eef2f6,#9aa6b2,#ffffff,#7d8894)]",
+    badge: "bg-[linear-gradient(135deg,#e6ebf0,#94a1ad)] text-[#1d2226]",
+    glow: "shadow-[0_30px_70px_-38px_rgba(148,161,173,0.85)]",
+    label: "Silver",
+  },
+  bronze: {
+    ring: "p-[3px] bg-[linear-gradient(135deg,#e6b58a,#a2643a,#f0cfae,#7d4a26)]",
+    badge: "bg-[linear-gradient(135deg,#dfa878,#9c5f36)] text-[#24160d]",
+    glow: "shadow-[0_30px_70px_-38px_rgba(162,100,58,0.85)]",
+    label: "Bronze",
+  },
+  best: {
+    ring: "p-[2px] bg-[linear-gradient(135deg,oklch(0.58_0.18_275_/_0.7),oklch(0.58_0.18_275_/_0.15))]",
+    badge: "bg-primary text-primary-foreground",
+    glow: "shadow-[0_24px_60px_-34px_oklch(0.58_0.18_275_/_0.7)]",
+    label: "Best",
+  },
+};
+
+function HonourBadge({ label, rank }: { label: string; rank?: Rank }) {
+  const f = rank ? FRAME[rank] : null;
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ${
-        isWinner
-          ? "bg-primary text-primary-foreground shadow-[0_8px_24px_-10px_oklch(0.58_0.18_275_/_0.8)]"
-          : "bg-accent text-accent-foreground"
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] shadow-sm ${
+        f ? f.badge : "bg-accent text-accent-foreground"
       }`}
     >
-      {isWinner ? <Trophy className="h-3.5 w-3.5" /> : <Award className="h-3.5 w-3.5" />}
+      {rank === "gold" ? <Trophy className="h-3.5 w-3.5" /> : <Award className="h-3.5 w-3.5" />}
       {label}
     </span>
   );
 }
 
+/** Uniform "library shelf" card — every card is the same height and the
+ *  image is letterboxed (object-contain) so no submission is cropped. */
 function EntryCard({ e, index }: { e: Entry; index: number }) {
+  const f = e.rank ? FRAME[e.rank] : null;
   return (
-    <Reveal delay={(index % 3) * 90} className="mb-6 break-inside-avoid">
-      <article className="group flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/70 backdrop-blur transition duration-500 hover:-translate-y-1.5 hover:border-primary/50 hover:shadow-[0_28px_60px_-30px_oklch(0.58_0.18_275_/_0.55)]">
-        <div className="relative overflow-hidden bg-secondary/40">
-          {/* natural aspect ratio — never cropped or compressed */}
-          <img
-            src={e.image}
-            alt={`${e.challenge} entry by ${e.name} — Bharat @ 80 challenge`}
-            loading="lazy"
-            className="block h-auto w-full transition duration-700 group-hover:scale-[1.02]"
-          />
-          {e.honour && (
-            <div className="absolute left-4 top-4">
-              <HonourBadge label={e.honour} />
-            </div>
-          )}
-        </div>
-        <div className="flex flex-1 flex-col gap-2 p-5">
-          <h3 className="font-display text-lg font-bold text-foreground">{e.name}</h3>
-          <p className="text-sm text-muted-foreground">{e.college}</p>
-          <p className="text-xs text-muted-foreground">{e.study}</p>
-          <p className="mt-2 text-sm font-medium text-foreground">{e.challenge}</p>
-          {e.note && <p className="text-sm text-muted-foreground italic">{e.note}</p>}
-          <div className="mt-auto pt-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-[11px] font-medium text-muted-foreground">
-              <Sparkles className="h-3 w-3 text-primary" /> Tool: {e.tool}
-            </span>
+    <Reveal delay={(index % 3) * 80} className="h-full">
+      <div className={`h-full rounded-[26px] ${f ? `${f.ring} ${f.glow}` : "p-[1px] bg-border/60"}`}>
+        <article className="group flex h-full flex-col overflow-hidden rounded-[23px] border border-border/40 bg-card/85 backdrop-blur transition duration-500 hover:-translate-y-1">
+          <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-secondary/50 p-3">
+            <img
+              src={e.image}
+              alt={`${e.challenge} entry by ${e.name} — Bharat @ 80 challenge`}
+              loading="lazy"
+              className="max-h-full max-w-full rounded-xl object-contain shadow-sm transition duration-700 group-hover:scale-[1.03]"
+            />
+            {e.honour && (
+              <div className="absolute left-3 top-3">
+                <HonourBadge label={e.honour} rank={e.rank} />
+              </div>
+            )}
           </div>
-        </div>
-      </article>
+          <div className="flex flex-1 flex-col gap-1.5 border-t border-border/40 p-5">
+            <h3 className="font-display text-base font-bold leading-snug text-foreground">{e.name}</h3>
+            <p className="line-clamp-2 text-sm text-muted-foreground">{e.college}</p>
+            <p className="text-xs text-muted-foreground">{e.study}</p>
+            <p className="mt-2 text-sm font-medium text-foreground">{e.challenge}</p>
+            {e.note && <p className="line-clamp-3 text-sm italic text-muted-foreground">{e.note}</p>}
+            <div className="mt-auto pt-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-[11px] font-medium text-muted-foreground">
+                <Sparkles className="h-3 w-3 text-primary" /> Tool: {e.tool}
+              </span>
+            </div>
+          </div>
+        </article>
+      </div>
     </Reveal>
   );
 }
+
 
 function AudioSubmission() {
   return (
@@ -410,7 +451,7 @@ function HallOfFame() {
             Winners &amp; Category Highlights
           </h2>
         </Reveal>
-        <div className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:break-inside-avoid">
+        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((e, i) => (
             <EntryCard key={e.name} e={e} index={i} />
           ))}
@@ -421,20 +462,25 @@ function HallOfFame() {
             Honoured for Writing &amp; Research
           </h2>
         </Reveal>
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
-          {TEXT_HONOURS.map((h, i) => (
-            <Reveal key={h.name} delay={i * 90}>
-              <article className="h-full rounded-3xl border border-border/60 bg-card/70 p-6 backdrop-blur transition hover:-translate-y-1 hover:border-primary/50">
-                <HonourBadge label={h.title} />
-                <h3 className="mt-4 font-display text-lg font-bold text-foreground">{h.name}</h3>
-                <p className="text-sm text-muted-foreground">{h.college}</p>
-                <p className="mt-2 text-sm font-medium text-foreground">{h.challenge}</p>
-                <p className="mt-2 text-sm italic text-muted-foreground">{h.note}</p>
-                {h.media === "audio" && <AudioSubmission />}
-                {h.media === "doc" && <DocSubmission />}
-              </article>
-            </Reveal>
-          ))}
+        <div className="mt-6 grid items-stretch gap-6 md:grid-cols-3">
+          {TEXT_HONOURS.map((h, i) => {
+            const f = FRAME[h.rank];
+            return (
+              <Reveal key={h.name} delay={i * 90} className="h-full">
+                <div className={`h-full rounded-[26px] ${f.ring} ${f.glow}`}>
+                  <article className="flex h-full flex-col rounded-[23px] border border-border/40 bg-card/85 p-6 backdrop-blur transition hover:-translate-y-1">
+                    <HonourBadge label={h.title} rank={h.rank} />
+                    <h3 className="mt-4 font-display text-lg font-bold text-foreground">{h.name}</h3>
+                    <p className="text-sm text-muted-foreground">{h.college}</p>
+                    <p className="mt-2 text-sm font-medium text-foreground">{h.challenge}</p>
+                    <p className="mt-2 text-sm italic text-muted-foreground">{h.note}</p>
+                    {h.media === "audio" && <AudioSubmission />}
+                    {h.media === "doc" && <DocSubmission />}
+                  </article>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
 
         <Reveal>
@@ -442,15 +488,16 @@ function HallOfFame() {
             All Prototypes
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Every entry submitted to Bharat @ 80, shown at its original aspect ratio and credited
-            to its creator.
+            Every entry submitted to Bharat @ 80 — shelved in equal, perfectly aligned frames, each
+            artwork shown in full without cropping.
           </p>
         </Reveal>
-        <div className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:break-inside-avoid">
+        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {rest.map((e, i) => (
             <EntryCard key={e.name} e={e} index={i} />
           ))}
         </div>
+
 
         <Reveal>
           <p className="mt-14 rounded-3xl border border-border/60 bg-card/60 p-6 text-center text-sm text-muted-foreground backdrop-blur">

@@ -67,10 +67,12 @@ const FOUNDERS_JSONLD = {
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
-      { title: "Core Team — MentorWise AI | Founder Faizal, Co-Founder Saif, CCO Aqhib" },
-      { name: "description", content: "The MentorWise AI core team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, and Administrator & CCO Mohammed Aqhib. K. Students of The New College (Autonomous), Chennai." },
-      { property: "og:title", content: "Core Team — MentorWise AI" },
-      { property: "og:description", content: "Meet the core team of MentorWise AI — Founder Faizal, Co-Founder Saif and CCO Aqhib from The New College (Autonomous), Chennai." },
+      { title: "Elite Team — MentorWise AI | Core Team & Campus Leaders" },
+      { name: "description", content: "The MentorWise AI Elite Team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, CCO Mohammed Aqhib. K, and our Tier-1 Elite Campus Leaders across India." },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Elite Team — MentorWise AI" },
+      { property: "og:description", content: "Meet the MentorWise AI Elite Team — core team and Tier-1 Elite Campus Leaders." },
+
       { property: "og:url", content: `${SITE}/founders` },
       { property: "og:image", content: FOUNDER_OG },
       { name: "twitter:image", content: FOUNDER_OG },
@@ -124,6 +126,99 @@ const profiles: Profile[] = [
   },
 ];
 
+type CampusLeader = { name: string; institute: string; linkedin: string; note?: string };
+
+const CAMPUS_LEADERS: CampusLeader[] = [
+  {
+    name: "Muavvidh Buhary. S",
+    institute: "MEASI Institute of Management, Chennai",
+    linkedin: "https://www.linkedin.com/in/muavvidhbuhary/",
+  },
+  {
+    name: "Aasiya Mufridha. S",
+    institute: "Wavoo Wajeeha Women's College of Arts & Science, Kayalpattinam",
+    linkedin: "https://www.linkedin.com/in/aasiya-mufridha-s-126882348/",
+  },
+  {
+    name: "Jaithoon Aasia MS",
+    institute: "Grace College of Engineering, Coimbatore",
+    linkedin: "https://www.linkedin.com/in/jaithoon-aasia-ms-819257371/",
+  },
+  {
+    name: "Dakshin Subhesh VS",
+    institute: "Noorul Islam Centre for Higher Education",
+    linkedin: "https://www.linkedin.com/in/dakshin-subhesh-v-s-691590322/",
+  },
+  {
+    name: "Mohammed Farooq",
+    institute: "The New College, Chennai",
+    note: "Passed out — 2025–2026",
+    linkedin: "https://www.linkedin.com/in/mohammed-farooq-78a6942b0/",
+  },
+  {
+    name: "Manisha Catherine Mary. A",
+    institute: "PSGR Krishnammal College for Women, Coimbatore",
+    linkedin: "https://www.linkedin.com/in/manisha-catherine-mary-a-294784324/",
+  },
+  {
+    name: "Sameera. S",
+    institute: "Arunachala College of Engineering for Women, Kanyakumari",
+    linkedin: "https://www.linkedin.com/in/sameera-s-9870a0381/",
+  },
+];
+
+function CampusLeaders() {
+  return (
+    <section className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <div className="rounded-[32px] border border-border/60 bg-card/60 p-6 backdrop-blur sm:p-10">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-cyber">
+            Tier-1 Cohort
+          </div>
+          <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+            Elite <span className="text-gradient">Campus Leaders</span>
+          </h2>
+          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+            Student leaders representing MentorWise AI on their campuses — driving adoption,
+            running challenges and mentoring peers across Tamil Nadu.
+          </p>
+        </div>
+
+        <ol className="mt-10 divide-y divide-border/50 border-y border-border/50">
+          {CAMPUS_LEADERS.map((l, i) => (
+            <li
+              key={l.name}
+              className="group grid grid-cols-[auto_1fr] items-center gap-4 py-5 transition sm:grid-cols-[auto_1fr_auto] sm:gap-6"
+            >
+              <span className="font-display text-sm font-semibold tabular-nums text-muted-foreground/70 sm:text-base">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="min-w-0">
+                <h3 className="truncate font-display text-lg font-semibold text-foreground">
+                  {l.name}
+                </h3>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  {l.institute}
+                  {l.note ? <span className="text-muted-foreground/70"> · {l.note}</span> : null}
+                </p>
+              </div>
+              <a
+                href={l.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`LinkedIn profile of ${l.name}`}
+                className="col-span-2 inline-flex w-fit items-center gap-2 rounded-full glass px-4 py-2 text-xs font-medium transition hover:scale-[1.04] hover:glow-cyan sm:col-span-1"
+              >
+                <Linkedin className="h-3.5 w-3.5 text-cyber" /> LinkedIn
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 function Founders() {
   return (
     <SiteLayout>
@@ -131,12 +226,14 @@ function Founders() {
         <div className="text-center max-w-2xl mx-auto animate-fade-up">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs text-cyber">Leadership</div>
           <h1 className="mt-4 font-display text-4xl font-bold sm:text-5xl">
-            Meet the <span className="text-gradient">Core Team</span>
+            The <span className="text-gradient">Elite Team</span>
           </h1>
-          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z and Administrator &amp; CCO Mohammed Aqhib. K — The New College (Autonomous), Chennai.</p>
+          <p className="mt-3 text-muted-foreground">Founder &amp; CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z and Administrator &amp; CCO Mohammed Aqhib. K — The New College (Autonomous), Chennai — with our Tier-1 Elite Campus Leaders.</p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <h2 className="mt-14 text-center font-display text-2xl font-bold sm:text-3xl">Core Team</h2>
+
+        <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {profiles.map((p, i) => (
 
             <article key={p.name} className="relative rounded-3xl glass-strong p-6 sm:p-8 animate-fade-up" style={{ animationDelay: `${i * 100}ms` }}>
@@ -150,7 +247,7 @@ function Founders() {
                     className="relative h-44 w-44 rounded-3xl object-cover ring-2 ring-cyber/40 shadow-2xl"
                   />
                 </div>
-                <h2 className="mt-5 font-display text-2xl font-bold">{p.name}</h2>
+                <h3 className="mt-5 font-display text-2xl font-bold">{p.name}</h3>
                 <div className="mt-1 text-xs uppercase tracking-[0.18em] text-cyber">{p.title}</div>
                 <p className="mt-4 max-w-md text-sm text-muted-foreground">{p.bio}</p>
                 <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -169,6 +266,9 @@ function Founders() {
           ))}
         </div>
       </section>
+
+      <CampusLeaders />
     </SiteLayout>
   );
 }
+
