@@ -60,8 +60,19 @@ const FOUNDERS_JSONLD = {
       worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
       sameAs: ["https://www.linkedin.com/in/mohammed-aqhib-6639902a5"],
     },
+    {
+      "@type": "Person",
+      "@id": `${SITE}/founders#saadh`,
+      name: "Saadh Mohammed",
+      jobTitle: "Executive Director — Finance & Strategy Mentor",
+      description:
+        "Executive Director — Finance & Strategy Mentor at MentorWise AI.",
+      worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
+      sameAs: ["https://www.linkedin.com/in/saadh-mohammed21/"],
+    },
   ],
 };
+
 
 
 export const Route = createFileRoute("/founders")({
