@@ -101,7 +101,7 @@ type Profile = {
   name: string;
   title: string;
   bio: string;
-  image: string;
+  image?: string;
   email: string;
   whatsapp: string;
   linkedin: string;
@@ -135,7 +135,16 @@ const profiles: Profile[] = [
     whatsapp: "https://wa.me/919176771119",
     linkedin: "https://www.linkedin.com/in/mohammed-aqhib-6639902a5?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
+  {
+    name: "Saadh Mohammed",
+    title: "Executive Director — Finance & Strategy Mentor",
+    bio: "Executive Director at MentorWise AI, leading finance and strategy. Mentors students on money skills, financial literacy and long-term career strategy across the MentorWise AI ecosystem.",
+    email: "mohammed.saadh21@gmail.com",
+    whatsapp: "https://wa.me/919677122760",
+    linkedin: "https://www.linkedin.com/in/saadh-mohammed21/",
+  },
 ];
+
 
 type CampusLeader = { name: string; institute: string; linkedin: string; note?: string };
 
