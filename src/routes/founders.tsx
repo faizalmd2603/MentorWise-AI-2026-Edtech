@@ -190,47 +190,60 @@ const CAMPUS_LEADERS: CampusLeader[] = [
 function CampusLeaders() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-      <div className="rounded-[32px] border border-border/60 bg-card/60 p-6 backdrop-blur sm:p-10">
-        <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-cyber">
-            Tier-1 Cohort
+      <div className="relative overflow-hidden rounded-[32px] border border-border/60 bg-card/60 p-6 backdrop-blur sm:p-10">
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyber/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-magenta/15 blur-3xl" />
+
+        <div className="relative flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-cyber">
+              Tier-1 Cohort
+            </div>
+            <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+              Elite <span className="text-gradient">Campus Leaders</span>
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+              Student leaders representing MentorWise AI on their campuses — driving adoption,
+              running challenges and mentoring peers across Tamil Nadu.
+            </p>
           </div>
-          <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
-            Elite <span className="text-gradient">Campus Leaders</span>
-          </h2>
-          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
-            Student leaders representing MentorWise AI on their campuses — driving adoption,
-            running challenges and mentoring peers across Tamil Nadu.
-          </p>
+          <div className="rounded-2xl glass px-5 py-4 text-center">
+            <div className="font-display text-3xl font-bold text-gradient">{CAMPUS_LEADERS.length}</div>
+            <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Campuses</div>
+          </div>
         </div>
 
-        <ol className="mt-10 divide-y divide-border/50 border-y border-border/50">
+        <ol className="relative mt-10 grid gap-3 sm:grid-cols-2">
           {CAMPUS_LEADERS.map((l, i) => (
             <li
               key={l.name}
-              className="group grid grid-cols-[auto_1fr] items-center gap-4 py-5 transition sm:grid-cols-[auto_1fr_auto] sm:gap-6"
+              className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/40 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-cyber/40 hover:shadow-xl"
             >
-              <span className="font-display text-sm font-semibold tabular-nums text-muted-foreground/70 sm:text-base">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="min-w-0">
-                <h3 className="truncate font-display text-lg font-semibold text-foreground">
-                  {l.name}
-                </h3>
-                <p className="mt-0.5 text-sm text-muted-foreground">
-                  {l.institute}
-                  {l.note ? <span className="text-muted-foreground/70"> · {l.note}</span> : null}
-                </p>
+              <span className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-cyber to-magenta opacity-0 transition group-hover:opacity-100" />
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <span className="font-display text-xs font-semibold tabular-nums text-muted-foreground/60">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-1 font-display text-lg font-semibold text-foreground">
+                    {l.name}
+                  </h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {l.institute}
+                    {l.note ? <span className="text-muted-foreground/70"> · {l.note}</span> : null}
+                  </p>
+                </div>
+                <a
+                  href={l.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`LinkedIn profile of ${l.name}`}
+                  className="shrink-0 inline-flex items-center gap-2 rounded-full glass px-3.5 py-2 text-xs font-medium transition hover:scale-[1.05] hover:glow-cyan"
+                >
+                  <Linkedin className="h-3.5 w-3.5 text-cyber" />
+                  <span className="hidden sm:inline">LinkedIn</span>
+                </a>
               </div>
-              <a
-                href={l.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`LinkedIn profile of ${l.name}`}
-                className="col-span-2 inline-flex w-fit items-center gap-2 rounded-full glass px-4 py-2 text-xs font-medium transition hover:scale-[1.04] hover:glow-cyan sm:col-span-1"
-              >
-                <Linkedin className="h-3.5 w-3.5 text-cyber" /> LinkedIn
-              </a>
             </li>
           ))}
         </ol>
@@ -238,6 +251,7 @@ function CampusLeaders() {
     </section>
   );
 }
+
 
 function Founders() {
   return (
@@ -261,11 +275,20 @@ function Founders() {
               <div className="relative flex flex-col items-center text-center">
                 <div className="relative">
                   <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-cyber/40 to-magenta/30 blur-xl opacity-70" />
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="relative h-44 w-44 rounded-3xl object-cover ring-2 ring-cyber/40 shadow-2xl"
-                  />
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="relative h-44 w-44 rounded-3xl object-cover ring-2 ring-cyber/40 shadow-2xl"
+                    />
+                  ) : (
+                    <div className="relative flex h-44 w-44 items-center justify-center rounded-3xl bg-gradient-to-br from-cyber/25 to-magenta/25 ring-2 ring-cyber/40 shadow-2xl">
+                      <span className="font-display text-4xl font-bold text-gradient">
+                        {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                      </span>
+                    </div>
+                  )}
+
                 </div>
                 <h3 className="mt-5 font-display text-2xl font-bold">{p.name}</h3>
                 <div className="mt-1 text-xs uppercase tracking-[0.18em] text-cyber">{p.title}</div>
