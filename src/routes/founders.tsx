@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import founder from "@/assets/founder-faizal.jpeg.asset.json";
 import cofounder from "@/assets/cofounder-saif.jpeg.asset.json";
 import aqhib from "@/assets/aqhib.jpeg.asset.json";
+import saadh from "@/assets/team/saadh-mohammed.jpg.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
 
 
@@ -139,6 +140,7 @@ const profiles: Profile[] = [
     name: "Saadh Mohammed",
     title: "Executive Director — Finance & Strategy Mentor",
     bio: "Executive Director at MentorWise AI, leading finance and strategy. Mentors students on money skills, financial literacy and long-term career strategy across the MentorWise AI ecosystem.",
+    image: saadh.url,
     email: "mohammed.saadh21@gmail.com",
     whatsapp: "https://wa.me/919677122760",
     linkedin: "https://www.linkedin.com/in/saadh-mohammed21/",
