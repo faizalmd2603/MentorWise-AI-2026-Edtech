@@ -66,6 +66,7 @@ const FOUNDERS_JSONLD = {
       "@id": `${SITE}/founders#saadh`,
       name: "Saadh Mohammed",
       jobTitle: "Executive Director — Finance & Strategy Mentor",
+      image: `${SITE}${saadh.url}`,
       description:
         "Executive Director — Finance & Strategy Mentor at MentorWise AI.",
       worksFor: { "@type": "Organization", name: "MentorWise AI", url: SITE },
