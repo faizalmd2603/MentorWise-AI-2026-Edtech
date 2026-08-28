@@ -317,21 +317,30 @@ function EntryCard({ e, index }: { e: Entry; index: number }) {
   const f = e.rank ? FRAME[e.rank] : null;
   return (
     <Reveal delay={(index % 3) * 80} className="h-full">
-      <div className={`h-full rounded-[26px] ${f ? `${f.ring} ${f.glow}` : "p-[1px] bg-border/60"}`}>
-        <article className="group flex h-full flex-col overflow-hidden rounded-[23px] border border-border/40 bg-card/85 backdrop-blur transition duration-500 hover:-translate-y-1">
+      <div className={`h-full rounded-[26px] transition duration-500 hover:shadow-2xl ${f ? `${f.ring} ${f.glow}` : "p-[1px] bg-border/60"}`}>
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-[23px] border border-border/40 bg-card/85 backdrop-blur transition duration-500 hover:-translate-y-1.5">
+          <span className="pointer-events-none absolute inset-0 z-20 -translate-x-full bg-gradient-to-r from-transparent via-foreground/10 to-transparent opacity-0 transition duration-1000 group-hover:translate-x-full group-hover:opacity-100" />
           <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-secondary/50 p-3">
+            <img
+              src={e.image}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-2xl"
+            />
             <img
               src={e.image}
               alt={`${e.challenge} entry by ${e.name} — Bharat @ 80 challenge`}
               loading="lazy"
-              className="max-h-full max-w-full rounded-xl object-contain shadow-sm transition duration-700 group-hover:scale-[1.03]"
+              className="relative z-10 max-h-full max-w-full rounded-xl object-contain shadow-lg ring-1 ring-border/40 transition duration-700 group-hover:scale-[1.04]"
             />
             {e.honour && (
-              <div className="absolute left-3 top-3">
+              <div className="absolute left-3 top-3 z-20">
                 <HonourBadge label={e.honour} rank={e.rank} />
               </div>
             )}
           </div>
+
           <div className="flex flex-1 flex-col gap-1.5 border-t border-border/40 p-5">
             <h3 className="font-display text-base font-bold leading-snug text-foreground">{e.name}</h3>
             <p className="line-clamp-2 text-sm text-muted-foreground">{e.college}</p>
