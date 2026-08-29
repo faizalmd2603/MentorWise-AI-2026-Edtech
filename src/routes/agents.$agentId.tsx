@@ -259,6 +259,13 @@ function AgentChat() {
     const sentAttachments = attach;
     setAttach([]);
     setLoading(true);
+    const searchCapable = agent!.id !== "humaniser";
+    setPhase(searchCapable ? "searching" : "thinking");
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    if (searchCapable) {
+      timers.push(setTimeout(() => setPhase("reading"), 2600));
+      timers.push(setTimeout(() => setPhase("thinking"), 5200));
+    }
     try {
       const res = await chat({
         data: {
@@ -270,7 +277,15 @@ function AgentChat() {
           })),
         },
       });
-      setMessages((m) => [...m, { role: "assistant", content: res.reply }]);
+      setMessages((m) => [
+        ...m,
+        {
+          role: "assistant",
+          content: res.reply,
+          sources: (res.sources ?? []) as Source[],
+          searchQuery: res.searchQuery ?? null,
+        },
+      ]);
     } catch (e) {
       console.error(e, "sent with", sentAttachments.length, "attachments");
       const msg = e instanceof Error ? e.message : "";
@@ -285,6 +300,7 @@ function AgentChat() {
         },
       ]);
     } finally {
+      timers.forEach(clearTimeout);
       setLoading(false);
       textareaRef.current?.focus();
     }
