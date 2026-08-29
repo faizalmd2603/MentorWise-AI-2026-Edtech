@@ -115,6 +115,7 @@ function AgentChat() {
   const [imgPrompt, setImgPrompt] = useState("");
   const [showImg, setShowImg] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phase, setPhase] = useState<"searching" | "reading" | "thinking">("searching");
   const [imgLoading, setImgLoading] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
