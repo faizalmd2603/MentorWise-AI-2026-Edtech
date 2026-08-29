@@ -22,8 +22,10 @@ import {
   Lock,
   MessageSquarePlus,
 } from "lucide-react";
+import { Globe, Search } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
+import { ChatMarkdown } from "@/components/ChatMarkdown";
 import { useAuthReady } from "@/hooks/use-auth-ready";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
