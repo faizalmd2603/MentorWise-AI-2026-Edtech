@@ -471,13 +471,55 @@ function AgentChat() {
               {messages.map((m, i) => (
                 <div key={i} className={`flex animate-fade-up ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-lg ${
+                    className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-lg ${
                       m.role === "user"
-                        ? "bg-gradient-to-br from-cyber/25 to-magenta/10 text-foreground ring-1 ring-cyber/40"
+                        ? "whitespace-pre-wrap bg-gradient-to-br from-cyber/25 to-magenta/10 text-foreground ring-1 ring-cyber/40"
                         : "bg-card/85 text-foreground ring-1 ring-border"
                     }`}
                   >
-                    {m.content}
+                    {m.role === "assistant" ? (
+                      <>
+                        {m.searchQuery && (
+                          <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-cyber/10 px-2.5 py-1 text-[11px] font-medium text-cyber ring-1 ring-cyber/30">
+                            <Globe className="h-3 w-3" />
+                            Searched Google · “{m.searchQuery}”
+                          </div>
+                        )}
+                        <ChatMarkdown content={m.content} />
+                        {m.sources && m.sources.length > 0 && (
+                          <div className="mt-3 border-t border-border/50 pt-3">
+                            <div className="mb-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                              Live web sources
+                            </div>
+                            <div className="flex flex-wrap gap-1.5">
+                              {m.sources.slice(0, 6).map((s, si) => (
+                                <a
+                                  key={si}
+                                  href={s.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer nofollow"
+                                  className="group inline-flex max-w-[15rem] items-center gap-1.5 rounded-full bg-background/60 px-2.5 py-1 text-[11px] ring-1 ring-border transition hover:ring-cyber/50"
+                                  title={s.title}
+                                >
+                                  <img
+                                    src={`https://www.google.com/s2/favicons?sz=32&domain=${new URL(s.link).hostname}`}
+                                    alt=""
+                                    className="h-3.5 w-3.5 rounded-sm"
+                                    loading="lazy"
+                                  />
+                                  <span className="truncate group-hover:text-cyber">
+                                    {s.source || new URL(s.link).hostname.replace(/^www\./, "")}
+                                  </span>
+                                  {s.date && <span className="shrink-0 text-muted-foreground">· {s.date}</span>}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      m.content
+                    )}
                     {m.attachments && m.attachments.length > 0 && (
                       <div className="mt-3 grid grid-cols-2 gap-2">
                         {m.attachments.map((a, idx) => (
@@ -500,9 +542,33 @@ function AgentChat() {
               ))}
               {loading && (
                 <div className="flex justify-start animate-fade-up">
-                  <div className="rounded-2xl bg-card/85 px-4 py-3 text-sm ring-1 ring-border flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin text-cyber" />
-                    <span className="shimmer-text font-medium">Thinking…</span>
+                  <div className="flex items-center gap-2.5 rounded-2xl bg-card/85 px-4 py-3 text-sm ring-1 ring-border text-muted-foreground">
+                    <span className="relative inline-flex h-5 w-5 items-center justify-center">
+                      <span className="absolute inset-0 rounded-full bg-cyber/25 animate-ping" />
+                      {phase === "thinking" ? (
+                        <Loader2 className="relative h-4 w-4 animate-spin text-cyber" />
+                      ) : phase === "reading" ? (
+                        <Globe className="relative h-4 w-4 text-magenta animate-float-y" />
+                      ) : (
+                        <Search className="relative h-4 w-4 text-cyber animate-float-y" />
+                      )}
+                    </span>
+                    <span className="shimmer-text font-medium">
+                      {phase === "searching"
+                        ? "Searching the web…"
+                        : phase === "reading"
+                          ? "Reading top results…"
+                          : "Thinking…"}
+                    </span>
+                    <span className="flex gap-1">
+                      {[0, 1, 2].map((d) => (
+                        <span
+                          key={d}
+                          className="h-1.5 w-1.5 rounded-full bg-cyber/70 animate-bounce"
+                          style={{ animationDelay: `${d * 140}ms` }}
+                        />
+                      ))}
+                    </span>
                   </div>
                 </div>
               )}
