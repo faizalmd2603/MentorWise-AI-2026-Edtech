@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { SearchSource } from "./search.server";
 import { AGENTS } from "./agents";
 
 
@@ -27,8 +28,42 @@ const ChatInput = z.object({
     .max(24),
 });
 
-const SHARED_STYLE_RULES =
-  "Style rules: write like a real conversational AI assistant. Never use markdown headings (no #, ##, ###), never use asterisks for bold or italics, never use bullet symbols like - or *. Use plain prose, short paragraphs, and where lists are essential use numbered lines like 1. 2. 3. Keep tone professional, warm, and globally polished. Keep replies concise to respect free-tier limits but maintain MNC-level quality. If the user is sharing an image, photo, document or file, analyse it carefully and reference what you actually see in it. If the user asks for something outside your scope, redirect them to the correct MentorWise AI agent.";
+const SHARED_STYLE_RULES = [
+  "Formatting rules: reply in rich Markdown exactly like Gemini or ChatGPT.",
+  "Use short bolded section labels with **bold**, use bulleted lists with -, numbered lists with 1. 2. 3., tables when comparing options, and `code` where relevant.",
+  "Never dump a wall of text. Lead with a one or two line direct answer, then structured detail, then a short next-step line.",
+  "Every link you mention MUST be a real, working, clickable Markdown link written as [Descriptive title](https://full-url) — never bare text like 'search on Google' and never invented or guessed URLs.",
+  "Only use URLs that appear in the web results you were given, or official root domains you are certain exist.",
+  "Prefer information published between 2020 and today; explicitly say when something may have changed and point to the live source.",
+  "Tone: professional, warm, globally polished, MNC quality. Be substantive but avoid padding.",
+  "If the user shares an image, photo, document or file, analyse it carefully and reference what you actually see.",
+  "If the request is outside your scope, answer what you can and point them to the right MentorWise AI agent.",
+].join(" ");
+
+const HUMANISER_SYSTEM = [
+  "You are the Humaniser Agent of MentorWise AI — the highest-capability AI-to-human text rewriter available.",
+  "Your single job: rewrite input text so it reads as 100% human-written and scores as human on AI-detection tools (GPTZero, Turnitin, ZeroGPT, Originality.ai, Copyleaks).",
+  "",
+  "How detectors work: they flag low perplexity (predictable word choice) and low burstiness (uniform sentence length). You defeat both honestly by writing the way a thoughtful human actually writes.",
+  "",
+  "Rewrite method, apply all of it:",
+  "1. Burstiness — deliberately vary sentence length. Mix 3-word sentences with 30-word ones. Never let three consecutive sentences have similar length or rhythm.",
+  "2. Perplexity — replace predictable AI collocations with specific, slightly unexpected but natural word choices. Prefer concrete nouns and plain verbs over abstractions.",
+  "3. Ban list — never output: delve, tapestry, testament, moreover, furthermore, in conclusion, it is important to note, navigate the landscape, in today's fast-paced world, unlock, harness, leverage (as a verb), robust, seamless, game-changer, paramount, meticulous, realm, embark, foster, pivotal, underscore, crucial, plethora, myriad, elevate, transformative.",
+  "4. Human texture — allow contractions, occasional sentence fragments, a mid-sentence aside, a direct address, one mild opinion or hedge (\"honestly\", \"to be fair\", \"which, fine, is annoying\"). Start a sentence with And/But/So sparingly.",
+  "5. Kill the AI skeleton — no tri-colon lists everywhere, no 'Firstly/Secondly/Finally' scaffolding, no summary paragraph that restates everything, no perfectly parallel bullet phrasing.",
+  "6. Imperfect rhythm — vary paragraph length too. One-line paragraphs are allowed and encouraged.",
+  "",
+  "Hard constraints:",
+  "- Preserve meaning, all facts, all numbers, names and claims exactly. Never invent content.",
+  "- Preserve the original format precisely: if the input is a bulleted list, output a bulleted list; if it is an email, keep the subject/greeting/sign-off; if it has headings, keep the same headings; keep the same number of paragraphs and roughly the same length (within ±15%).",
+  "- Preserve the original language, tense and point of view.",
+  "- Preserve technical terms, code blocks, URLs and citations verbatim.",
+  "- Never add commentary, never add headings like 'Humanised version'. Output ONLY the rewritten text and nothing else.",
+  "",
+  "If the user asks a question about humanising instead of pasting text, answer briefly and ask them to paste the text.",
+].join("\n");
+
 
 type Part =
   | { type: "text"; text: string }
@@ -49,43 +84,107 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
   return parts;
 }
 
+const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const MODEL = "google/gemini-3-flash-preview";
+
+async function gateway(key: string, body: Record<string, unknown>) {
+  return fetch(GATEWAY, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
+
+/** Decides whether a live Google search is needed and what to search for. */
+async function planSearch(key: string, agentName: string, question: string): Promise<string | null> {
+  if (!question.trim()) return null;
+  try {
+    const res = await gateway(key, {
+      model: MODEL,
+      max_tokens: 60,
+      messages: [
+        {
+          role: "system",
+          content:
+            `You are the retrieval router for the ${agentName} of MentorWise AI. Decide if answering the user's message well requires up-to-date information from the live web (jobs, internships, courses, certifications, companies, deadlines, exams, tools, prices, news, rankings, current best practices, anything that changes over time, or anything where the user expects real links).` +
+            ` If yes, reply with ONLY the best Google search query (max 14 words, add the year when recency matters).` +
+            ` If the message is purely a rewrite, personal advice, or opinion task with no factual lookup, reply with exactly NONE.`,
+        },
+        { role: "user", content: question.slice(0, 1500) },
+      ],
+    });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+    const out = (j.choices?.[0]?.message?.content ?? "").trim().replace(/^["'`]|["'`]$/g, "");
+    if (!out || /^none\b/i.test(out) || out.length > 160) return null;
+    return out;
+  } catch {
+    return null;
+  }
+}
+
 export const chatWithAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
   .handler(async ({ data }) => {
-
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI service is not configured.");
 
     const agent = AGENTS.find((a) => a.id === data.agentId);
     if (!agent) throw new Error("Unknown agent.");
 
-    const systemPrompt = `${agent.system}\n\n${SHARED_STYLE_RULES}`;
+    const isHumaniser = agent.id === "humaniser";
+    const lastUser = [...data.messages].reverse().find((m) => m.role === "user");
+    const question = lastUser?.content ?? "";
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        max_tokens: 900,
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...data.messages.map((m) => ({
-            role: m.role,
-            content: buildContent(m.content, m.attachments),
-          })),
-        ],
-      }),
+    let sources: SearchSource[] = [];
+    let searchQuery: string | null = null;
+
+    if (!isHumaniser) {
+      searchQuery = await planSearch(key, agent.name, question);
+      if (searchQuery) {
+        const { googleSearch } = await import("./search.server");
+        sources = await googleSearch(searchQuery, 8);
+      }
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    let systemPrompt: string;
+    if (isHumaniser) {
+      systemPrompt = HUMANISER_SYSTEM;
+    } else {
+      systemPrompt = `${agent.system}\n\n${SHARED_STYLE_RULES}\n\nToday's date is ${today}.`;
+      if (sources.length) {
+        const { formatSourcesForPrompt } = await import("./search.server");
+        systemPrompt +=
+          `\n\nLIVE GOOGLE SEARCH RESULTS for "${searchQuery}" (restricted to pages published from 2020 onwards). Ground your answer in these, prefer the most recent items, and cite them inline as clickable Markdown links using their exact URLs. Never cite a URL that is not listed here. If the results do not cover something, say so plainly instead of guessing.\n\n` +
+          formatSourcesForPrompt(sources) +
+          `\n\nEnd your reply with a short "**Sources**" list of the links you actually used, as Markdown links.`;
+      } else if (searchQuery) {
+        systemPrompt +=
+          `\n\nA live web search was attempted but returned no usable recent results. Answer from your own knowledge, be explicit about what may have changed, and only link to official root domains you are certain exist.`;
+      }
+    }
+
+    const res = await gateway(key, {
+      model: MODEL,
+      max_tokens: isHumaniser ? 2200 : 1600,
+      temperature: isHumaniser ? 1 : 0.7,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...data.messages.map((m) => ({
+          role: m.role,
+          content: buildContent(m.content, m.attachments),
+        })),
+      ],
     });
 
     if (res.status === 429) {
-      return { reply: "I'm receiving a lot of requests right now. Please try again in a moment." };
+      return { reply: "I'm receiving a lot of requests right now. Please try again in a moment.", sources: [], searchQuery: null };
     }
     if (res.status === 402) {
-      return { reply: "The free AI quota for this workspace is exhausted. Please contact the MentorWise AI team." };
+      return { reply: "The free AI quota for this workspace is exhausted. Please contact the MentorWise AI team.", sources: [], searchQuery: null };
     }
     if (!res.ok) {
       const text = await res.text();
@@ -96,16 +195,15 @@ export const chatWithAgent = createServerFn({ method: "POST" })
     const json = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
-    const raw = json.choices?.[0]?.message?.content ?? "";
-    const clean = raw
-      .replace(/^#{1,6}\s+/gm, "")
-      .replace(/\*\*(.*?)\*\*/g, "$1")
-      .replace(/(^|\s)\*(?!\s)([^*]+)\*/g, "$1$2")
-      .replace(/^\s*[-*•]\s+/gm, "")
-      .trim();
+    const reply = (json.choices?.[0]?.message?.content ?? "").trim();
 
-    return { reply: clean || "Sorry, I couldn't generate a response. Please try again." };
+    return {
+      reply: reply || "Sorry, I couldn't generate a response. Please try again.",
+      sources: sources.map((s) => ({ title: s.title, link: s.link, date: s.date ?? null, source: s.source ?? null })),
+      searchQuery,
+    };
   });
+
 
 const ImageInput = z.object({
   prompt: z.string().min(3).max(500),
