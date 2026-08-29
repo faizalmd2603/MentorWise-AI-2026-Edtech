@@ -68,7 +68,15 @@ export const Route = createFileRoute("/agents/$agentId")({
 });
 
 type Attachment = { kind: "image" | "file"; name: string; mime: string; dataUrl: string };
-type Msg = { role: "user" | "assistant"; content: string; image?: string; attachments?: Attachment[] };
+type Source = { title: string; link: string; date?: string | null; source?: string | null };
+type Msg = {
+  role: "user" | "assistant";
+  content: string;
+  image?: string;
+  attachments?: Attachment[];
+  sources?: Source[];
+  searchQuery?: string | null;
+};
 
 const MAX_ATTACH = 4;
 const MAX_BYTES = 7 * 1024 * 1024; // 7MB per file
