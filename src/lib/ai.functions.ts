@@ -101,7 +101,7 @@ async function planSearch(key: string, agentName: string, question: string): Pro
   try {
     const res = await gateway(key, {
       model: MODEL,
-      max_tokens: 60,
+      max_tokens: 256,
       messages: [
         {
           role: "system",
@@ -117,6 +117,8 @@ async function planSearch(key: string, agentName: string, question: string): Pro
     const j = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
     const out = (j.choices?.[0]?.message?.content ?? "").trim().replace(/^["'`]|["'`]$/g, "");
     if (!out || /^none\b/i.test(out) || out.length > 160) return null;
+    // Guard against a truncated / degenerate router answer.
+    if (out.split(/\s+/).length < 3) return question.trim().slice(0, 120);
     return out;
   } catch {
     return null;
