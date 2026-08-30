@@ -85,7 +85,7 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
 }
 
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "google/gemini-3-flash-preview";
+const MODEL = "google/gemini-3.7-flash";
 
 async function gateway(key: string, body: Record<string, unknown>) {
   return fetch(GATEWAY, {
