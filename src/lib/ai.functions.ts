@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SearchSource } from "./search.server";
+import { llmChat } from "./llm.server";
 import { AGENTS } from "./agents";
 
 
@@ -84,25 +85,12 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
   return parts;
 }
 
-const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "google/gemini-3.7-flash";
-
-async function gateway(key: string, body: Record<string, unknown>) {
-  return fetch(GATEWAY, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-}
-
 /** Decides whether a live Google search is needed and what to search for. */
-async function planSearch(key: string, agentName: string, question: string): Promise<string | null> {
+async function planSearch(agentName: string, question: string): Promise<string | null> {
   if (!question.trim()) return null;
   try {
-    const res = await gateway(key, {
-      model: MODEL,
-      max_tokens: 256,
-      messages: [
+    const { text } = await llmChat(
+      [
         {
           role: "system",
           content:
@@ -112,10 +100,9 @@ async function planSearch(key: string, agentName: string, question: string): Pro
         },
         { role: "user", content: question.slice(0, 1500) },
       ],
-    });
-    if (!res.ok) return null;
-    const j = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    const out = (j.choices?.[0]?.message?.content ?? "").trim().replace(/^["'`]|["'`]$/g, "");
+      { maxTokens: 256, temperature: 0.2 },
+    );
+    const out = text.trim().replace(/^["'`]|["'`]$/g, "");
     if (!out || /^none\b/i.test(out) || out.length > 160) return null;
     // Guard against a truncated / degenerate router answer.
     if (out.split(/\s+/).length < 3) return question.trim().slice(0, 120);
@@ -125,13 +112,11 @@ async function planSearch(key: string, agentName: string, question: string): Pro
   }
 }
 
+
 export const chatWithAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
   .handler(async ({ data }) => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) throw new Error("AI service is not configured.");
-
     const agent = AGENTS.find((a) => a.id === data.agentId);
     if (!agent) throw new Error("Unknown agent.");
 
@@ -143,7 +128,7 @@ export const chatWithAgent = createServerFn({ method: "POST" })
     let searchQuery: string | null = null;
 
     if (!isHumaniser) {
-      searchQuery = await planSearch(key, agent.name, question);
+      searchQuery = await planSearch(agent.name, question);
       if (searchQuery) {
         const { googleSearch } = await import("./search.server");
         sources = await googleSearch(searchQuery, 8);
@@ -169,35 +154,34 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       }
     }
 
-    const res = await gateway(key, {
-      model: MODEL,
-      max_tokens: isHumaniser ? 2200 : 1600,
-      temperature: isHumaniser ? 1 : 0.7,
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...data.messages.map((m) => ({
-          role: m.role,
-          content: buildContent(m.content, m.attachments),
-        })),
-      ],
-    });
+    const hasAttachments = data.messages.some((m) => (m.attachments?.length ?? 0) > 0);
 
-    if (res.status === 429) {
-      return { reply: "I'm receiving a lot of requests right now. Please try again in a moment.", sources: [], searchQuery: null };
+    let reply = "";
+    try {
+      const out = await llmChat(
+        [
+          { role: "system", content: systemPrompt },
+          ...data.messages.map((m) => ({
+            role: m.role,
+            content: buildContent(m.content, m.attachments),
+          })),
+        ],
+        {
+          maxTokens: isHumaniser ? 2200 : 1600,
+          temperature: isHumaniser ? 1 : 0.7,
+          multimodal: hasAttachments,
+        },
+      );
+      reply = out.text;
+    } catch (err) {
+      console.error("All AI providers failed", err);
+      return {
+        reply:
+          "All AI providers are busy or out of quota right now. Please try again in a moment — the MentorWise AI team has been notified.",
+        sources: [],
+        searchQuery: null,
+      };
     }
-    if (res.status === 402) {
-      return { reply: "The free AI quota for this workspace is exhausted. Please contact the MentorWise AI team.", sources: [], searchQuery: null };
-    }
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("AI gateway error", res.status, text);
-      throw new Error("AI service error");
-    }
-
-    const json = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const reply = (json.choices?.[0]?.message?.content ?? "").trim();
 
     return {
       reply: reply || "Sorry, I couldn't generate a response. Please try again.",
@@ -205,6 +189,7 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       searchQuery,
     };
   });
+
 
 
 const ImageInput = z.object({
