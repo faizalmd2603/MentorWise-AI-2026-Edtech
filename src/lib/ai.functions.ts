@@ -116,9 +116,6 @@ export const chatWithAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
   .handler(async ({ data }) => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) throw new Error("AI service is not configured.");
-
     const agent = AGENTS.find((a) => a.id === data.agentId);
     if (!agent) throw new Error("Unknown agent.");
 
@@ -130,7 +127,7 @@ export const chatWithAgent = createServerFn({ method: "POST" })
     let searchQuery: string | null = null;
 
     if (!isHumaniser) {
-      searchQuery = await planSearch(key, agent.name, question);
+      searchQuery = await planSearch(agent.name, question);
       if (searchQuery) {
         const { googleSearch } = await import("./search.server");
         sources = await googleSearch(searchQuery, 8);
@@ -156,35 +153,34 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       }
     }
 
-    const res = await gateway(key, {
-      model: MODEL,
-      max_tokens: isHumaniser ? 2200 : 1600,
-      temperature: isHumaniser ? 1 : 0.7,
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...data.messages.map((m) => ({
-          role: m.role,
-          content: buildContent(m.content, m.attachments),
-        })),
-      ],
-    });
+    const hasAttachments = data.messages.some((m) => (m.attachments?.length ?? 0) > 0);
 
-    if (res.status === 429) {
-      return { reply: "I'm receiving a lot of requests right now. Please try again in a moment.", sources: [], searchQuery: null };
+    let reply = "";
+    try {
+      const out = await llmChat(
+        [
+          { role: "system", content: systemPrompt },
+          ...data.messages.map((m) => ({
+            role: m.role,
+            content: buildContent(m.content, m.attachments),
+          })),
+        ],
+        {
+          maxTokens: isHumaniser ? 2200 : 1600,
+          temperature: isHumaniser ? 1 : 0.7,
+          multimodal: hasAttachments,
+        },
+      );
+      reply = out.text;
+    } catch (err) {
+      console.error("All AI providers failed", err);
+      return {
+        reply:
+          "All AI providers are busy or out of quota right now. Please try again in a moment — the MentorWise AI team has been notified.",
+        sources: [],
+        searchQuery: null,
+      };
     }
-    if (res.status === 402) {
-      return { reply: "The free AI quota for this workspace is exhausted. Please contact the MentorWise AI team.", sources: [], searchQuery: null };
-    }
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("AI gateway error", res.status, text);
-      throw new Error("AI service error");
-    }
-
-    const json = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const reply = (json.choices?.[0]?.message?.content ?? "").trim();
 
     return {
       reply: reply || "Sorry, I couldn't generate a response. Please try again.",
@@ -192,6 +188,7 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       searchQuery,
     };
   });
+
 
 
 const ImageInput = z.object({
