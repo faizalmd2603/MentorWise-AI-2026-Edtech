@@ -84,25 +84,12 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
   return parts;
 }
 
-const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "google/gemini-3.7-flash";
-
-async function gateway(key: string, body: Record<string, unknown>) {
-  return fetch(GATEWAY, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-}
-
 /** Decides whether a live Google search is needed and what to search for. */
-async function planSearch(key: string, agentName: string, question: string): Promise<string | null> {
+async function planSearch(agentName: string, question: string): Promise<string | null> {
   if (!question.trim()) return null;
   try {
-    const res = await gateway(key, {
-      model: MODEL,
-      max_tokens: 256,
-      messages: [
+    const { text } = await llmChat(
+      [
         {
           role: "system",
           content:
@@ -112,10 +99,9 @@ async function planSearch(key: string, agentName: string, question: string): Pro
         },
         { role: "user", content: question.slice(0, 1500) },
       ],
-    });
-    if (!res.ok) return null;
-    const j = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    const out = (j.choices?.[0]?.message?.content ?? "").trim().replace(/^["'`]|["'`]$/g, "");
+      { maxTokens: 256, temperature: 0.2 },
+    );
+    const out = text.trim().replace(/^["'`]|["'`]$/g, "");
     if (!out || /^none\b/i.test(out) || out.length > 160) return null;
     // Guard against a truncated / degenerate router answer.
     if (out.split(/\s+/).length < 3) return question.trim().slice(0, 120);
@@ -124,6 +110,7 @@ async function planSearch(key: string, agentName: string, question: string): Pro
     return null;
   }
 }
+
 
 export const chatWithAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
