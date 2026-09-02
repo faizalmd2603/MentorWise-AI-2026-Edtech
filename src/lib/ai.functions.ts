@@ -176,7 +176,12 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       }
     }
 
-    const hasAttachments = data.messages.some((m) => (m.attachments?.length ?? 0) > 0);
+    const hasAttachments = data.messages.some((m) =>
+      (m.attachments ?? []).some(
+        (a) => a.kind === "image" || a.mime.startsWith("image/") || a.mime === "application/pdf",
+      ),
+    );
+
 
     let reply = "";
     try {
