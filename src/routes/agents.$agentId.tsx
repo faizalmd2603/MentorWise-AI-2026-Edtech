@@ -691,7 +691,7 @@ function AgentChat() {
                         className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-card/70 text-left"
                         type="button"
                       >
-                        <Paperclip className="h-4 w-4 text-magenta" /> Upload file / folder
+                        <Paperclip className="h-4 w-4 text-magenta" /> Upload file (PDF, DOC, XLS, image)
                       </button>
                       <button
                         onClick={() => { setShowPlus(false); setCameraOpen(true); }}
