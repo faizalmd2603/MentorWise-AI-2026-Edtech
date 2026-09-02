@@ -702,11 +702,10 @@ function AgentChat() {
                   type="file"
                   multiple
                   className="hidden"
-                  // @ts-expect-error webkitdirectory is non-standard but supported
-                  webkitdirectory=""
-                  directory=""
+                  accept=".pdf,.jpg,.jpeg,.png,.webp,.gif,.doc,.docx,.xls,.xlsx,.csv,.txt,application/pdf,image/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain"
                   onChange={(e) => { void handleFiles(e.target.files, "file"); e.target.value = ""; }}
                 />
+
 
                 <textarea
                   ref={textareaRef}
