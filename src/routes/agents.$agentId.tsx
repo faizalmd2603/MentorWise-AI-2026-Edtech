@@ -202,6 +202,26 @@ function AgentChat() {
     });
   }
 
+  function mimeFor(file: File, kind: "image" | "file") {
+    if (file.type) return file.type;
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+    const map: Record<string, string> = {
+      pdf: "application/pdf",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      webp: "image/webp",
+      gif: "image/gif",
+      doc: "application/msword",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      xls: "application/vnd.ms-excel",
+      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      csv: "text/csv",
+      txt: "text/plain",
+    };
+    return map[ext] ?? (kind === "image" ? "image/png" : "application/octet-stream");
+  }
+
   async function handleFiles(files: FileList | null, kind: "image" | "file") {
     if (!files) return;
     for (const file of Array.from(files)) {
@@ -209,16 +229,18 @@ function AgentChat() {
         alert(`${file.name} is larger than 7MB. Please pick a smaller file.`);
         continue;
       }
+      const mime = mimeFor(file, kind);
       const dataUrl = await readFileAsDataURL(file);
       addAttachment({
-        kind: kind === "image" || file.type.startsWith("image/") ? "image" : "file",
+        kind: kind === "image" || mime.startsWith("image/") ? "image" : "file",
         name: file.name,
-        mime: file.type || (kind === "image" ? "image/png" : "application/octet-stream"),
+        mime,
         dataUrl,
       });
     }
     setShowPlus(false);
   }
+
 
   function captureFromCamera() {
     const video = videoRef.current;
@@ -669,7 +691,7 @@ function AgentChat() {
                         className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-card/70 text-left"
                         type="button"
                       >
-                        <Paperclip className="h-4 w-4 text-magenta" /> Upload file / folder
+                        <Paperclip className="h-4 w-4 text-magenta" /> Upload file (PDF, DOC, XLS, image)
                       </button>
                       <button
                         onClick={() => { setShowPlus(false); setCameraOpen(true); }}
@@ -702,11 +724,10 @@ function AgentChat() {
                   type="file"
                   multiple
                   className="hidden"
-                  // @ts-expect-error webkitdirectory is non-standard but supported
-                  webkitdirectory=""
-                  directory=""
+                  accept=".pdf,.jpg,.jpeg,.png,.webp,.gif,.doc,.docx,.xls,.xlsx,.csv,.txt,application/pdf,image/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain"
                   onChange={(e) => { void handleFiles(e.target.files, "file"); e.target.value = ""; }}
                 />
+
 
                 <textarea
                   ref={textareaRef}
