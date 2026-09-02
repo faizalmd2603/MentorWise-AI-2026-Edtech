@@ -4,6 +4,8 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SearchSource } from "./search.server";
 import { llmChat } from "./llm.server";
+import { extractOfficeText } from "./docs.server";
+
 import { AGENTS } from "./agents";
 
 
