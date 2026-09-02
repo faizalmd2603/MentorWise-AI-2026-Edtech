@@ -76,14 +76,34 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
   const parts: Part[] = [];
   if (text.trim()) parts.push({ type: "text", text });
   for (const a of attachments) {
-    if (a.kind === "image" || a.mime.startsWith("image/")) {
+    const isImage = a.kind === "image" || a.mime.startsWith("image/");
+    const isPdf = a.mime === "application/pdf" || /\.pdf$/i.test(a.name);
+    if (isImage) {
       parts.push({ type: "image_url", image_url: { url: a.dataUrl } });
-    } else {
-      parts.push({ type: "file", file: { filename: a.name, file_data: a.dataUrl } });
+      continue;
     }
+    if (isPdf) {
+      parts.push({ type: "file", file: { filename: a.name, file_data: a.dataUrl } });
+      continue;
+    }
+    // Other documents: models only accept PDF inline, so extract text here.
+    const b64 = a.dataUrl.split(",")[1] ?? "";
+    let body: string | null = null;
+    if (/^(text\/|application\/json)/.test(a.mime) || /\.(txt|csv|md|json)$/i.test(a.name)) {
+      try { body = Buffer.from(b64, "base64").toString("utf8"); } catch { body = null; }
+    } else {
+      body = extractOfficeText(a.mime, a.name, b64);
+    }
+    parts.push({
+      type: "text",
+      text: body
+        ? `Contents of the attached file "${a.name}":\n\n${body.slice(0, 60000)}`
+        : `The user attached "${a.name}" (${a.mime}) but its text could not be read. Ask them to paste the text or upload a PDF.`,
+    });
   }
   return parts;
 }
+
 
 /** Decides whether a live Google search is needed and what to search for. */
 async function planSearch(agentName: string, question: string): Promise<string | null> {
