@@ -202,6 +202,26 @@ function AgentChat() {
     });
   }
 
+  function mimeFor(file: File, kind: "image" | "file") {
+    if (file.type) return file.type;
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+    const map: Record<string, string> = {
+      pdf: "application/pdf",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      webp: "image/webp",
+      gif: "image/gif",
+      doc: "application/msword",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      xls: "application/vnd.ms-excel",
+      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      csv: "text/csv",
+      txt: "text/plain",
+    };
+    return map[ext] ?? (kind === "image" ? "image/png" : "application/octet-stream");
+  }
+
   async function handleFiles(files: FileList | null, kind: "image" | "file") {
     if (!files) return;
     for (const file of Array.from(files)) {
@@ -209,16 +229,18 @@ function AgentChat() {
         alert(`${file.name} is larger than 7MB. Please pick a smaller file.`);
         continue;
       }
+      const mime = mimeFor(file, kind);
       const dataUrl = await readFileAsDataURL(file);
       addAttachment({
-        kind: kind === "image" || file.type.startsWith("image/") ? "image" : "file",
+        kind: kind === "image" || mime.startsWith("image/") ? "image" : "file",
         name: file.name,
-        mime: file.type || (kind === "image" ? "image/png" : "application/octet-stream"),
+        mime,
         dataUrl,
       });
     }
     setShowPlus(false);
   }
+
 
   function captureFromCamera() {
     const video = videoRef.current;
