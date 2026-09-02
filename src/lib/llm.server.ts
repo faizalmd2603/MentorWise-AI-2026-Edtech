@@ -27,7 +27,7 @@ const PROVIDERS: Provider[] = [
   {
     name: "openrouter",
     url: "https://openrouter.ai/api/v1/chat/completions",
-    model: "google/gemini-2.0-flash-001",
+    model: "google/gemini-3.7-flash",
     keyEnv: "OPENROUTER_API_KEY",
     multimodal: true,
     headers: {
@@ -38,21 +38,21 @@ const PROVIDERS: Provider[] = [
   {
     name: "groq",
     url: "https://api.groq.com/openai/v1/chat/completions",
-    model: "llama-3.3-70b-versatile",
+    model: "openai/gpt-oss-120b",
     keyEnv: "GROQ_API_KEY",
     multimodal: false,
   },
   {
     name: "gemini",
     url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-    model: "gemini-2.0-flash",
+    model: "gemini-3.6-flash",
     keyEnv: "GOOGLE_API_KEY",
     multimodal: true,
   },
   {
     name: "cerebras",
     url: "https://api.cerebras.ai/v1/chat/completions",
-    model: "llama-3.3-70b",
+    model: "gpt-oss-120b",
     keyEnv: "OPENAI_API_KEY",
     multimodal: false,
   },
