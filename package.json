@@ -65,6 +65,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "emoji-picker-react": "^4.19.1",
+    "fflate": "^0.8.3",
     "input-otp": "^1.4.2",
     "livekit-client": "^2.19.2",
     "livekit-server-sdk": "^2.15.4",
