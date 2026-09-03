@@ -65,6 +65,16 @@ const PROVIDERS: Provider[] = [
   },
 ];
 
+/** Collapses OpenAI-style content parts into a plain string (text parts only). */
+function flattenContent(m: LlmMessage): LlmMessage {
+  if (typeof m.content === "string" || !Array.isArray(m.content)) return m;
+  const text = (m.content as Array<{ type?: string; text?: string }>)
+    .filter((p) => p?.type === "text" && typeof p.text === "string")
+    .map((p) => p.text as string)
+    .join("\n\n");
+  return { ...m, content: text };
+}
+
 export type LlmResult = { text: string; provider: string };
 
 export class LlmUnavailableError extends Error {
@@ -88,6 +98,8 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
 
   for (const p of PROVIDERS) {
     if (multimodal && !p.multimodal) continue;
+    // Text-only providers reject array content; flatten text parts to a string.
+    const payloadMessages = p.multimodal ? messages : messages.map(flattenContent);
     const key = process.env[p.keyEnv];
     if (!key) continue;
 
@@ -103,7 +115,7 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
           model: p.model,
           max_tokens: maxTokens,
           temperature,
-          messages,
+          messages: payloadMessages,
         }),
       });
 
