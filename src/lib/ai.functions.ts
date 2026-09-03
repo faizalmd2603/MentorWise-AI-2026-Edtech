@@ -70,10 +70,12 @@ const HUMANISER_SYSTEM = [
 
 type Part =
   | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string } }
-  | { type: "file"; file: { filename: string; file_data: string } };
+  | { type: "image_url"; image_url: { url: string } };
 
-function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]): string | Part[] {
+async function buildContent(
+  text: string,
+  attachments?: z.infer<typeof Attachment>[],
+): Promise<string | Part[]> {
   if (!attachments || attachments.length === 0) return text;
   const parts: Part[] = [];
   if (text.trim()) parts.push({ type: "text", text });
@@ -84,14 +86,13 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
       parts.push({ type: "image_url", image_url: { url: a.dataUrl } });
       continue;
     }
-    if (isPdf) {
-      parts.push({ type: "file", file: { filename: a.name, file_data: a.dataUrl } });
-      continue;
-    }
-    // Other documents: models only accept PDF inline, so extract text here.
+    // Documents (PDF included): providers reject inline `file` parts, so we
+    // extract the text server-side and pass it as plain text.
     const b64 = a.dataUrl.split(",")[1] ?? "";
     let body: string | null = null;
-    if (/^(text\/|application\/json)/.test(a.mime) || /\.(txt|csv|md|json)$/i.test(a.name)) {
+    if (isPdf) {
+      body = await extractPdfText(b64);
+    } else if (/^(text\/|application\/json)/.test(a.mime) || /\.(txt|csv|md|json)$/i.test(a.name)) {
       try { body = Buffer.from(b64, "base64").toString("utf8"); } catch { body = null; }
     } else {
       body = extractOfficeText(a.mime, a.name, b64);
@@ -100,11 +101,12 @@ function buildContent(text: string, attachments?: z.infer<typeof Attachment>[]):
       type: "text",
       text: body
         ? `Contents of the attached file "${a.name}":\n\n${body.slice(0, 60000)}`
-        : `The user attached "${a.name}" (${a.mime}) but its text could not be read. Ask them to paste the text or upload a PDF.`,
+        : `The user attached "${a.name}" (${a.mime}) but no text could be read from it (it may be a scanned image-only file). Ask them to paste the text or upload a clearer copy.`,
     });
   }
   return parts;
 }
+
 
 
 /** Decides whether a live Google search is needed and what to search for. */
