@@ -55,3 +55,18 @@ function decode(s: string) {
     .replace(/&apos;/g, "'")
     .replace(/&amp;/g, "&");
 }
+
+/** Extract plain text from a PDF (server-only, pure JS — Worker safe). */
+export async function extractPdfText(base64: string): Promise<string | null> {
+  try {
+    const { extractText, getDocumentProxy } = await import("unpdf");
+    const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    const doc = await getDocumentProxy(bytes);
+    const { text } = await extractText(doc, { mergePages: true });
+    const out = (Array.isArray(text) ? text.join("\n") : text ?? "").replace(/\n{3,}/g, "\n\n").trim();
+    return out.length > 20 ? out : null;
+  } catch (err) {
+    console.error("[docs] pdf extraction failed", err);
+    return null;
+  }
+}
