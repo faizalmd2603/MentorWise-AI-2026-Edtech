@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SearchSource } from "./search.server";
-import { llmChat } from "./llm.server";
+import { llmChat, LlmUnavailableError } from "./llm.server";
 import { extractOfficeText } from "./docs.server";
 
 import { AGENTS } from "./agents";
@@ -202,9 +202,12 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       reply = out.text;
     } catch (err) {
       console.error("All AI providers failed", err);
+      const isQuota =
+        err instanceof LlmUnavailableError ? err.isQuotaExhausted : true;
       return {
-        reply:
-          "All AI providers are busy or out of quota right now. Please try again in a moment — the MentorWise AI team has been notified.",
+        reply: isQuota
+          ? "Our AI quota is temporarily exhausted, so I can't generate a reply right now. This is a billing limit on our side — not a problem with your message or attachment. Please try again later, and the MentorWise AI team has been notified."
+          : "Our AI providers are temporarily busy. Please try again in a moment — your message was received, just not answered yet.",
         sources: [],
         searchQuery: null,
       };

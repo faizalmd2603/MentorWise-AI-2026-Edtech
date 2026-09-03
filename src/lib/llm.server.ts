@@ -68,9 +68,13 @@ const PROVIDERS: Provider[] = [
 export type LlmResult = { text: string; provider: string };
 
 export class LlmUnavailableError extends Error {
-  constructor(public readonly lastStatus: number | null) {
+  constructor(public readonly statuses: number[]) {
     super("All AI providers are unavailable.");
     this.name = "LlmUnavailableError";
+  }
+  /** True when every failure was auth/credit/quota — a billing problem, not transient load. */
+  get isQuotaExhausted(): boolean {
+    return this.statuses.length > 0 && this.statuses.every((s) => [401, 402, 403].includes(s));
   }
 }
 
@@ -80,7 +84,7 @@ export class LlmUnavailableError extends Error {
  */
 export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Promise<LlmResult> {
   const { maxTokens = 1600, temperature = 0.7, multimodal = false } = opts;
-  let lastStatus: number | null = null;
+  const statuses: number[] = [];
 
   for (const p of PROVIDERS) {
     if (multimodal && !p.multimodal) continue;
@@ -104,7 +108,7 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
       });
 
       if (!res.ok) {
-        lastStatus = res.status;
+        statuses.push(res.status);
         const body = await res.text();
         console.error(`[llm] ${p.name} failed`, res.status, body.slice(0, 400));
         continue;
@@ -125,5 +129,5 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
     }
   }
 
-  throw new LlmUnavailableError(lastStatus);
+  throw new LlmUnavailableError(statuses);
 }
