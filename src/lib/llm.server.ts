@@ -68,9 +68,13 @@ const PROVIDERS: Provider[] = [
 export type LlmResult = { text: string; provider: string };
 
 export class LlmUnavailableError extends Error {
-  constructor(public readonly lastStatus: number | null) {
+  constructor(public readonly statuses: number[]) {
     super("All AI providers are unavailable.");
     this.name = "LlmUnavailableError";
+  }
+  /** True when every failure was auth/credit/quota — a billing problem, not transient load. */
+  get isQuotaExhausted(): boolean {
+    return this.statuses.length > 0 && this.statuses.every((s) => [401, 402, 403].includes(s));
   }
 }
 
