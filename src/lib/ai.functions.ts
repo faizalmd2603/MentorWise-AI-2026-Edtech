@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SearchSource } from "./search.server";
 import { llmChat, LlmUnavailableError } from "./llm.server";
-import { extractOfficeText } from "./docs.server";
+import { extractOfficeText, extractPdfText } from "./docs.server";
 
 import { AGENTS } from "./agents";
 
@@ -180,20 +180,24 @@ export const chatWithAgent = createServerFn({ method: "POST" })
 
     const hasAttachments = data.messages.some((m) =>
       (m.attachments ?? []).some(
-        (a) => a.kind === "image" || a.mime.startsWith("image/") || a.mime === "application/pdf",
+        (a) => a.kind === "image" || a.mime.startsWith("image/"),
       ),
     );
 
+
+    const builtMessages = await Promise.all(
+      data.messages.map(async (m) => ({
+        role: m.role,
+        content: await buildContent(m.content, m.attachments),
+      })),
+    );
 
     let reply = "";
     try {
       const out = await llmChat(
         [
           { role: "system", content: systemPrompt },
-          ...data.messages.map((m) => ({
-            role: m.role,
-            content: buildContent(m.content, m.attachments),
-          })),
+          ...builtMessages,
         ],
         {
           maxTokens: isHumaniser ? 2200 : 1600,
