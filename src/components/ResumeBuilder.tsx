@@ -146,49 +146,74 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
     // Build a compact snapshot so we stay well under the 8000-char limit
     // enforced by the chat server function input validator. Photos (large
     // data URLs) are stripped because they would also blow past the cap.
-    const d: any = data;
+    const d = data;
     const snapshot = {
       step,
+      fullName: d.fullName,
       headline: d.headline,
-      summary: (d.summary || "").slice(0, 400),
+      summary: d.summary.slice(0, 800),
       contact: {
         email: d.email,
         phone: d.phone,
         location: d.location,
         linkedin: d.linkedin,
-        portfolio: d.portfolio,
+        website: d.website,
+        links: d.links
+          .filter((l) => l.label.trim() || l.url.trim())
+          .slice(0, 5)
+          .map((l) => ({ label: l.label, url: l.url })),
       },
-      education: (d.education || []).slice(0, 4).map((e: any) => ({
-        school: e.school,
-        degree: e.degree,
-        year: e.year,
-      })),
-      experience: (d.experience || []).slice(0, 4).map((x: any) => ({
-        role: x.role,
-        company: x.company,
-        period: x.period,
-        bullets: (x.bullets || []).slice(0, 3),
-      })),
-      projects: (d.projects || []).slice(0, 4).map((p: any) => ({
-        name: p.name,
-        tech: p.tech,
-        summary: (p.summary || "").slice(0, 200),
-      })),
-      skills: (d.skills || []).slice(0, 25),
+      education: d.education
+        .filter((e) => e.school.trim() || e.degree.trim())
+        .slice(0, 6)
+        .map((e) => ({
+          school: e.school,
+          degree: e.degree,
+          year: e.year,
+          score: e.score,
+        })),
+      experience: d.experience
+        .filter((x) => x.role.trim() || x.company.trim())
+        .slice(0, 6)
+        .map((x) => ({
+          role: x.role,
+          company: x.company,
+          period: x.period,
+          bullets: x.bullets.slice(0, 900),
+        })),
+      projects: d.projects
+        .filter((p) => p.name.trim())
+        .slice(0, 6)
+        .map((p) => ({
+          name: p.name,
+          tech: p.tech,
+          link: p.link,
+          bullets: p.bullets.slice(0, 600),
+        })),
+      certifications: d.certifications
+        .filter((c) => c.name.trim())
+        .slice(0, 6)
+        .map((c) => ({ name: c.name, issuer: c.issuer, year: c.year })),
+      skills: d.skills.slice(0, 800),
+      achievements: d.achievements.slice(0, 500),
     };
     let ctx = `You are the side assistant inside the ATS Resume Builder. Current step: ${step}. Resume snapshot (JSON): ${JSON.stringify(
       snapshot,
-    )}. User asks: ${text}. Reply with concise, ATS-friendly, recruiter-grade guidance. If they ask you to write content, give them the exact text to paste.`;
+    )}. User asks: ${text}. Reply with concise, ATS-friendly, recruiter-grade guidance based on the ACTUAL resume data in the snapshot. If they ask you to write content, give them the exact text to paste.`;
     if (ctx.length > 7500) ctx = ctx.slice(0, 7500);
     const next = [...aiMsgs, { role: "user" as const, content: text }];
     setAiMsgs(next);
     setAiInput("");
     setAiLoading(true);
     try {
+      const history = next.slice(-6).map((m) => ({
+        role: m.role,
+        content: m.content.slice(0, 1000),
+      }));
       const res = await chat({
         data: {
           agentId: "resume",
-          messages: [{ role: "user" as const, content: ctx }],
+          messages: [...history.slice(0, -1), { role: "user" as const, content: ctx }],
         },
       });
       setAiMsgs((m) => [...m, { role: "assistant", content: res.reply }]);
