@@ -35,6 +35,10 @@ import { Route as ApiVellumupRouteImport } from './routes/api/vellumup'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CompareIndexRouteImport } from './routes/compare.index'
+import { Route as CompareInternshalaVsMentorwiseAiRouteImport } from './routes/compare.internshala-vs-mentorwise-ai'
+import { Route as ComparePrepinstaAlternativesRouteImport } from './routes/compare.prepinsta-alternatives'
+import { Route as CompareUnstopAlternativesRouteImport } from './routes/compare.unstop-alternatives'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
@@ -176,6 +180,29 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareIndexRoute = CompareIndexRouteImport.update({
+  id: '/compare/',
+  path: '/compare/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareInternshalaVsMentorwiseAiRoute =
+  CompareInternshalaVsMentorwiseAiRouteImport.update({
+    id: '/compare/internshala-vs-mentorwise-ai',
+    path: '/compare/internshala-vs-mentorwise-ai',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ComparePrepinstaAlternativesRoute =
+  ComparePrepinstaAlternativesRouteImport.update({
+    id: '/compare/prepinsta-alternatives',
+    path: '/compare/prepinsta-alternatives',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CompareUnstopAlternativesRoute =
+  CompareUnstopAlternativesRouteImport.update({
+    id: '/compare/unstop-alternatives',
+    path: '/compare/unstop-alternatives',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
@@ -244,11 +271,15 @@ export interface FileRoutesByFullPath {
   '/api/vellumup': typeof ApiVellumupRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/compare/internshala-vs-mentorwise-ai': typeof CompareInternshalaVsMentorwiseAiRoute
+  '/compare/prepinsta-alternatives': typeof ComparePrepinstaAlternativesRoute
+  '/compare/unstop-alternatives': typeof CompareUnstopAlternativesRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/compare/': typeof CompareIndexRoute
   '/events/': typeof EventsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -280,11 +311,15 @@ export interface FileRoutesByTo {
   '/api/vellumup': typeof ApiVellumupRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/compare/internshala-vs-mentorwise-ai': typeof CompareInternshalaVsMentorwiseAiRoute
+  '/compare/prepinsta-alternatives': typeof ComparePrepinstaAlternativesRoute
+  '/compare/unstop-alternatives': typeof CompareUnstopAlternativesRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin': typeof AdminIndexRoute
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/compare': typeof CompareIndexRoute
   '/events': typeof EventsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -317,11 +352,15 @@ export interface FileRoutesById {
   '/api/vellumup': typeof ApiVellumupRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/compare/internshala-vs-mentorwise-ai': typeof CompareInternshalaVsMentorwiseAiRoute
+  '/compare/prepinsta-alternatives': typeof ComparePrepinstaAlternativesRoute
+  '/compare/unstop-alternatives': typeof CompareUnstopAlternativesRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/compare/': typeof CompareIndexRoute
   '/events/': typeof EventsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -355,11 +394,15 @@ export interface FileRouteTypes {
     | '/api/vellumup'
     | '/auth/confirm'
     | '/blog/$slug'
+    | '/compare/internshala-vs-mentorwise-ai'
+    | '/compare/prepinsta-alternatives'
+    | '/compare/unstop-alternatives'
     | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/admin/'
     | '/agents/'
     | '/blog/'
+    | '/compare/'
     | '/events/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -391,11 +434,15 @@ export interface FileRouteTypes {
     | '/api/vellumup'
     | '/auth/confirm'
     | '/blog/$slug'
+    | '/compare/internshala-vs-mentorwise-ai'
+    | '/compare/prepinsta-alternatives'
+    | '/compare/unstop-alternatives'
     | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/admin'
     | '/agents'
     | '/blog'
+    | '/compare'
     | '/events'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -427,11 +474,15 @@ export interface FileRouteTypes {
     | '/api/vellumup'
     | '/auth/confirm'
     | '/blog/$slug'
+    | '/compare/internshala-vs-mentorwise-ai'
+    | '/compare/prepinsta-alternatives'
+    | '/compare/unstop-alternatives'
     | '/events/$eventId'
     | '/resources/job-search-sites'
     | '/admin/'
     | '/agents/'
     | '/blog/'
+    | '/compare/'
     | '/events/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -463,11 +514,15 @@ export interface RootRouteChildren {
   AgentsAgentIdRoute: typeof AgentsAgentIdRoute
   ApiVellumupRoute: typeof ApiVellumupRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CompareInternshalaVsMentorwiseAiRoute: typeof CompareInternshalaVsMentorwiseAiRoute
+  ComparePrepinstaAlternativesRoute: typeof ComparePrepinstaAlternativesRoute
+  CompareUnstopAlternativesRoute: typeof CompareUnstopAlternativesRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  CompareIndexRoute: typeof CompareIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -660,6 +715,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare/': {
+      id: '/compare/'
+      path: '/compare'
+      fullPath: '/compare/'
+      preLoaderRoute: typeof CompareIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/internshala-vs-mentorwise-ai': {
+      id: '/compare/internshala-vs-mentorwise-ai'
+      path: '/compare/internshala-vs-mentorwise-ai'
+      fullPath: '/compare/internshala-vs-mentorwise-ai'
+      preLoaderRoute: typeof CompareInternshalaVsMentorwiseAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/prepinsta-alternatives': {
+      id: '/compare/prepinsta-alternatives'
+      path: '/compare/prepinsta-alternatives'
+      fullPath: '/compare/prepinsta-alternatives'
+      preLoaderRoute: typeof ComparePrepinstaAlternativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/unstop-alternatives': {
+      id: '/compare/unstop-alternatives'
+      path: '/compare/unstop-alternatives'
+      fullPath: '/compare/unstop-alternatives'
+      preLoaderRoute: typeof CompareUnstopAlternativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/events/': {
       id: '/events/'
       path: '/events'
@@ -753,11 +836,15 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsAgentIdRoute: AgentsAgentIdRoute,
   ApiVellumupRoute: ApiVellumupRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CompareInternshalaVsMentorwiseAiRoute: CompareInternshalaVsMentorwiseAiRoute,
+  ComparePrepinstaAlternativesRoute: ComparePrepinstaAlternativesRoute,
+  CompareUnstopAlternativesRoute: CompareUnstopAlternativesRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AdminIndexRoute: AdminIndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  CompareIndexRoute: CompareIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
