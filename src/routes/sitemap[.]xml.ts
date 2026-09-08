@@ -36,6 +36,25 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/resources/job-search-sites", changefreq: "monthly", priority: "0.7" },
           { path: "/blog", changefreq: "weekly", priority: "0.8" },
           { path: "/hall-of-fame", changefreq: "monthly", priority: "0.85" },
+          { path: "/compare", changefreq: "weekly", priority: "0.85", lastmod: "2026-09-07" },
+          {
+            path: "/compare/unstop-alternatives",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-07",
+          },
+          {
+            path: "/compare/internshala-vs-mentorwise-ai",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-07",
+          },
+          {
+            path: "/compare/prepinsta-alternatives",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-07",
+          },
 
           ...AGENTS.map((a) => ({
             path: `/agents/${a.id}`,
