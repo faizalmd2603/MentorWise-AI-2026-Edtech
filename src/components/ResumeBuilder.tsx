@@ -197,13 +197,20 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
       skills: d.skills.slice(0, 800),
       achievements: d.achievements.slice(0, 500),
     };
-    // Truncate the resume JSON first so the user's question and the
-    // guidance instructions always survive the 8000-char input cap.
-    let json = JSON.stringify(snapshot);
-    if (json.length > 5500) json = `${json.slice(0, 5500)}…(truncated)`;
-    const ctx =
-      `User asks: ${text}. You are the side assistant inside the ATS Resume Builder. Current step: ${step}. Resume snapshot (JSON): ${json}. ` +
+    // Cap the whole prompt under the 8000-char input cap enforced by the
+    // chat server function: the question is trimmed to 3000 chars and the
+    // resume snapshot absorbs any remaining overflow, so long pastes never
+    // get rejected with a generic "AI is unreachable" error.
+    const question =
+      text.length > 3000 ? `${text.slice(0, 3000)}…(question truncated)` : text;
+    const instructions =
+      `. You are the side assistant inside the ATS Resume Builder. Current step: ${step}. ` +
       `Reply with concise, ATS-friendly, recruiter-grade guidance based on the ACTUAL resume data in the snapshot. If they ask you to write content, give them the exact text to paste.`;
+    let json = JSON.stringify(snapshot);
+    const prefix = `User asks: ${question}${instructions} Resume snapshot (JSON): `;
+    const maxJson = Math.max(200, 7800 - prefix.length);
+    if (json.length > maxJson) json = `${json.slice(0, maxJson)}…(truncated)`;
+    const ctx = `${prefix}${json}.`;
     const next = [...aiMsgs, { role: "user" as const, content: text }];
     setAiMsgs(next);
     setAiInput("");
