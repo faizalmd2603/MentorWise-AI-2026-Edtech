@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as FoundersRouteImport } from './routes/founders'
 import { Route as HallOfFameRouteImport } from './routes/hall-of-fame'
@@ -41,6 +42,11 @@ import { Route as ComparePrepinstaAlternativesRouteImport } from './routes/compa
 import { Route as CompareUnstopAlternativesRouteImport } from './routes/compare.unstop-alternatives'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
+import { Route as FreeIndexRouteImport } from './routes/free.index'
+import { Route as FreeInternshipsForStudentsRouteImport } from './routes/free.internships-for-students'
+import { Route as FreeMockInterviewPracticeRouteImport } from './routes/free.mock-interview-practice'
+import { Route as FreeOnlineCoursesWithCertificatesRouteImport } from './routes/free.online-courses-with-certificates'
+import { Route as FreeResumeBuilderRouteImport } from './routes/free.resume-builder'
 import { Route as ResourcesJobSearchSitesRouteImport } from './routes/resources.job-search-sites'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
@@ -71,6 +77,11 @@ const AuthRoute = AuthRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeedRoute = FeedRouteImport.update({
@@ -213,6 +224,34 @@ const EventsEventIdRoute = EventsEventIdRouteImport.update({
   path: '/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeIndexRoute = FreeIndexRouteImport.update({
+  id: '/free/',
+  path: '/free/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreeInternshipsForStudentsRoute =
+  FreeInternshipsForStudentsRouteImport.update({
+    id: '/free/internships-for-students',
+    path: '/free/internships-for-students',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FreeMockInterviewPracticeRoute =
+  FreeMockInterviewPracticeRouteImport.update({
+    id: '/free/mock-interview-practice',
+    path: '/free/mock-interview-practice',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FreeOnlineCoursesWithCertificatesRoute =
+  FreeOnlineCoursesWithCertificatesRouteImport.update({
+    id: '/free/online-courses-with-certificates',
+    path: '/free/online-courses-with-certificates',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FreeResumeBuilderRoute = FreeResumeBuilderRouteImport.update({
+  id: '/free/resume-builder',
+  path: '/free/resume-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesJobSearchSitesRoute = ResourcesJobSearchSitesRouteImport.update({
   id: '/resources/job-search-sites',
   path: '/resources/job-search-sites',
@@ -253,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
   '/hall-of-fame': typeof HallOfFameRoute
@@ -275,12 +315,17 @@ export interface FileRoutesByFullPath {
   '/compare/prepinsta-alternatives': typeof ComparePrepinstaAlternativesRoute
   '/compare/unstop-alternatives': typeof CompareUnstopAlternativesRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/free/internships-for-students': typeof FreeInternshipsForStudentsRoute
+  '/free/mock-interview-practice': typeof FreeMockInterviewPracticeRoute
+  '/free/online-courses-with-certificates': typeof FreeOnlineCoursesWithCertificatesRoute
+  '/free/resume-builder': typeof FreeResumeBuilderRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/free/': typeof FreeIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -293,6 +338,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
   '/hall-of-fame': typeof HallOfFameRoute
@@ -315,12 +361,17 @@ export interface FileRoutesByTo {
   '/compare/prepinsta-alternatives': typeof ComparePrepinstaAlternativesRoute
   '/compare/unstop-alternatives': typeof CompareUnstopAlternativesRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/free/internships-for-students': typeof FreeInternshipsForStudentsRoute
+  '/free/mock-interview-practice': typeof FreeMockInterviewPracticeRoute
+  '/free/online-courses-with-certificates': typeof FreeOnlineCoursesWithCertificatesRoute
+  '/free/resume-builder': typeof FreeResumeBuilderRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin': typeof AdminIndexRoute
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
   '/compare': typeof CompareIndexRoute
   '/events': typeof EventsIndexRoute
+  '/free': typeof FreeIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -334,6 +385,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/feed': typeof FeedRoute
   '/founders': typeof FoundersRoute
   '/hall-of-fame': typeof HallOfFameRoute
@@ -356,12 +408,17 @@ export interface FileRoutesById {
   '/compare/prepinsta-alternatives': typeof ComparePrepinstaAlternativesRoute
   '/compare/unstop-alternatives': typeof CompareUnstopAlternativesRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/free/internships-for-students': typeof FreeInternshipsForStudentsRoute
+  '/free/mock-interview-practice': typeof FreeMockInterviewPracticeRoute
+  '/free/online-courses-with-certificates': typeof FreeOnlineCoursesWithCertificatesRoute
+  '/free/resume-builder': typeof FreeResumeBuilderRoute
   '/resources/job-search-sites': typeof ResourcesJobSearchSitesRoute
   '/admin/': typeof AdminIndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/free/': typeof FreeIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/elevenlabs/mentor-token': typeof ApiElevenlabsMentorTokenRoute
@@ -376,6 +433,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/contact'
+    | '/faq'
     | '/feed'
     | '/founders'
     | '/hall-of-fame'
@@ -398,12 +456,17 @@ export interface FileRouteTypes {
     | '/compare/prepinsta-alternatives'
     | '/compare/unstop-alternatives'
     | '/events/$eventId'
+    | '/free/internships-for-students'
+    | '/free/mock-interview-practice'
+    | '/free/online-courses-with-certificates'
+    | '/free/resume-builder'
     | '/resources/job-search-sites'
     | '/admin/'
     | '/agents/'
     | '/blog/'
     | '/compare/'
     | '/events/'
+    | '/free/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
@@ -416,6 +479,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/contact'
+    | '/faq'
     | '/feed'
     | '/founders'
     | '/hall-of-fame'
@@ -438,12 +502,17 @@ export interface FileRouteTypes {
     | '/compare/prepinsta-alternatives'
     | '/compare/unstop-alternatives'
     | '/events/$eventId'
+    | '/free/internships-for-students'
+    | '/free/mock-interview-practice'
+    | '/free/online-courses-with-certificates'
+    | '/free/resume-builder'
     | '/resources/job-search-sites'
     | '/admin'
     | '/agents'
     | '/blog'
     | '/compare'
     | '/events'
+    | '/free'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
@@ -456,6 +525,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/contact'
+    | '/faq'
     | '/feed'
     | '/founders'
     | '/hall-of-fame'
@@ -478,12 +548,17 @@ export interface FileRouteTypes {
     | '/compare/prepinsta-alternatives'
     | '/compare/unstop-alternatives'
     | '/events/$eventId'
+    | '/free/internships-for-students'
+    | '/free/mock-interview-practice'
+    | '/free/online-courses-with-certificates'
+    | '/free/resume-builder'
     | '/resources/job-search-sites'
     | '/admin/'
     | '/agents/'
     | '/blog/'
     | '/compare/'
     | '/events/'
+    | '/free/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/elevenlabs/mentor-token'
@@ -497,6 +572,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRouteWithChildren
   ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
   FeedRoute: typeof FeedRoute
   FoundersRoute: typeof FoundersRoute
   HallOfFameRoute: typeof HallOfFameRoute
@@ -518,12 +594,17 @@ export interface RootRouteChildren {
   ComparePrepinstaAlternativesRoute: typeof ComparePrepinstaAlternativesRoute
   CompareUnstopAlternativesRoute: typeof CompareUnstopAlternativesRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
+  FreeInternshipsForStudentsRoute: typeof FreeInternshipsForStudentsRoute
+  FreeMockInterviewPracticeRoute: typeof FreeMockInterviewPracticeRoute
+  FreeOnlineCoursesWithCertificatesRoute: typeof FreeOnlineCoursesWithCertificatesRoute
+  FreeResumeBuilderRoute: typeof FreeResumeBuilderRoute
   ResourcesJobSearchSitesRoute: typeof ResourcesJobSearchSitesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CompareIndexRoute: typeof CompareIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  FreeIndexRoute: typeof FreeIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiElevenlabsMentorTokenRoute: typeof ApiElevenlabsMentorTokenRoute
@@ -566,6 +647,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/feed': {
@@ -757,6 +845,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/free/': {
+      id: '/free/'
+      path: '/free'
+      fullPath: '/free/'
+      preLoaderRoute: typeof FreeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free/internships-for-students': {
+      id: '/free/internships-for-students'
+      path: '/free/internships-for-students'
+      fullPath: '/free/internships-for-students'
+      preLoaderRoute: typeof FreeInternshipsForStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free/mock-interview-practice': {
+      id: '/free/mock-interview-practice'
+      path: '/free/mock-interview-practice'
+      fullPath: '/free/mock-interview-practice'
+      preLoaderRoute: typeof FreeMockInterviewPracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free/online-courses-with-certificates': {
+      id: '/free/online-courses-with-certificates'
+      path: '/free/online-courses-with-certificates'
+      fullPath: '/free/online-courses-with-certificates'
+      preLoaderRoute: typeof FreeOnlineCoursesWithCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free/resume-builder': {
+      id: '/free/resume-builder'
+      path: '/free/resume-builder'
+      fullPath: '/free/resume-builder'
+      preLoaderRoute: typeof FreeResumeBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resources/job-search-sites': {
       id: '/resources/job-search-sites'
       path: '/resources/job-search-sites'
@@ -818,6 +941,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AuthRoute: AuthRouteWithChildren,
   ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
   FeedRoute: FeedRoute,
   FoundersRoute: FoundersRoute,
   HallOfFameRoute: HallOfFameRoute,
@@ -840,12 +964,18 @@ const rootRouteChildren: RootRouteChildren = {
   ComparePrepinstaAlternativesRoute: ComparePrepinstaAlternativesRoute,
   CompareUnstopAlternativesRoute: CompareUnstopAlternativesRoute,
   EventsEventIdRoute: EventsEventIdRoute,
+  FreeInternshipsForStudentsRoute: FreeInternshipsForStudentsRoute,
+  FreeMockInterviewPracticeRoute: FreeMockInterviewPracticeRoute,
+  FreeOnlineCoursesWithCertificatesRoute:
+    FreeOnlineCoursesWithCertificatesRoute,
+  FreeResumeBuilderRoute: FreeResumeBuilderRoute,
   ResourcesJobSearchSitesRoute: ResourcesJobSearchSitesRoute,
   AdminIndexRoute: AdminIndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   CompareIndexRoute: CompareIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  FreeIndexRoute: FreeIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiElevenlabsMentorTokenRoute: ApiElevenlabsMentorTokenRoute,
