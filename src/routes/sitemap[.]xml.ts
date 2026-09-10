@@ -55,6 +55,32 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.9",
             lastmod: "2026-09-07",
           },
+          { path: "/faq", changefreq: "monthly", priority: "0.85", lastmod: "2026-09-09" },
+          { path: "/free", changefreq: "weekly", priority: "0.85", lastmod: "2026-09-09" },
+          {
+            path: "/free/resume-builder",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-09",
+          },
+          {
+            path: "/free/mock-interview-practice",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-09",
+          },
+          {
+            path: "/free/internships-for-students",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-09",
+          },
+          {
+            path: "/free/online-courses-with-certificates",
+            changefreq: "weekly",
+            priority: "0.9",
+            lastmod: "2026-09-09",
+          },
 
           ...AGENTS.map((a) => ({
             path: `/agents/${a.id}`,

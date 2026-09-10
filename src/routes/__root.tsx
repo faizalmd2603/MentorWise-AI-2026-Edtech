@@ -198,6 +198,41 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "@id": "https://mentorwiseaiedtechservice.lovable.app/#app",
+          name: "MentorWise AI",
+          applicationCategory: "EducationalApplication",
+          applicationSubCategory: "Career and job search",
+          operatingSystem: "Web browser (Android, iOS, Windows, macOS)",
+          url: "https://mentorwiseaiedtechservice.lovable.app/",
+          publisher: { "@id": "https://mentorwiseaiedtechservice.lovable.app/#organization" },
+          inLanguage: "en",
+          isAccessibleForFree: true,
+          description:
+            "Free AI career app for college students and freshers: resume builder, mock interview practice, internship search, free course curation and LinkedIn help. Free forever, no paid tier.",
+          featureList: [
+            "Free resume builder with ATS optimisation",
+            "Free mock interview practice with STAR feedback",
+            "Free internship and LOR programme search",
+            "Free online course curation with certificates",
+            "LinkedIn profile and personal branding help",
+            "AI text humaniser",
+            "Exam notes and study help",
+            "1-on-1 mentoring",
+          ],
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "INR",
+            availability: "https://schema.org/InStock",
+            category: "Free",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "FAQPage",
           mainEntity: [
             {
