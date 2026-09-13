@@ -117,33 +117,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           console.error("[sitemap] articles fetch failed", err);
         }
 
-        // Add live event detail pages from the database.
-        // Admin routes (/admin, /admin/users, /admin/reports, /admin/announcements)
-        // are intentionally excluded — they carry robots noindex and require auth.
-        try {
-          const url = process.env.SUPABASE_URL;
-          const key = process.env.SUPABASE_PUBLISHABLE_KEY;
-          if (url && key) {
-            const sb = createClient<Database>(url, key, {
-              auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-            });
-            const { data } = await sb
-              .from("live_events")
-              .select("id,updated_at")
-              .order("updated_at", { ascending: false })
-              .limit(500);
-            for (const row of data ?? []) {
-              entries.push({
-                path: `/events/${row.id}`,
-                changefreq: "daily",
-                priority: "0.8",
-                lastmod: row.updated_at ? row.updated_at.slice(0, 10) : undefined,
-              });
-            }
-          }
-        } catch (err) {
-          console.error("[sitemap] events fetch failed", err);
-        }
+        // Auth-only routes are intentionally excluded from the sitemap:
+        // /admin, /admin/users, /admin/reports, /admin/announcements and
+        // /events/$eventId all require sign-in and carry robots noindex.
 
         const urls = entries.map((e) =>
           [
