@@ -8,7 +8,7 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About the Builders & Core Vision | MentorWise AI" },
-      { name: "description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z, building an ethical, corporate-social-responsibility driven tech infrastructure out of Chennai to democratize employment access." },
+      { name: "description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — Chennai students building free AI career tools for students worldwide." },
       { property: "og:title", content: "About the Builders & Core Vision | MentorWise AI" },
       { property: "og:description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — building MentorWise AI from Chennai to democratize employment access." },
       { property: "og:url", content: `${SITE}/about` },

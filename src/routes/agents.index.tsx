@@ -17,6 +17,25 @@ export const Route = createFileRoute("/agents/")({
       { property: "og:url", content: `${SITE}/agents` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/agents` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": `${SITE}/agents`,
+          url: `${SITE}/agents`,
+          name: "Free AI Tools for Students — 12 in One App",
+          description: "The MentorWise AI Studio: 12 free AI agents for resume, interview, LinkedIn, internships, courses, study help and more.",
+          hasPart: AGENTS.map((a) => ({
+            "@type": "WebPage",
+            "@id": `${SITE}/agents/${a.id}`,
+            url: `${SITE}/agents/${a.id}`,
+            name: a.name,
+          })),
+        }),
+      },
+    ],
   }),
   component: AgentsIndex,
 });

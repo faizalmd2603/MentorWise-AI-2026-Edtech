@@ -34,10 +34,10 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "MentorWise AI — Free AI Career App for Students" },
-      { name: "description", content: "Free AI career help for students. Build a resume, practice mock interviews, find free internships, learn from free online courses and get LinkedIn help — all free, in one app." },
+      { name: "description", content: "Free AI career help for students — resume builder, mock interviews, free internships, free courses and LinkedIn help, all in one free app." },
       { name: "keywords", content: "free resume builder, free mock interview, free internships for students, free online courses with certificate, LinkedIn help, AI career app, college students, freshers, MentorWise AI" },
       { property: "og:title", content: "MentorWise AI — Free AI Career App for Students" },
-      { property: "og:description", content: "Free AI career help for students. Build a resume, practice mock interviews, find free internships, learn from free online courses and get LinkedIn help — all free, in one app." },
+      { property: "og:description", content: "Free AI career help for students — resume builder, mock interviews, free internships, free courses and LinkedIn help, all in one free app." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: `${SITE}/` },

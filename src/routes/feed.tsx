@@ -28,6 +28,20 @@ export const Route = createFileRoute("/feed")({
       { property: "og:url", content: `${SITE}/feed` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/feed` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": `${SITE}/feed`,
+          url: `${SITE}/feed`,
+          name: "MentorWise AI — Founder Announcements & Posts",
+          description: "Official announcements, updates and posts from the MentorWise AI founding team.",
+          isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/` },
+        }),
+      },
+    ],
   }),
   component: FeedPage,
 });
