@@ -8,6 +8,14 @@ import { useAuthReady } from "@/hooks/use-auth-ready";
 import { Hand, Send, LogIn, ArrowLeft, Smile, Radio, Video, ExternalLink, Copy, Check } from "lucide-react";
 
 export const Route = createFileRoute("/events/$eventId")({
+  head: ({ params }) => ({
+    meta: [
+      { title: "Live Event — MentorWise AI" },
+      // Event rooms require sign-in; keep them out of search indexes.
+      { name: "robots", content: "noindex,nofollow" },
+      { property: "og:url", content: `https://mentorwiseaiedtechservice.lovable.app/events/${params.eventId}` },
+    ],
+  }),
   component: LiveEventRoom,
 });
 
