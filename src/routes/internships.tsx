@@ -14,6 +14,20 @@ export const Route = createFileRoute("/internships")({
       { property: "og:url", content: `${SITE}/internships` },
     ],
     links: [{ rel: "canonical", href: `${SITE}/internships` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": `${SITE}/internships`,
+          url: `${SITE}/internships`,
+          name: "Free Internships for Students & Freshers",
+          description: "Curated free internships, free certifications and free letters of recommendation for college students and freshers.",
+          isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/` },
+        }),
+      },
+    ],
   }),
   component: InternshipsPage,
 });

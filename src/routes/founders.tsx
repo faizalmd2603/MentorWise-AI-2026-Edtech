@@ -94,6 +94,23 @@ export const Route = createFileRoute("/founders")({
     links: [{ rel: "canonical", href: `${SITE}/founders` }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(FOUNDERS_JSONLD) },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          "@id": `${SITE}/founders`,
+          url: `${SITE}/founders`,
+          name: "MentorWise AI Elite Team — Core Team & Campus Leaders",
+          description: "Profiles of the MentorWise AI core team: Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, CCO Mohammed Aqhib. K and Executive Director Saadh Mohammed.",
+          about: [
+            { "@id": `${SITE}/founders#faizal` },
+            { "@id": `${SITE}/founders#saif` },
+            { "@id": `${SITE}/founders#aqhib` },
+            { "@id": `${SITE}/founders#saadh` },
+          ],
+        }),
+      },
     ],
   }),
   component: Founders,
