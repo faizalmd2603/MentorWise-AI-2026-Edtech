@@ -91,7 +91,7 @@ export function SiteHeader() {
             ) : (
               <Link
                 to="/account"
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_6px_16px_-6px_oklch(0.58_0.18_256_/_0.55)] transition hover:brightness-110 active:scale-[0.98] sm:px-5"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_8px_22px_-10px_color-mix(in_oklab,var(--color-primary)_75%,transparent)] transition hover:brightness-110 active:scale-[0.98] sm:px-5"
                 aria-label="Sign in or Sign up"
               >
                 <LogIn className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
@@ -111,7 +111,7 @@ export function SiteHeader() {
           </div>
         </div>
 
-        {/* Cream accent bar under nav */}
+        {/* Logo-gold accent bar under nav */}
         <div className="google-bar" />
 
 

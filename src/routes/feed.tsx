@@ -7,7 +7,8 @@ import { listAnnouncements } from "@/lib/announcements.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeAnnouncementHtml } from "@/lib/sanitize";
 import { useAuthReady } from "@/hooks/use-auth-ready";
-import { Megaphone, ShieldCheck, LogIn, Loader2 } from "lucide-react";
+import jaithoonPortrait from "@/assets/jaithoon-aasia-ms.jpeg.asset.json";
+import { Megaphone, ShieldCheck, LogIn, Loader2, Mic2, Sparkles } from "lucide-react";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -26,6 +27,8 @@ export const Route = createFileRoute("/feed")({
         content: "Official MentorWise AI announcements from the founders. Sign in to get every post by email.",
       },
       { property: "og:url", content: `${SITE}/feed` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: `${SITE}/feed` }],
     scripts: [
@@ -99,7 +102,7 @@ function FeedPage() {
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-20">
         <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-foreground/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground">
@@ -152,6 +155,40 @@ function FeedPage() {
           </div>
         </header>
 
+        <article className="contributor-spotlight group relative mb-12 overflow-hidden rounded-3xl border border-primary/35 bg-card">
+          <div aria-hidden="true" className="gold-rule absolute inset-x-0 top-0 h-px" />
+          <div className="grid md:grid-cols-[minmax(0,1fr)_20rem]">
+            <div className="relative flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+              <div className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-bold uppercase text-primary">
+                <Sparkles className="h-3.5 w-3.5" />
+                Community spotlight
+              </div>
+              <p className="text-xs font-semibold uppercase text-muted-foreground">Contributed to our platform</p>
+              <h2 className="mt-3 text-3xl font-bold text-foreground sm:text-4xl">Jaithoon Aasia MS</h2>
+              <blockquote className="mt-6 max-w-2xl border-l-2 border-primary pl-5 text-lg leading-relaxed text-foreground/85 sm:text-xl">
+                Collaborated with MentorWise AI and host a session on 'How to build your own startup when you're still a student'.
+              </blockquote>
+              <div className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                <Mic2 className="h-4 w-4" /> Student startup session
+              </div>
+            </div>
+
+            <div className="relative min-h-80 overflow-hidden border-t border-primary/20 md:border-l md:border-t-0">
+              <div aria-hidden="true" className="absolute inset-0 bg-primary/10 transition-opacity duration-500 group-hover:opacity-40" />
+              <img
+                src={jaithoonPortrait.url}
+                alt="Jaithoon Aasia MS"
+                width={768}
+                height={768}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+              />
+              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-primary/25 bg-background/85 px-4 py-3 backdrop-blur-md">
+                <p className="text-xs font-bold uppercase text-primary">MentorWise AI collaborator</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
         {isLoading ? (
           <div className="motion-card rounded-xl border border-border bg-card p-6 text-muted-foreground">
             <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading announcements…</span>
@@ -165,11 +202,19 @@ function FeedPage() {
             </p>
           </div>
         ) : (
-          <ol className="space-y-5">
+          <div className="grid gap-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
+            <aside className="hidden lg:block">
+              <div className="sticky top-28 border-t border-primary/40 pt-5">
+                <p className="text-xs font-bold uppercase text-primary">Latest from MentorWise</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Official news, milestones and updates from the founders.</p>
+              </div>
+            </aside>
+            <ol className="space-y-5">
             {data.announcements.map((a) => (
               <AnnouncementItem key={a.id} a={a} />
             ))}
-          </ol>
+            </ol>
+          </div>
         )}
       </section>
     </SiteLayout>
