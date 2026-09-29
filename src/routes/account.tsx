@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/SiteLayout";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuthReady } from "@/hooks/use-auth-ready";
 import { getMyProfile, updateMyProfile } from "@/lib/profile.functions";
 import {
@@ -93,11 +94,10 @@ function AuthPanel() {
   async function google() {
     setError(null);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: `${window.location.origin}/account` },
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
       });
-      if (error) throw error;
+      if (result.error) throw result.error;
     } catch (e: any) { setError(e?.message ?? "Google sign-in failed"); }
   }
 
