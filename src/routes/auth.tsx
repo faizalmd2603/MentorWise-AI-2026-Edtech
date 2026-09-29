@@ -166,7 +166,6 @@ function AuthPage() {
         data: { email: email.trim().toLowerCase(), otp: otp.trim() },
       });
       const { error: vErr } = await supabase.auth.verifyOtp({
-        email: res.email,
         token_hash: res.token_hash,
         type: "magiclink",
       });
