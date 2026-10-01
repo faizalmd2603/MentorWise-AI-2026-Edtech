@@ -7,7 +7,15 @@ import sameeraPhoto from "@/assets/testimonials/sameera-s.jpeg.asset.json";
 const AUTO_HOLD_SECONDS = 5;
 const MANUAL_HOLD_SECONDS = 15;
 
-const testimonials = [
+type Testimonial = {
+  name: string;
+  role: string;
+  organisation: string;
+  quote: string;
+  photo?: string;
+};
+
+const testimonials: Testimonial[] = [
   {
     name: "Mohamed Habibullah M",
     role: "MBA · HR Intern",
@@ -38,7 +46,7 @@ const testimonials = [
     quote:
       "MentorWise AI helped me explore technology, build real projects and showcase skills beyond academics. Building Questoria AI and winning the Full Stack challenge strengthened my confidence to experiment, learn and grow in AI development.",
   },
-] as const;
+];
 
 export function TestimonialCarousel() {
   const [active, setActive] = useState(0);
@@ -98,10 +106,6 @@ export function TestimonialCarousel() {
           className="mx-auto max-w-4xl"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          onFocusCapture={() => setPaused(true)}
-          onBlurCapture={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
-          }}
         >
           <article
             key={`${active}-${direction}`}
@@ -156,8 +160,10 @@ export function TestimonialCarousel() {
 
             <div className="flex items-center gap-2" aria-label={`Feedback ${active + 1} of ${testimonials.length}`}>
               {testimonials.map((item, index) => (
-                <button
+                <Button
                   key={item.name}
+                  variant="ghost"
+                  size="icon"
                   type="button"
                   onClick={() => {
                     setDirection(index > active ? "next" : "previous");
@@ -165,10 +171,12 @@ export function TestimonialCarousel() {
                     setHoldDuration(MANUAL_HOLD_SECONDS);
                     setRemaining(MANUAL_HOLD_SECONDS);
                   }}
-                  className={`h-2 rounded-full transition-all ${index === active ? "w-8 bg-primary" : "w-2 bg-muted-foreground/40 hover:bg-muted-foreground"}`}
+                  className={`h-8 min-w-8 p-0 hover:bg-transparent ${index === active ? "text-primary" : "text-muted-foreground"}`}
                   aria-label={`Read feedback from ${item.name}`}
                   aria-current={index === active ? "true" : undefined}
-                />
+                >
+                  <span className={`block h-2 rounded-full bg-current transition-all ${index === active ? "w-8" : "w-2"}`} />
+                </Button>
               ))}
             </div>
 

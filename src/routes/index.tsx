@@ -4,6 +4,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { Reveal } from "@/components/Reveal";
+import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import banner from "@/assets/mw-banner.png.asset.json";
 import { STOCK_AGENT_IMAGES } from "@/lib/stock-images";
 import {
@@ -65,6 +66,7 @@ function Home() {
       <LaunchBuffBadge />
       <ToolIndexBadge />
       <AgentBento />
+      <TestimonialCarousel />
       <NexoraShowcase />
       <Testimonial />
       <CTA />

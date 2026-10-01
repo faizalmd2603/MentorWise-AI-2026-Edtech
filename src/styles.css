@@ -299,6 +299,14 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+@keyframes testimonial-enter-right {
+  from { opacity: 0; transform: translateX(18%) scale(0.97); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes testimonial-enter-left {
+  from { opacity: 0; transform: translateX(-18%) scale(0.97); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
 @keyframes wiggle {
   0%, 100% { transform: rotate(-2deg); }
   50% { transform: rotate(2deg); }
@@ -317,6 +325,9 @@
 .animate-draw-line { stroke-dasharray: 400; animation: draw-line 1.2s .3s ease-out both; }
 .animate-marquee { animation: marquee 40s linear infinite; }
 .animate-wiggle { animation: wiggle 3s ease-in-out infinite; }
+.testimonial-enter-right { animation: testimonial-enter-right 1.15s cubic-bezier(.2,.8,.2,1) both; }
+.testimonial-enter-left { animation: testimonial-enter-left 1.15s cubic-bezier(.2,.8,.2,1) both; }
+.testimonial-card { box-shadow: 0 34px 90px -48px color-mix(in oklab, var(--color-primary) 65%, transparent); }
 
 .motion-card {
   position: relative;
