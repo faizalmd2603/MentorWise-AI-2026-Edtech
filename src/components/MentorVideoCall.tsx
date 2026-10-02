@@ -1,4 +1,4 @@
-import { useConversation } from "@elevenlabs/react";
+import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Mic, MicOff, PhoneOff, Video, Loader2, X } from "lucide-react";
 import avatarMeta from "@/assets/agents/mentor-avatar-3d.png.asset.json";
@@ -9,6 +9,14 @@ const MAX_SECONDS = 20 * 60; // 20-minute hard cap
 type Props = { open: boolean; onClose: () => void };
 
 export function MentorVideoCall({ open, onClose }: Props) {
+  return (
+    <ConversationProvider>
+      <MentorVideoCallContent open={open} onClose={onClose} />
+    </ConversationProvider>
+  );
+}
+
+function MentorVideoCallContent({ open, onClose }: Props) {
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [muted, setMuted] = useState(false);

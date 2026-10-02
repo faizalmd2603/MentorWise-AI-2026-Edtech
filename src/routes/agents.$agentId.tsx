@@ -812,7 +812,7 @@ function AgentChat() {
           </div>
         </div>
       )}
-      {agent.id === "mentor" && (
+      {agent.id === "mentor" && callOpen && (
         <MentorVideoCall open={callOpen} onClose={() => setCallOpen(false)} />
       )}
       {agent.id === "resume" && (
