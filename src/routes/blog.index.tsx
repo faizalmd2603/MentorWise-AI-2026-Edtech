@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter, type ErrorRouteComponent } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { BookOpen, Clock, ArrowRight } from "lucide-react";
 import {
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/blog/")({
     ],
     links: [{ rel: "canonical", href: `${SITE}/blog` }],
   }),
-  errorComponent: BlogError,
+  errorComponent: BlogError as ErrorRouteComponent,
   notFoundComponent: () => <SiteLayout><div className="p-16 text-center">Not found</div></SiteLayout>,
   component: BlogIndex,
 });
