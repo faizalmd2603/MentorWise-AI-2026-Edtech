@@ -190,10 +190,10 @@ export function TestimonialCarousel() {
                 <blockquote className="text-base leading-7 text-card-foreground sm:text-lg sm:leading-8">
                   “{testimonial.quote}”
                 </blockquote>
-                <div className="mt-6 border-l-2 border-primary pl-4">
+                <div className="relative z-10 mt-6 max-w-[15rem] border-l-2 border-primary pl-4 sm:max-w-none">
                   <div className="font-display text-xl font-bold">{testimonial.name}</div>
                   <div className="mt-1 text-sm font-medium text-primary">{testimonial.role}</div>
-                  <div className="mt-1 text-sm text-muted-foreground">{testimonial.organisation}</div>
+                  <div className="mt-1 text-sm leading-5 text-muted-foreground">{testimonial.organisation}</div>
                 </div>
               </div>
             </div>
