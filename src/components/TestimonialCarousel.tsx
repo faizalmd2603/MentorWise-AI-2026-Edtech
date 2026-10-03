@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Pause, Quote } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Pause, Quote, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import muavvidhPhoto from "@/assets/testimonials/muavvidh-buhary.jpeg.asset.json";
 import sameeraPhoto from "@/assets/testimonials/sameera-s.jpeg.asset.json";
@@ -46,6 +46,20 @@ const testimonials: Testimonial[] = [
     quote:
       "MentorWise AI helped me explore technology, build real projects and showcase skills beyond academics. Building Questoria AI and winning the Full Stack challenge strengthened my confidence to experiment, learn and grow in AI development.",
   },
+  {
+    name: "Hareem Fatima",
+    role: "Top 5 · Aptitude Challenge 2026",
+    organisation: "University of Sargodha, Ex-Mianwali Campus",
+    quote:
+      "My journey with MentorWise AI has been interesting and rewarding. From detailed research training to a student-startup workshop and the Aptitude Challenge 2026, I learned new techniques, handled pressure and solved tricky questions—becoming a top-five performer. It is a wonderful platform for learners and explorers to discover new abilities.",
+  },
+  {
+    name: "Saamia Dua",
+    role: "MPhil English Linguistics Scholar",
+    organisation: "University of Mianwali, Pakistan",
+    quote:
+      "I attended two MentorWise AI webinars co-hosted by Saadh Mohamed on the research writing process. Both sessions went well and gave me a valuable learning experience in research writing.",
+  },
 ];
 
 export function TestimonialCarousel() {
@@ -54,27 +68,48 @@ export function TestimonialCarousel() {
   const [holdDuration, setHoldDuration] = useState(AUTO_HOLD_SECONDS);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState<"next" | "previous">("next");
-  const pausedRef = useRef(false);
+  const pauseReasons = useRef(new Set<string>());
+  const remainingMs = useRef(AUTO_HOLD_SECONDS * 1000);
+  const deadline = useRef(0);
 
-  useEffect(() => {
-    pausedRef.current = paused;
-  }, [paused]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      if (pausedRef.current) return;
-      setRemaining((current) => {
-        if (current > 1) return current - 1;
-        setDirection("next");
-        setActive((index) => (index + 1) % testimonials.length);
-        setHoldDuration(AUTO_HOLD_SECONDS);
-        return AUTO_HOLD_SECONDS;
-      });
-    }, 1000);
-    return () => window.clearInterval(timer);
+  const setPauseReason = useCallback((reason: string, shouldPause: boolean) => {
+    if (shouldPause) pauseReasons.current.add(reason);
+    else pauseReasons.current.delete(reason);
+    setPaused(pauseReasons.current.size > 0);
   }, []);
 
+  useEffect(() => {
+    const onVisibilityChange = () => setPauseReason("hidden", document.hidden);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, [setPauseReason]);
+
+  useEffect(() => {
+    if (paused) return;
+
+    deadline.current = performance.now() + remainingMs.current;
+    const updateCountdown = () => {
+      remainingMs.current = Math.max(0, deadline.current - performance.now());
+      setRemaining(Math.max(1, Math.ceil(remainingMs.current / 1000)));
+    };
+    const ticker = window.setInterval(updateCountdown, 200);
+    const timer = window.setTimeout(() => {
+      remainingMs.current = AUTO_HOLD_SECONDS * 1000;
+      setRemaining(AUTO_HOLD_SECONDS);
+      setHoldDuration(AUTO_HOLD_SECONDS);
+      setDirection("next");
+      setActive((index) => (index + 1) % testimonials.length);
+    }, remainingMs.current);
+
+    return () => {
+      remainingMs.current = Math.max(0, deadline.current - performance.now());
+      window.clearInterval(ticker);
+      window.clearTimeout(timer);
+    };
+  }, [active, holdDuration, paused]);
+
   const navigate = (step: -1 | 1) => {
+    remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
     setDirection(step === 1 ? "next" : "previous");
     setActive((index) => (index + step + testimonials.length) % testimonials.length);
     setHoldDuration(MANUAL_HOLD_SECONDS);
@@ -91,7 +126,7 @@ export function TestimonialCarousel() {
   return (
     <section className="relative overflow-hidden border-y border-border/60 py-20 sm:py-24" aria-labelledby="student-voices-heading">
       <div aria-hidden className="absolute inset-0 mesh-grid opacity-20" />
-      <div aria-hidden className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[100px]" />
+      <div aria-hidden className="testimonial-light absolute inset-x-[15%] top-1/2 h-px" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto mb-9 max-w-2xl text-center">
@@ -104,13 +139,23 @@ export function TestimonialCarousel() {
 
         <div
           className="mx-auto max-w-4xl"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+          onMouseEnter={() => setPauseReason("hover", true)}
+          onMouseLeave={() => setPauseReason("hover", false)}
+          onFocusCapture={() => setPauseReason("focus", true)}
+          onBlurCapture={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setPauseReason("focus", false);
+          }}
+          onPointerDown={(event) => {
+            if (event.pointerType === "touch") setPauseReason("touch", true);
+          }}
+          onPointerUp={() => setPauseReason("touch", false)}
+          onPointerCancel={() => setPauseReason("touch", false)}
         >
           <article
             key={`${active}-${direction}`}
-            className={`testimonial-card ${direction === "next" ? "testimonial-enter-right" : "testimonial-enter-left"} relative min-h-[420px] overflow-hidden rounded-[1.75rem] border border-border bg-card/95 p-6 shadow-2xl shadow-primary/10 sm:min-h-[350px] sm:p-10`}
+            className={`testimonial-card ${direction === "next" ? "testimonial-enter-next" : "testimonial-enter-previous"} relative min-h-[455px] overflow-hidden rounded-[1.75rem] border border-border bg-card/95 p-6 sm:min-h-[350px] sm:p-10`}
           >
+            <div className="testimonial-story-number" aria-hidden="true">{String(active + 1).padStart(2, "0")}</div>
             <div className="absolute inset-x-0 top-0 h-1 bg-secondary">
               <div
                 className="h-full bg-primary transition-[width] duration-1000 ease-linear"
@@ -118,8 +163,8 @@ export function TestimonialCarousel() {
               />
             </div>
 
-            <div className="grid min-h-[300px] gap-7 sm:grid-cols-[170px_1fr] sm:items-center">
-              <div className="mx-auto">
+            <div className="testimonial-content grid min-h-[330px] gap-5 sm:min-h-[300px] sm:grid-cols-[170px_1fr] sm:items-center sm:gap-7">
+              <div className="testimonial-portrait mx-auto">
                 {testimonial.photo ? (
                   <img
                     src={testimonial.photo}
@@ -133,7 +178,7 @@ export function TestimonialCarousel() {
                 )}
               </div>
 
-              <div>
+              <div className="testimonial-copy relative">
                 <Quote className="mb-4 h-8 w-8 text-primary" aria-hidden="true" />
                 <blockquote className="text-base leading-7 text-card-foreground sm:text-lg sm:leading-8">
                   “{testimonial.quote}”
@@ -158,7 +203,7 @@ export function TestimonialCarousel() {
               <ArrowLeft />
             </Button>
 
-            <div className="flex items-center gap-2" aria-label={`Feedback ${active + 1} of ${testimonials.length}`}>
+            <div className="flex items-center gap-1 sm:gap-2" aria-label={`Feedback ${active + 1} of ${testimonials.length}`}>
               {testimonials.map((item, index) => (
                 <Button
                   key={item.name}
@@ -166,12 +211,13 @@ export function TestimonialCarousel() {
                   size="icon"
                   type="button"
                   onClick={() => {
+                    remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
                     setDirection(index > active ? "next" : "previous");
                     setActive(index);
                     setHoldDuration(MANUAL_HOLD_SECONDS);
                     setRemaining(MANUAL_HOLD_SECONDS);
                   }}
-                  className={`h-8 min-w-8 p-0 hover:bg-transparent ${index === active ? "text-primary" : "text-muted-foreground"}`}
+                  className={`h-8 min-w-6 p-0 hover:bg-transparent sm:min-w-8 ${index === active ? "text-primary" : "text-muted-foreground"}`}
                   aria-label={`Read feedback from ${item.name}`}
                   aria-current={index === active ? "true" : undefined}
                 >
@@ -187,6 +233,10 @@ export function TestimonialCarousel() {
           <p className="mt-3 text-center text-xs text-muted-foreground" aria-live="polite">
             {paused ? "Held while you read" : `${remaining}s until the next story`}
           </p>
+          <div className="mt-2 flex items-center justify-center gap-1.5 text-xs text-primary/80">
+            <Sparkles className="h-3 w-3" aria-hidden="true" />
+            Story {active + 1} of {testimonials.length}
+          </div>
         </div>
       </div>
     </section>
