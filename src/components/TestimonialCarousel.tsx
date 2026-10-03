@@ -71,6 +71,7 @@ export function TestimonialCarousel() {
   const pauseReasons = useRef(new Set<string>());
   const remainingMs = useRef(AUTO_HOLD_SECONDS * 1000);
   const deadline = useRef(0);
+  const carryRemainingOnCleanup = useRef(true);
 
   const setPauseReason = useCallback((reason: string, shouldPause: boolean) => {
     if (shouldPause) pauseReasons.current.add(reason);
@@ -87,6 +88,7 @@ export function TestimonialCarousel() {
   useEffect(() => {
     if (paused) return;
 
+    carryRemainingOnCleanup.current = true;
     deadline.current = performance.now() + remainingMs.current;
     const updateCountdown = () => {
       remainingMs.current = Math.max(0, deadline.current - performance.now());
@@ -94,6 +96,7 @@ export function TestimonialCarousel() {
     };
     const ticker = window.setInterval(updateCountdown, 200);
     const timer = window.setTimeout(() => {
+      carryRemainingOnCleanup.current = false;
       remainingMs.current = AUTO_HOLD_SECONDS * 1000;
       setRemaining(AUTO_HOLD_SECONDS);
       setHoldDuration(AUTO_HOLD_SECONDS);
@@ -102,14 +105,18 @@ export function TestimonialCarousel() {
     }, remainingMs.current);
 
     return () => {
-      remainingMs.current = Math.max(0, deadline.current - performance.now());
+      if (carryRemainingOnCleanup.current) {
+        remainingMs.current = Math.max(0, deadline.current - performance.now());
+      }
       window.clearInterval(ticker);
       window.clearTimeout(timer);
     };
   }, [active, holdDuration, paused]);
 
   const navigate = (step: -1 | 1) => {
+    carryRemainingOnCleanup.current = false;
     remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
+    setPauseReason("focus", false);
     setDirection(step === 1 ? "next" : "previous");
     setActive((index) => (index + step + testimonials.length) % testimonials.length);
     setHoldDuration(MANUAL_HOLD_SECONDS);
@@ -211,7 +218,9 @@ export function TestimonialCarousel() {
                   size="icon"
                   type="button"
                   onClick={() => {
+                    carryRemainingOnCleanup.current = false;
                     remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
+                    setPauseReason("focus", false);
                     setDirection(index > active ? "next" : "previous");
                     setActive(index);
                     setHoldDuration(MANUAL_HOLD_SECONDS);
