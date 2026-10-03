@@ -1,9 +1,9 @@
-import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useRouter, type ErrorRouteComponent } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { BookOpen, Clock, FileText, ArrowLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getArticleBySlug, type ArticleSummary } from "@/lib/articles.functions";
+import { getArticleBySlug, type Article, type ArticleSummary } from "@/lib/articles.functions";
 
 const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 
@@ -14,12 +14,13 @@ export const Route = createFileRoute("/blog/$slug")({
     return res;
   },
   head: ({ params, loaderData }) => {
-    if (!loaderData) {
+    const data = loaderData as { article: Article; related: ArticleSummary[] } | undefined;
+    if (!data) {
       return {
         meta: [{ title: "Article not found" }, { name: "robots", content: "noindex" }],
       };
     }
-    const a = loaderData.article;
+    const a = data.article;
     const url = `${SITE}/blog/${params.slug}`;
     const desc = a.meta_description ?? a.excerpt ?? a.title;
     const meta: Array<Record<string, string>> = [
@@ -65,7 +66,7 @@ export const Route = createFileRoute("/blog/$slug")({
       ],
     };
   },
-  errorComponent: ArticleError,
+  errorComponent: ArticleError as ErrorRouteComponent,
   notFoundComponent: ArticleNotFound,
   component: ArticlePage,
 });
@@ -112,7 +113,7 @@ function ArticleNotFound() {
 type Takeaway = { takeaway?: string; _heading?: string };
 
 function ArticlePage() {
-  const { article, related } = Route.useLoaderData();
+  const { article, related } = Route.useLoaderData() as { article: Article; related: ArticleSummary[] };
   const takeaways: Takeaway[] = Array.isArray(article.key_takeaways)
     ? (article.key_takeaways as Takeaway[])
     : [];
