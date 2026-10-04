@@ -17,12 +17,11 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        // lastmod is only emitted for content with a real per-page timestamp
-        // (published articles). Static routes intentionally omit it.
+        // lastmod is emitted only when a page's content was actually updated.
 
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "daily", priority: "1.0" },
-          { path: "/agents", changefreq: "daily", priority: "0.95" },
+          { path: "/", changefreq: "daily", priority: "1.0", lastmod: "2026-10-04" },
+          { path: "/agents", changefreq: "daily", priority: "0.95", lastmod: "2026-10-04" },
           { path: "/events", changefreq: "daily", priority: "0.95" },
           { path: "/feed", changefreq: "daily", priority: "0.9" },
           { path: "/auth", changefreq: "yearly", priority: "0.3" },
