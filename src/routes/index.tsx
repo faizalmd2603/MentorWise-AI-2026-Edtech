@@ -60,7 +60,7 @@ function Home() {
   return (
     <SiteLayout>
       {show && <SplashScreen />}
-      <Hero />
+      <Hero key={show ? "intro" : "ready"} />
       <BentoDeck />
       <BannerReveal />
       <Marquee />
