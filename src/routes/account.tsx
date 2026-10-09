@@ -17,6 +17,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/account")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "My Account — MentorWise AI" },
       { name: "description", content: "Manage your MentorWise AI account, update your profile, change your password, and switch between student and working professional." },
       { property: "og:title", content: "My Account — MentorWise AI" },

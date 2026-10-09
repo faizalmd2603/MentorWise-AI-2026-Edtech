@@ -80,6 +80,7 @@ const FOUNDERS_JSONLD = {
 export const Route = createFileRoute("/founders")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Elite Team — MentorWise AI | Core Team & Campus Leaders" },
       { name: "description", content: "The MentorWise AI Elite Team — Founder & CEO Mohammed Faizal. M, Co-Founder Saif Ahmed. Z, CCO Mohammed Aqhib. K, and our Tier-1 Elite Campus Leaders across India." },
       { property: "og:type", content: "website" },

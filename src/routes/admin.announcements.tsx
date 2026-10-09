@@ -20,6 +20,11 @@ const ADMIN_EMAILS = [
 export const Route = createFileRoute("/admin/announcements")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "description", content: "Private administration area for the MentorWise AI team." },
+      { property: "og:title", content: "Admin · Announcements — MentorWise AI" },
+      { property: "og:description", content: "Private administration area for the MentorWise AI team." },
       { title: "Admin · Announcements — MentorWise AI" },
       { name: "robots", content: "noindex,nofollow" },
     ],

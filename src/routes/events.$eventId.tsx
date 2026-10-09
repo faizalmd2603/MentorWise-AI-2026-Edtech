@@ -10,6 +10,11 @@ import { Hand, Send, LogIn, ArrowLeft, Smile, Radio, Video, ExternalLink, Copy, 
 export const Route = createFileRoute("/events/$eventId")({
   head: ({ params }) => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "description", content: "Join a member-only MentorWise AI live event with student discussions and mentor-led learning." },
+      { property: "og:title", content: "Live Event — MentorWise AI" },
+      { property: "og:description", content: "Member-only student discussions and mentor-led learning at MentorWise AI." },
       { title: "Live Event — MentorWise AI" },
       // Event rooms require sign-in; keep them out of search indexes.
       { name: "robots", content: "noindex,nofollow" },

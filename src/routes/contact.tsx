@@ -10,6 +10,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Contact MentorWise AI" },
       { name: "description", content: "Reach the MentorWise AI team in Chennai — instant AI acknowledgement plus personal follow-up from the founders." },
       { property: "og:title", content: "Contact MentorWise AI" },

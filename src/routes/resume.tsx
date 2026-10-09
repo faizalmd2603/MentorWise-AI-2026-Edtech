@@ -7,6 +7,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/resume")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Free Resume Builder for Students & Freshers | MentorWise AI" },
       { name: "description", content: "Make a free resume online. Get a clean, recruiter-ready resume in minutes — perfect for college students, freshers and first jobs. 100% free." },
       { property: "og:title", content: "Free Resume Builder for Students & Freshers | MentorWise AI" },

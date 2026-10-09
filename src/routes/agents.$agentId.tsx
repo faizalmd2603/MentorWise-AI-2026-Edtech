@@ -40,6 +40,8 @@ export const Route = createFileRoute("/agents/$agentId")({
     const url = `${SITE}/agents/${params.agentId}`;
     return {
       meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
         { title },
         { name: "description", content: description },
         { property: "og:title", content: title },

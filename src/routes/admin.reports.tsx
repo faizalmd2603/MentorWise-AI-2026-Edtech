@@ -12,6 +12,11 @@ const ADMIN_EMAILS = ["mentorwiseaiedtech@gmail.com", "saifahmedmentorwise@gmail
 export const Route = createFileRoute("/admin/reports")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "description", content: "Private administration area for the MentorWise AI team." },
+      { property: "og:title", content: "Admin · Reports — MentorWise AI" },
+      { property: "og:description", content: "Private administration area for the MentorWise AI team." },
       { title: "Admin · Reports — MentorWise AI" },
       { name: "robots", content: "noindex,nofollow" },
     ],

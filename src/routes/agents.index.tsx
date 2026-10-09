@@ -10,6 +10,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/agents/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Free AI Tools for Students — 12 in One App | MentorWise AI" },
       { name: "description", content: "12 free AI tools for students in one app — resume help, mock interview, LinkedIn help, free internships, free courses, study help, email writing and more." },
       { property: "og:title", content: "Free AI Tools for Students — 12 in One App | MentorWise AI" },
