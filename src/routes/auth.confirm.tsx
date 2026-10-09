@@ -11,6 +11,8 @@ export const Route = createFileRoute("/auth/confirm")({
   ssr: false,
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Confirming your email — MentorWise AI" },
       { name: "description", content: "Finishing email verification for your MentorWise AI account." },
       { name: "robots", content: "noindex" },

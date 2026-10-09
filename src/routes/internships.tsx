@@ -7,6 +7,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/internships")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Free Internships for Students & Freshers | MentorWise AI" },
       { name: "description", content: "Find free internships, free online courses with certificate, and free letters of recommendation. Made for college students and freshers." },
       { property: "og:title", content: "Free Internships for Students & Freshers | MentorWise AI" },

@@ -7,6 +7,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/resources/job-search-sites")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Best Free Job Search Websites for Students & Freshers | MentorWise AI" },
       { name: "description", content: "Discover the best free job search websites for students and freshers. Curated list of entry level job sites, internship portals, and career platforms with zero cost." },
       { property: "og:title", content: "Best Free Job Search Websites for Students & Freshers | MentorWise AI" },

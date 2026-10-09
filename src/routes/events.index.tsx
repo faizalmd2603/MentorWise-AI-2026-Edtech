@@ -12,6 +12,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/events/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Live Events — MentorWise AI" },
       { name: "description", content: "Join live voice and video events hosted by MentorWise AI founders. Free, interactive, mentor-led sessions for students." },
       { name: "keywords", content: "live mentor events, free webinar, student live session, AI Q&A, career live talk" },

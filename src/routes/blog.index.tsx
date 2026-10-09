@@ -12,6 +12,7 @@ export const Route = createFileRoute("/blog/")({
   loader: () => listPublishedArticles(),
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Blog — MentorWise AI | Career, AI & Student Success" },
       {
         name: "description",

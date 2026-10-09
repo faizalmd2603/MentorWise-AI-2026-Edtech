@@ -20,7 +20,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         // lastmod is emitted only when a page's content was actually updated.
 
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "daily", priority: "1.0", lastmod: "2026-10-04" },
+          { path: "/", changefreq: "daily", priority: "1.0", lastmod: "2026-10-09" },
           { path: "/agents", changefreq: "daily", priority: "0.95", lastmod: "2026-10-04" },
           { path: "/events", changefreq: "daily", priority: "0.95" },
           { path: "/feed", changefreq: "daily", priority: "0.9" },

@@ -7,6 +7,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/mentorlink")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Free LinkedIn Help for Students | MentorWise AI" },
       { name: "description", content: "Free LinkedIn help for students and freshers. Improve your profile, write better posts and grow your network — all for free." },
       { property: "og:title", content: "Free LinkedIn Help for Students | MentorWise AI" },

@@ -7,6 +7,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/interview")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Free Mock Interview Practice Online | MentorWise AI" },
       { name: "description", content: "Practice job interviews online for free. Get real-time AI feedback on HR and technical questions — perfect for students and freshers." },
       { property: "og:title", content: "Free Mock Interview Practice Online | MentorWise AI" },

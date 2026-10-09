@@ -7,6 +7,8 @@ const SITE = "https://mentorwiseaiedtechservice.lovable.app";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "About the Builders & Core Vision | MentorWise AI" },
       { name: "description", content: "Meet Founder & CEO Mohammed Faizal. M and Co-Founder Saif Ahmed. Z — Chennai students building free AI career tools for students worldwide." },
       { property: "og:title", content: "About the Builders & Core Vision | MentorWise AI" },

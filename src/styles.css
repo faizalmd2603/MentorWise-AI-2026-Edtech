@@ -443,6 +443,33 @@
           mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
 
+/* Keep verified links stationary and clickable; motion lives around them. */
+.directory-link { transition: transform .35s ease, filter .35s ease; }
+.directory-link:hover { transform: translateY(-4px); filter: brightness(1.12); }
+.directory-track { animation: marquee 28s linear infinite; }
+.directory-section:hover .directory-track,
+.directory-section:focus-within .directory-track,
+.motion-held .directory-track { animation-play-state: paused; }
+.feature-motion-grid .motion-card::after { animation: soft-sheen 8s ease-in-out infinite; }
+.feature-motion-grid > :nth-child(2n) .motion-card::after { animation-delay: 2s; }
+.feature-motion-grid > :nth-child(3n) .motion-card::after { animation-delay: 4s; }
+@supports (animation-timeline: view()) {
+  .feature-motion-grid .motion-card img {
+    animation: feature-image-drift linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+}
+@keyframes feature-image-drift {
+  from { transform: scale(1.12) translateY(-3%); }
+  to { transform: scale(1.02) translateY(3%); }
+}
+/* A crisp directional reveal with staggered depth, not a spinning photo roll. */
+.testimonial-enter-next { animation-duration: 1.15s; }
+.testimonial-enter-previous { animation-duration: 1.15s; }
+.testimonial-card .testimonial-copy { animation-duration: 1s; }
+.testimonial-card .testimonial-portrait { animation-name: testimonial-content-settle; }
+
 html { scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
