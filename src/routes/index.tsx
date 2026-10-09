@@ -333,27 +333,30 @@ function LaunchBuffBadge() {
   );
 }
 
-function ToolIndexBadge() {
+function LaunchPandaBadge() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
       <Reveal className="flex justify-center">
         <a
-          href="https://strategic-flow-audit.replit.app/directory"
+          href="https://launchpanda.dev/launches/ai-tool/mentorwise-ai"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           className="inline-block transition hover:scale-[1.03]"
-          aria-label="Listed on ToolIndex"
+          aria-label="Launched on LaunchPanda"
         >
-          <span
-            className="inline-block rounded-[6px] border border-[rgba(0,212,200,0.6)] bg-[#0a1628] px-[14px] py-[6px] font-mono text-[12px] font-bold text-[#00d4c8]"
-          >
-            🔗 Listed on ToolIndex · DR 86 dofollow
-          </span>
+          <img
+            src="https://launchpanda.dev/images/badges/launchpanda-badge-dark.svg"
+            alt="Launched on LaunchPanda"
+            width={260}
+            height={64}
+            loading="lazy"
+          />
         </a>
       </Reveal>
     </section>
   );
 }
+
 
 
 const FEATURES = [
