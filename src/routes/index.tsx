@@ -64,6 +64,7 @@ function Home() {
       <BannerReveal />
       <Marquee />
       <LaunchBuffBadge />
+      <LaunchPandaBadge />
       <ToolIndexBadge />
       <AgentBento />
       <TestimonialCarousel />
@@ -333,6 +334,30 @@ function LaunchBuffBadge() {
   );
 }
 
+function LaunchPandaBadge() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
+      <Reveal className="flex justify-center">
+        <a
+          href="https://launchpanda.dev/launches/ai-tool/mentorwise-ai"
+          target="_blank"
+          rel="noopener"
+          className="inline-block transition hover:scale-[1.03]"
+          aria-label="Launched on LaunchPanda"
+        >
+          <img
+            src="https://launchpanda.dev/images/badges/launchpanda-badge-dark.svg"
+            alt="Launched on LaunchPanda"
+            width={260}
+            height={64}
+            loading="lazy"
+          />
+        </a>
+      </Reveal>
+    </section>
+  );
+}
+
 function ToolIndexBadge() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
@@ -354,6 +379,8 @@ function ToolIndexBadge() {
     </section>
   );
 }
+
+
 
 
 const FEATURES = [
