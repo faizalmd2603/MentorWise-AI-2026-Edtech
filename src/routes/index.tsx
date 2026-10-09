@@ -64,6 +64,7 @@ function Home() {
       <BannerReveal />
       <Marquee />
       <LaunchBuffBadge />
+      <LaunchPandaBadge />
       <ToolIndexBadge />
       <AgentBento />
       <TestimonialCarousel />
@@ -356,6 +357,29 @@ function LaunchPandaBadge() {
     </section>
   );
 }
+
+function ToolIndexBadge() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
+      <Reveal className="flex justify-center">
+        <a
+          href="https://strategic-flow-audit.replit.app/directory"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block transition hover:scale-[1.03]"
+          aria-label="Listed on ToolIndex"
+        >
+          <span
+            className="inline-block rounded-[6px] border border-[rgba(0,212,200,0.6)] bg-[#0a1628] px-[14px] py-[6px] font-mono text-[12px] font-bold text-[#00d4c8]"
+          >
+            🔗 Listed on ToolIndex · DR 86 dofollow
+          </span>
+        </a>
+      </Reveal>
+    </section>
+  );
+}
+
 
 
 
