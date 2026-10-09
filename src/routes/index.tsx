@@ -5,6 +5,7 @@ import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { Reveal } from "@/components/Reveal";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
+import { DirectoryBadges } from "@/components/DirectoryBadges";
 import banner from "@/assets/mw-banner.png.asset.json";
 import { STOCK_AGENT_IMAGES } from "@/lib/stock-images";
 import {
@@ -63,9 +64,7 @@ function Home() {
       <BentoDeck />
       <BannerReveal />
       <Marquee />
-      <LaunchBuffBadge />
-      <LaunchPandaBadge />
-      <ToolIndexBadge />
+      <DirectoryBadges />
       <AgentBento />
       <TestimonialCarousel />
       <NexoraShowcase />
@@ -110,7 +109,7 @@ function Hero() {
         <h1 className="mt-8 font-display text-[2.7rem] font-extrabold leading-[1.05] tracking-tight animate-fade-up [animation-delay:80ms] sm:text-6xl lg:text-[4.5rem]">
           Master your career
           <br />
-          <span className="bg-gradient-to-r from-primary via-lilac to-foreground bg-clip-text text-transparent">
+          <span className="shimmer-text">
             with 12 AI Agents.
           </span>
         </h1>
@@ -310,79 +309,6 @@ function Marquee() {
   );
 }
 
-function LaunchBuffBadge() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6">
-      <Reveal className="flex justify-center">
-        <a
-          href="https://launchbuff.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block transition hover:scale-[1.03]"
-          aria-label="Featured on LaunchBuff"
-        >
-          <img
-            src="https://launchbuff.com/badge-featured-dark.svg"
-            alt="Featured on LaunchBuff"
-            width={256}
-            height={80}
-            loading="lazy"
-          />
-        </a>
-      </Reveal>
-    </section>
-  );
-}
-
-function LaunchPandaBadge() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
-      <Reveal className="flex justify-center">
-        <a
-          href="https://launchpanda.dev/launches/ai-tool/mentorwise-ai"
-          target="_blank"
-          rel="noopener"
-          className="inline-block transition hover:scale-[1.03]"
-          aria-label="Launched on LaunchPanda"
-        >
-          <img
-            src="https://launchpanda.dev/images/badges/launchpanda-badge-dark.svg"
-            alt="Launched on LaunchPanda"
-            width={260}
-            height={64}
-            loading="lazy"
-          />
-        </a>
-      </Reveal>
-    </section>
-  );
-}
-
-function ToolIndexBadge() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 pt-3 sm:px-6">
-      <Reveal className="flex justify-center">
-        <a
-          href="https://strategic-flow-audit.replit.app/directory"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block transition hover:scale-[1.03]"
-          aria-label="Listed on ToolIndex"
-        >
-          <span
-            className="inline-block rounded-[6px] border border-[rgba(0,212,200,0.6)] bg-[#0a1628] px-[14px] py-[6px] font-mono text-[12px] font-bold text-[#00d4c8]"
-          >
-            🔗 Listed on ToolIndex · DR 86 dofollow
-          </span>
-        </a>
-      </Reveal>
-    </section>
-  );
-}
-
-
-
-
 const FEATURES = [
   { img: agentResume, span: "lg:col-span-3", title: "Resume Optimiser", desc: "Craft an ATS-ready resume with a floating AI guide beside you.", agentId: "resume" as const },
   { img: agentInterview, span: "lg:col-span-3", title: "Mock Interviews", desc: "Practice real questions and get instant, kind feedback.", agentId: "interview" as const },
@@ -409,7 +335,7 @@ function AgentBento() {
         </p>
       </Reveal>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="feature-motion-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         {FEATURES.map((f, i) => (
           <Reveal key={f.title} className={f.span} delay={i * 70}>
             <Link
