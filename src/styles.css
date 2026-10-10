@@ -464,11 +464,42 @@
   from { transform: scale(1.12) translateY(-3%); }
   to { transform: scale(1.02) translateY(3%); }
 }
-/* A crisp directional reveal with staggered depth, not a spinning photo roll. */
-.testimonial-enter-next { animation-duration: 1.15s; }
-.testimonial-enter-previous { animation-duration: 1.15s; }
-.testimonial-card .testimonial-copy { animation-duration: 1s; }
-.testimonial-card .testimonial-portrait { animation-name: testimonial-content-settle; }
+/* Persistent spatial motion: panels stay mounted throughout a slide. */
+.testimonial-stage { touch-action: pan-y; }
+.testimonial-window { overflow: hidden; border-radius: 1.75rem; }
+.testimonial-track {
+  display: flex;
+  align-items: stretch;
+  transition: transform 950ms cubic-bezier(.22,.7,.15,1);
+  will-change: transform;
+}
+.testimonial-track.track-reset { transition: none; }
+.testimonial-track .testimonial-card { flex: 0 0 100%; min-width: 0; }
+.testimonial-track .testimonial-content,
+.testimonial-track .testimonial-copy,
+.testimonial-track .testimonial-portrait { animation: none; }
+.testimonial-track .testimonial-card { will-change: auto; }
+.headline-track { animation: marquee 32s linear infinite; }
+.skills-ribbon:hover .headline-track { animation-play-state: paused; }
+.directory-track { animation-duration: 18s; }
+.directory-section:hover .directory-track,
+.directory-section:focus-within .directory-track { animation-play-state: running; }
+.directory-section.motion-held .directory-track { animation-play-state: paused; }
+.feature-shelf {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--secondary);
+  padding: 1rem 0 2rem;
+}
+.feature-slide { flex: 0 0 82%; scroll-snap-align: start; min-width: 0; }
+.feature-slide .motion-card { transition: transform .55s cubic-bezier(.22,.7,.15,1), border-color .3s; }
+.feature-slide .motion-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+@media (min-width: 640px) { .feature-slide { flex-basis: 44%; } }
+@media (min-width: 1024px) { .feature-slide { flex-basis: 36%; } }
 
 html { scroll-behavior: smooth; }
 

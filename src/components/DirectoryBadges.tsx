@@ -19,7 +19,7 @@ export function DirectoryBadges() {
     <section aria-labelledby="directory-heading" className={`directory-section overflow-hidden border-b border-border py-10 ${paused ? "motion-held" : ""}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mb-7 flex items-center justify-between gap-4">
-          <h2 id="directory-heading" className="font-display text-xl font-semibold">Around the web</h2>
+          <h2 id="directory-heading" className="font-display text-3xl font-semibold sm:text-4xl">Around the web</h2>
           <Button variant="outline" size="icon" aria-label={paused ? "Resume directory motion" : "Pause directory motion"} title={paused ? "Resume directory motion" : "Pause directory motion"} onClick={() => setPaused(value => !value)}>
             {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
           </Button>
@@ -37,7 +37,7 @@ export function DirectoryBadges() {
       </div>
       <div aria-hidden="true" className="mask-marquee mt-8 overflow-hidden border-t border-border/50 pt-5">
         <div className="directory-track flex w-max">
-          {[0, 1].map(copy => <div key={copy} className="flex shrink-0 items-center gap-12 px-6 font-display text-2xl font-medium text-muted-foreground/50">
+          {[0, 1].map(copy => <div key={copy} className="flex shrink-0 items-center gap-12 px-6 font-display text-4xl font-semibold text-foreground/80 sm:text-6xl">
             {["LaunchBuff", "LaunchPanda", "Uno Directory", "EasyDoFollow", "ToolIndex"].map(name => <span key={name} className="inline-flex items-center gap-12 whitespace-nowrap">{name}<span className="text-primary">✦</span></span>)}
           </div>)}
         </div>

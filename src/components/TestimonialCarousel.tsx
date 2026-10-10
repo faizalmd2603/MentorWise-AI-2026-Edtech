@@ -67,7 +67,12 @@ export function TestimonialCarousel() {
   const [remaining, setRemaining] = useState(AUTO_HOLD_SECONDS);
   const [holdDuration, setHoldDuration] = useState(AUTO_HOLD_SECONDS);
   const [paused, setPaused] = useState(false);
-  const [direction, setDirection] = useState<"next" | "previous">("next");
+  const [position, setPosition] = useState(1);
+  const [moving, setMoving] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const stage = useRef<HTMLDivElement>(null);
+  const touchStart = useRef<number | null>(null);
+  const locked = useRef(false);
   const pauseReasons = useRef(new Set<string>());
   const remainingMs = useRef(AUTO_HOLD_SECONDS * 1000);
   const deadline = useRef(0);
@@ -80,13 +85,37 @@ export function TestimonialCarousel() {
   }, []);
 
   useEffect(() => {
+    const node = stage.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => setPauseReason("offscreen", !entry.isIntersecting), { threshold: 0.35 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [setPauseReason]);
+
+  useEffect(() => {
+    if (!moving) return;
+    setPauseReason("transition", true);
+    const timer = window.setTimeout(() => {
+      if (position === 0 || position === testimonials.length + 1) {
+        setResetting(true);
+        setPosition(position === 0 ? testimonials.length : 1);
+        requestAnimationFrame(() => requestAnimationFrame(() => setResetting(false)));
+      }
+      locked.current = false;
+      setMoving(false);
+      setPauseReason("transition", false);
+    }, 950);
+    return () => window.clearTimeout(timer);
+  }, [moving, position, setPauseReason]);
+
+  useEffect(() => {
     const onVisibilityChange = () => setPauseReason("hidden", document.hidden);
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => document.removeEventListener("visibilitychange", onVisibilityChange);
   }, [setPauseReason]);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || moving) return;
 
     carryRemainingOnCleanup.current = true;
     deadline.current = performance.now() + remainingMs.current;
@@ -100,7 +129,9 @@ export function TestimonialCarousel() {
       remainingMs.current = AUTO_HOLD_SECONDS * 1000;
       setRemaining(AUTO_HOLD_SECONDS);
       setHoldDuration(AUTO_HOLD_SECONDS);
-      setDirection("next");
+      locked.current = true;
+      setMoving(true);
+      setPosition(value => value + 1);
       setActive((index) => (index + 1) % testimonials.length);
     }, remainingMs.current);
 
@@ -111,24 +142,22 @@ export function TestimonialCarousel() {
       window.clearInterval(ticker);
       window.clearTimeout(timer);
     };
-  }, [active, holdDuration, paused]);
+  }, [active, holdDuration, paused, moving]);
 
   const navigate = (step: -1 | 1) => {
+    if (locked.current) return;
+    locked.current = true;
+    setMoving(true);
     carryRemainingOnCleanup.current = false;
     remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
     setPauseReason("focus", false);
-    setDirection(step === 1 ? "next" : "previous");
+    setPosition(value => value + step);
     setActive((index) => (index + step + testimonials.length) % testimonials.length);
     setHoldDuration(MANUAL_HOLD_SECONDS);
     setRemaining(MANUAL_HOLD_SECONDS);
   };
 
-  const testimonial = testimonials[active];
-  const initials = testimonial.name
-    .split(" ")
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("");
+  const slides = [testimonials[testimonials.length - 1], ...testimonials, testimonials[0]];
 
   return (
     <section className="relative overflow-hidden border-y border-border/60 py-20 sm:py-24" aria-labelledby="student-voices-heading">
@@ -145,7 +174,8 @@ export function TestimonialCarousel() {
         </div>
 
         <div
-          className="mx-auto max-w-4xl"
+          ref={stage}
+          className="testimonial-stage mx-auto max-w-4xl"
           onMouseEnter={() => setPauseReason("hover", true)}
           onMouseLeave={() => setPauseReason("hover", false)}
           onFocusCapture={() => setPauseReason("focus", true)}
@@ -153,16 +183,29 @@ export function TestimonialCarousel() {
             if (!event.currentTarget.contains(event.relatedTarget)) setPauseReason("focus", false);
           }}
           onPointerDown={(event) => {
-            if (event.pointerType === "touch") setPauseReason("touch", true);
+            if (event.pointerType === "touch") { touchStart.current = event.clientX; setPauseReason("touch", true); }
           }}
-          onPointerUp={() => setPauseReason("touch", false)}
-          onPointerCancel={() => setPauseReason("touch", false)}
+          onPointerUp={(event) => {
+            if (touchStart.current !== null) {
+              const delta = event.clientX - touchStart.current;
+              if (Math.abs(delta) > 45) navigate(delta < 0 ? 1 : -1);
+              touchStart.current = null;
+            }
+            setPauseReason("touch", false);
+          }}
+          onPointerCancel={() => { touchStart.current = null; setPauseReason("touch", false); }}
         >
-          <article
-            key={`${active}-${direction}`}
-            className={`testimonial-card ${direction === "next" ? "testimonial-enter-next" : "testimonial-enter-previous"} relative min-h-[455px] overflow-hidden rounded-[1.75rem] border border-border bg-card/95 p-6 sm:min-h-[350px] sm:p-10`}
+          <div className="testimonial-window">
+          <div className={`testimonial-track ${resetting ? "track-reset" : ""}`} style={{ transform: `translate3d(-${position * 100}%,0,0)` }}>
+          {slides.map((testimonial, slideIndex) => {
+            const storyIndex = (slideIndex - 1 + testimonials.length) % testimonials.length;
+            const initials = testimonial.name.split(" ").slice(0, 2).map(part => part[0]).join("");
+            return <article
+            key={`${testimonial.name}-${slideIndex}`}
+            aria-hidden={slideIndex !== position}
+            className="testimonial-card relative overflow-hidden rounded-[1.75rem] border border-border bg-card p-6 sm:p-10"
           >
-            <div className="testimonial-story-number" aria-hidden="true">{String(active + 1).padStart(2, "0")}</div>
+            <div className="testimonial-story-number" aria-hidden="true">{String(storyIndex + 1).padStart(2, "0")}</div>
             <div className="absolute inset-x-0 top-0 h-1 bg-secondary">
               <div
                 className="h-full bg-primary transition-[width] duration-1000 ease-linear"
@@ -170,7 +213,7 @@ export function TestimonialCarousel() {
               />
             </div>
 
-            <div className="testimonial-content grid min-h-[330px] gap-5 sm:min-h-[300px] sm:grid-cols-[170px_1fr] sm:items-center sm:gap-7">
+            <div className="testimonial-content grid gap-5 sm:grid-cols-[170px_1fr] sm:items-center sm:gap-7">
               <div className="testimonial-portrait mx-auto">
                 {testimonial.photo ? (
                   <img
@@ -203,7 +246,10 @@ export function TestimonialCarousel() {
                 <Pause className="h-3 w-3 fill-current" /> Paused
               </div>
             )}
-          </article>
+          </article>;
+          })}
+          </div>
+          </div>
 
           <div className="mt-6 flex items-center justify-between gap-4">
             <Button variant="outline" size="icon" onClick={() => navigate(-1)} aria-label="Previous feedback" title="Previous feedback">
@@ -218,10 +264,13 @@ export function TestimonialCarousel() {
                   size="icon"
                   type="button"
                   onClick={() => {
+                    if (locked.current || index === active) return;
                     carryRemainingOnCleanup.current = false;
                     remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
                     setPauseReason("focus", false);
-                    setDirection(index > active ? "next" : "previous");
+                    locked.current = true;
+                    setMoving(true);
+                    setPosition(index + 1);
                     setActive(index);
                     setHoldDuration(MANUAL_HOLD_SECONDS);
                     setRemaining(MANUAL_HOLD_SECONDS);
