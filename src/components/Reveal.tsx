@@ -8,12 +8,14 @@ type RevealProps = {
   /** how much of the element must be visible before revealing */
   threshold?: number;
   as?: "div" | "section" | "li";
+  /** direction the element glides in from */
+  from?: "up" | "left" | "right" | "zoom";
 };
 
 /**
- * Scroll-driven reveal wrapper. Adds `.is-visible` to the `.reveal`
- * utility in styles.css once the element enters the viewport.
- * Respects prefers-reduced-motion by revealing immediately.
+ * Scroll-driven reveal wrapper. Adds `.is-visible` when the element enters
+ * the viewport and removes it again once it fully leaves, so sections glide
+ * in every time the visitor scrolls back to them.
  */
 export function Reveal({
   children,
@@ -21,6 +23,7 @@ export function Reveal({
   delay = 0,
   threshold = 0.15,
   as: Tag = "div",
+  from = "up",
 }: RevealProps) {
   const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
@@ -28,25 +31,14 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setVisible(true);
-      return;
-    }
-
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            io.disconnect();
-          }
+          if (entry.isIntersecting && entry.intersectionRatio >= threshold) setVisible(true);
+          else if (!entry.isIntersecting) setVisible(false);
         }
       },
-      { threshold, rootMargin: "0px 0px -8% 0px" },
+      { threshold: [0, threshold], rootMargin: "0px 0px -6% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -55,8 +47,8 @@ export function Reveal({
   return (
     <Tag
       ref={ref as never}
-      className={`reveal ${visible ? "is-visible" : ""} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className={`reveal reveal-${from} ${visible ? "is-visible" : ""} ${className}`}
+      style={{ transitionDelay: visible ? `${delay}ms` : "0ms" }}
     >
       {children}
     </Tag>
