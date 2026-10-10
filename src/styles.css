@@ -435,8 +435,16 @@
 
 .page-transition { animation: route-blur-in 0.5s cubic-bezier(0.2,0.8,0.2,1) both; }
 
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(0.2,0.8,0.2,1); }
-.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity .9s ease, transform 1.1s cubic-bezier(.16,1,.3,1), filter .9s ease;
+}
+.reveal-up { transform: translate3d(0, 70px, 0) scale(.96); }
+.reveal-left { transform: translate3d(-90px, 0, 0) rotate(-1.5deg); }
+.reveal-right { transform: translate3d(90px, 0, 0) rotate(1.5deg); }
+.reveal-zoom { transform: scale(.82); }
+.reveal.is-visible { opacity: 1; filter: blur(0); transform: none; }
 
 .mask-marquee {
   -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
@@ -503,11 +511,31 @@
 
 html { scroll-behavior: smooth; }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.001ms !important;
-  }
+/* App-style depth: the current story is full size, neighbours sink back while sliding. */
+.testimonial-track .testimonial-card {
+  transform: scale(.86) rotateY(0deg);
+  opacity: .25;
+  filter: blur(2px);
+  transition: transform 950ms cubic-bezier(.22,.7,.15,1), opacity 950ms ease, filter 950ms ease;
 }
+.testimonial-track .testimonial-card.is-current { transform: scale(1); opacity: 1; filter: none; }
+.testimonial-track.track-reset .testimonial-card { transition: none; }
+.testimonial-track .testimonial-card.is-current .testimonial-portrait { animation: testimonial-portrait-reveal .8s .35s cubic-bezier(.16,1,.3,1) both; }
+.testimonial-track .testimonial-card.is-current .testimonial-copy { animation: testimonial-content-settle .8s .45s cubic-bezier(.16,1,.3,1) both; }
+
+/* Second headline row runs the opposite way like a news ticker. */
+.headline-track-reverse { animation: marquee 38s linear infinite reverse; }
+.skills-ribbon:hover .headline-track-reverse { animation-play-state: paused; }
+.ticker-band { transform: rotate(-2deg) scale(1.04); }
+.ticker-band-alt { transform: rotate(1.5deg) scale(1.04); }
+
+/* Auto-gliding feature shelf: snapping would fight the continuous drift. */
+.feature-shelf.is-drifting { scroll-snap-type: none; scroll-behavior: auto; }
+
+@keyframes float-card {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.feature-slide:nth-child(odd) > .motion-card { animation: float-card 6s ease-in-out infinite; }
+.feature-slide:nth-child(even) > .motion-card { animation: float-card 6s 3s ease-in-out infinite; }
+.feature-slide > .motion-card:hover { animation-play-state: paused; }
