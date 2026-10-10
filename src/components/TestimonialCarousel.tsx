@@ -264,10 +264,10 @@ export function TestimonialCarousel() {
                   size="icon"
                   type="button"
                   onClick={() => {
+                    if (locked.current || index === active) return;
                     carryRemainingOnCleanup.current = false;
                     remainingMs.current = MANUAL_HOLD_SECONDS * 1000;
                     setPauseReason("focus", false);
-                    if (locked.current || index === active) return;
                     locked.current = true;
                     setMoving(true);
                     setPosition(index + 1);

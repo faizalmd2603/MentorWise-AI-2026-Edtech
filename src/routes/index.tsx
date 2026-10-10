@@ -1,14 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { Reveal } from "@/components/Reveal";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
+import { Button } from "@/components/ui/button";
 import { DirectoryBadges } from "@/components/DirectoryBadges";
 import banner from "@/assets/mw-banner.png.asset.json";
 import { STOCK_AGENT_IMAGES } from "@/lib/stock-images";
 import {
+  ArrowLeft,
   ArrowRight,
   Sparkles,
   ExternalLink,
@@ -295,15 +297,12 @@ function Marquee() {
     "Project Ideas",
     "Exam Prep",
   ];
-  const row = [...items, ...items];
   return (
-    <section aria-hidden="true" className="mask-marquee mt-10 overflow-hidden border-y border-border/60 bg-card/60 py-4">
-      <div className="flex w-max animate-marquee gap-8 px-4 text-xs uppercase tracking-[0.3em] text-muted-foreground">
-        {row.map((t, i) => (
-          <span key={i} className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" /> {t}
-          </span>
-        ))}
+    <section aria-label="Career skills" className="skills-ribbon overflow-hidden border-y border-primary/30 bg-primary/10 py-6">
+      <div className="headline-track flex w-max">
+        {[0, 1].map(copy => <div key={copy} aria-hidden={copy === 1} className="flex shrink-0 items-center gap-10 px-5">
+          {items.map(item => <span key={item} className="inline-flex items-center gap-10 whitespace-nowrap font-display text-3xl font-semibold sm:text-5xl"><span>{item}</span><Sparkles className="h-7 w-7 text-primary" /></span>)}
+        </div>)}
       </div>
     </section>
   );
@@ -319,6 +318,11 @@ const FEATURES = [
 ];
 
 function AgentBento() {
+  const shelf = useRef<HTMLDivElement>(null);
+  const moveShelf = (step: number) => {
+    const node = shelf.current;
+    if (node) node.scrollBy({ left: step * node.clientWidth * .8, behavior: "smooth" });
+  };
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <Reveal className="mb-12 max-w-3xl">
@@ -335,9 +339,13 @@ function AgentBento() {
         </p>
       </Reveal>
 
-      <div className="feature-motion-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-        {FEATURES.map((f, i) => (
-          <Reveal key={f.title} className={f.span} delay={i * 70}>
+      <div className="mb-6 flex justify-end gap-3">
+        <Button variant="outline" size="icon" aria-label="Previous features" onClick={() => moveShelf(-1)}><ArrowLeft /></Button>
+        <Button variant="outline" size="icon" aria-label="Next features" onClick={() => moveShelf(1)}><ArrowRight /></Button>
+      </div>
+      <div ref={shelf} className="feature-motion-grid feature-shelf">
+        {FEATURES.map((f) => (
+          <div key={f.title} className="feature-slide">
             <Link
               to="/agents/$agentId" params={{ agentId: f.agentId }}
               className="motion-card group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card"
@@ -360,7 +368,7 @@ function AgentBento() {
                 </div>
               </div>
             </Link>
-          </Reveal>
+          </div>
         ))}
       </div>
     </section>
