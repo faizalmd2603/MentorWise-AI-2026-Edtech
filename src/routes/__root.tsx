@@ -90,6 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "MentorWise AI — Free AI Career App for Students" },
       { name: "twitter:description", content: "Free AI career help for students — resume builder, mock interviews, free internships, free courses and LinkedIn help, all in one free app." },
       { name: "google-site-verification", content: "DHjo3vqRDJYGT0yhZU7S1XNTmL84AqdWO3DAzQznzC0" },
+      { name: "google-site-verification", content: "c4u4UISxi85dRimI4bYWW_ziQz8TSOzkKOn5SzE2-Hg" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/MOenNFrbYlgBYv2flSCzr5Foryf2/social-images/social-1785075065860-MentorWise_AI_banner.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/MOenNFrbYlgBYv2flSCzr5Foryf2/social-images/social-1785075065860-MentorWise_AI_banner.webp" },
     ],
