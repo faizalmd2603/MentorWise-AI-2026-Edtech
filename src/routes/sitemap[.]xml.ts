@@ -4,7 +4,7 @@ import { AGENTS } from "@/lib/agents";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-const BASE_URL = "https://mentorwiseaiedtechservice.lovable.app";
+const BASE_URL = "https://mentorwiseai.store";
 
 interface SitemapEntry {
   path: string;

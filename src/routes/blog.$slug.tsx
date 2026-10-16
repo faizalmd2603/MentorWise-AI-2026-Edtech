@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getArticleBySlug, type Article, type ArticleSummary } from "@/lib/articles.functions";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {

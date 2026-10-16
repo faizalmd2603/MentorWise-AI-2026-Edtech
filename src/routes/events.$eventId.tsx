@@ -18,7 +18,7 @@ export const Route = createFileRoute("/events/$eventId")({
       { title: "Live Event — MentorWise AI" },
       // Event rooms require sign-in; keep them out of search indexes.
       { name: "robots", content: "noindex,nofollow" },
-      { property: "og:url", content: `https://mentorwiseaiedtechservice.lovable.app/events/${params.eventId}` },
+      { property: "og:url", content: `https://mentorwiseai.store/events/${params.eventId}` },
     ],
   }),
   component: LiveEventRoom,

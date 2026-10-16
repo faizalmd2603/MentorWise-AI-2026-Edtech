@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Free Online Courses with Certificates for Students — MentorWise AI";
 const DESC =
   "Genuinely free online courses with certificates for college students — Google, Microsoft Learn, NPTEL, AWS and freeCodeCamp — plus a free AI curator that builds your learning path.";

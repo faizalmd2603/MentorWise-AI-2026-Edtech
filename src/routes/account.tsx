@@ -12,7 +12,7 @@ import {
   Lock, LogIn, UserPlus, Loader2, ShieldCheck, Camera, LogOut, Check,
 } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/account")({
   head: () => ({

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Alternatives to PrepInsta for Interview Prep (Free, 2026)";
 const DESC =
   "Free alternatives to PrepInsta for interview preparation: MentorWise AI mock interviews, Google Interview Warmup, GeeksforGeeks and LeetCode compared.";

@@ -95,7 +95,7 @@ function shell(inner: string): string {
         </td></tr>
         <tr><td style="padding:28px 28px 8px 28px;color:#0b1220;font-size:15px;line-height:1.6;">${inner}</td></tr>
         <tr><td style="padding:18px 28px 28px 28px;color:#6b7280;font-size:12px;line-height:1.5;">
-          You receive this email because you signed up at <a href="https://mentorwiseaiedtechservice.lovable.app" style="color:#0b5fff;text-decoration:none;">mentorwiseaiedtechservice.lovable.app</a>.<br>
+          You receive this email because you signed up at <a href="https://mentorwiseai.store" style="color:#0b5fff;text-decoration:none;">mentorwiseai.store</a>.<br>
           MentorWise AI · Chennai, India · 100% free forever.
         </td></tr>
       </table>
@@ -135,7 +135,7 @@ export function announcementEmailTemplate(opts: {
       <h1 style="margin:0 0 10px 0;font-size:22px;line-height:1.3;color:#0b1220;">${esc(opts.title)}</h1>
       <p style="margin:0 0 18px 0;color:#374151;font-size:14px;">From <strong>${esc(opts.authorName)}</strong></p>
       <div style="margin:0 0 22px 0;color:#0b1220;font-size:15px;line-height:1.65;">${opts.bodyHtml}</div>
-      <a href="https://mentorwiseaiedtechservice.lovable.app/feed" style="display:inline-block;padding:11px 20px;background:#0b1220;color:#ffffff;text-decoration:none;border-radius:10px;font-weight:600;font-size:14px;">Open the feed</a>
+      <a href="https://mentorwiseai.store/feed" style="display:inline-block;padding:11px 20px;background:#0b1220;color:#ffffff;text-decoration:none;border-radius:10px;font-weight:600;font-size:14px;">Open the feed</a>
     `),
   };
 }

@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import type { EmailOtpType } from "@supabase/supabase-js";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/auth/confirm")({
   ssr: false,

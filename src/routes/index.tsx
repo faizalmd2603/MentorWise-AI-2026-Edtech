@@ -31,7 +31,7 @@ const agentInternship = { url: STOCK_AGENT_IMAGES.internship };
 const agentCourses = { url: STOCK_AGENT_IMAGES.courses };
 const agentHumaniser = { url: STOCK_AGENT_IMAGES.humaniser };
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const OG_IMAGE = `${SITE}${banner.url}`;
 
 export const Route = createFileRoute("/")({

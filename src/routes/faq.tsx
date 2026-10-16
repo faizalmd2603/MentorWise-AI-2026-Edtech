@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "MentorWise AI FAQ — What It Is, Who Runs It, What It Costs";
 const DESC =
   "Straight answers about MentorWise AI: what it is, who founded it, what the 12 AI agents do, whether it is really free, and how students in India use it.";
@@ -34,7 +34,7 @@ const FAQS: Faq[] = [
   },
   {
     q: "Is MentorWise AI related to mentorwise.io or mentorwise.com?",
-    a: "No. MentorWise AI is an independent Indian EdTech platform at mentorwiseaiedtechservice.lovable.app and is not affiliated with any similarly named site.",
+    a: "No. MentorWise AI is an independent Indian EdTech platform at mentorwiseai.store and is not affiliated with any similarly named site.",
   },
   {
     q: "How does MentorWise AI make money if everything is free?",

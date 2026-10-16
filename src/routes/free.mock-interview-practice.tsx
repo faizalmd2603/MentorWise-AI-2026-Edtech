@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Free Mock Interview Practice Online for Students — MentorWise AI";
 const DESC =
   "Practice unlimited mock interviews free. STAR-method questions, instant AI feedback and HR round preparation for college students and freshers. No booking, no fee.";

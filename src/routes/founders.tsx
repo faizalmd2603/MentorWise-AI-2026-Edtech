@@ -7,7 +7,7 @@ import saadh from "@/assets/team/saadh-mohammed.jpg.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
 
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const FOUNDER_OG = `${SITE}${founder.url}`;
 
 const FOUNDERS_JSONLD = {

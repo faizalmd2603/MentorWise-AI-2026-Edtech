@@ -6,7 +6,7 @@ import {
   type ArticleSummary,
 } from "@/lib/articles.functions";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/blog/")({
   loader: () => listPublishedArticles(),

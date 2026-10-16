@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { ArrowRight } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "MentorWise AI Comparisons: Free Alternatives for Students";
 const DESC =
   "Honest comparisons of free career platforms for Indian students and freshers — MentorWise AI vs Internshala, Unstop alternatives and PrepInsta alternatives.";

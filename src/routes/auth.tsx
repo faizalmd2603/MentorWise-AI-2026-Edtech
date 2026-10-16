@@ -7,7 +7,7 @@ import { requestEmailOtp, verifyEmailOtp } from "@/lib/auth-otp.functions";
 import { useAuthReady } from "@/hooks/use-auth-ready";
 import { Mail, ShieldCheck, Loader2, Lock, UserPlus, LogIn } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
