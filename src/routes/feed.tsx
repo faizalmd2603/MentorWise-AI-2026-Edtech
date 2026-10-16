@@ -10,7 +10,7 @@ import { useAuthReady } from "@/hooks/use-auth-ready";
 import jaithoonPortrait from "@/assets/jaithoon-aasia-ms.jpeg.asset.json";
 import { Megaphone, ShieldCheck, LogIn, Loader2, Mic2, Sparkles } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/feed")({
   head: () => ({

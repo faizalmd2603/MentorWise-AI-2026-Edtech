@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { ArrowRight } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Free AI Career Tools for Students — MentorWise AI";
 const DESC =
   "Free resume builder, free mock interview practice, free internship search and free online courses for college students and freshers. No payment, no trial, no card.";

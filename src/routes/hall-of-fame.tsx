@@ -23,7 +23,7 @@ import sabaAudio from "@/assets/hof/Saba_Ambareen.mpeg.asset.json";
 import sameeraDocx from "@/assets/hof/India_at_80_AI_Quiz_Research_Challenge.docx.asset.json";
 import sameeraPdf from "@/assets/hof/India_at_80_AI_Quiz_Research_Challenge.pdf.asset.json";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const OG_IMAGE = `${SITE}${dakshin.url}`;
 
 type Rank = "gold" | "silver" | "bronze" | "best";

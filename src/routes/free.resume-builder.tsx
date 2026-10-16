@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Free Resume Builder for Students (No Payment) — MentorWise AI";
 const DESC =
   "A genuinely free resume builder for college students and freshers. Build an ATS-ready resume with AI help, download it, and pay nothing — no trial, no watermark, no card.";

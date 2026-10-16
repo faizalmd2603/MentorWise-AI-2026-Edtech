@@ -31,7 +31,7 @@ const PROVIDERS: Provider[] = [
     keyEnv: "OPENROUTER_API_KEY",
     multimodal: true,
     headers: {
-      "HTTP-Referer": "https://mentorwiseaiedtechservice.lovable.app",
+      "HTTP-Referer": "https://mentorwiseai.store",
       "X-Title": "MentorWise AI",
     },
   },

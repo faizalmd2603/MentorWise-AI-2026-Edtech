@@ -5,7 +5,7 @@ import * as Icons from "lucide-react";
 import { Lock, Sparkles } from "lucide-react";
 import { STOCK_AGENT_IMAGES as AGENT_IMAGES } from "@/lib/stock-images";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/agents/")({
   head: () => ({

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Internshala vs AI Career Platforms for Freshers (2026)";
 const DESC =
   "Internshala vs MentorWise AI and other AI career platforms for freshers: listings versus coaching, what each costs, and which one gets you shortlisted.";

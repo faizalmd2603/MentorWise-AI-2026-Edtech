@@ -5,7 +5,7 @@ import { submitContactForm } from "@/lib/contact.functions";
 import { useState } from "react";
 import { Mail, MessageCircle, Linkedin, Loader2, CheckCircle2 } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({

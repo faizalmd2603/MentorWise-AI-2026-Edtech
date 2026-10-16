@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Free Internships for College Students in India — MentorWise AI";
 const DESC =
   "How to find free internships, LOR programmes and government internship schemes as a college student in India — and get shortlisted with a free AI resume and mock interviews.";

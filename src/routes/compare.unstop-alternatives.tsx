@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AnswerPage, faqJsonLd, type Faq } from "@/components/AnswerPage";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 const TITLE = "Unstop Alternatives for Free Internship Discovery (2026)";
 const DESC =
   "The best Unstop alternatives for finding free internships in India — MentorWise AI, Internshala, LinkedIn and government portals compared on cost, coverage and support.";

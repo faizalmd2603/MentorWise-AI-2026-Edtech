@@ -28,7 +28,7 @@ import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { ChatMarkdown } from "@/components/ChatMarkdown";
 import { useAuthReady } from "@/hooks/use-auth-ready";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/agents/$agentId")({
   head: ({ params }) => {

@@ -7,7 +7,7 @@ import { createEvent, listEvents, deleteEvent, setEventStatus } from "@/lib/even
 import { useAuthReady } from "@/hooks/use-auth-ready";
 import { Radio, Calendar, Plus, Trash2, Play, Square, LogIn, Video, Loader2 } from "lucide-react";
 
-const SITE = "https://mentorwiseaiedtechservice.lovable.app";
+const SITE = "https://mentorwiseai.store";
 
 export const Route = createFileRoute("/events/")({
   head: () => ({
