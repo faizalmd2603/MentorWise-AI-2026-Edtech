@@ -22,7 +22,7 @@ import {
   Lock,
   MessageSquarePlus,
 } from "lucide-react";
-import { Globe, Search } from "lucide-react";
+import { Globe, Search, Zap, Brain, ChevronDown, Check } from "lucide-react";
 import { MentorVideoCall } from "@/components/MentorVideoCall";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { ChatMarkdown } from "@/components/ChatMarkdown";
@@ -117,7 +117,9 @@ function AgentChat() {
   const [imgPrompt, setImgPrompt] = useState("");
   const [showImg, setShowImg] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [phase, setPhase] = useState<"searching" | "reading" | "thinking">("searching");
+  const [phase, setPhase] = useState<"searching" | "reading" | "thinking" | "typing">("typing");
+  const [mode, setMode] = useState<"fast" | "think" | "search">("fast");
+  const [modeOpen, setModeOpen] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
@@ -283,12 +285,12 @@ function AgentChat() {
     const sentAttachments = attach;
     setAttach([]);
     setLoading(true);
-    const searchCapable = agent!.id !== "humaniser";
-    setPhase(searchCapable ? "searching" : "thinking");
+    const searching = mode === "search" && agent!.id !== "humaniser";
+    setPhase(searching ? "searching" : mode === "think" ? "thinking" : "typing");
     const timers: ReturnType<typeof setTimeout>[] = [];
-    if (searchCapable) {
-      timers.push(setTimeout(() => setPhase("reading"), 2600));
-      timers.push(setTimeout(() => setPhase("thinking"), 5200));
+    if (searching) {
+      timers.push(setTimeout(() => setPhase("reading"), 2200));
+      timers.push(setTimeout(() => setPhase("typing"), 4800));
     }
     try {
       const res = await chat({
@@ -299,6 +301,7 @@ function AgentChat() {
             content: m.content,
             attachments: m.attachments,
           })),
+          mode,
         },
       });
       setMessages((m) => [
@@ -582,7 +585,9 @@ function AgentChat() {
                         ? "Searching the web…"
                         : phase === "reading"
                           ? "Reading top results…"
-                          : "Thinking…"}
+                          : phase === "thinking"
+                            ? "Thinking it through…"
+                            : "Typing"}
                     </span>
                     <span className="flex gap-1">
                       {[0, 1, 2].map((d) => (
@@ -730,6 +735,42 @@ function AgentChat() {
                   onChange={(e) => { void handleFiles(e.target.files, "file"); e.target.value = ""; }}
                 />
 
+
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setModeOpen((v) => !v)}
+                    aria-label="Choose response mode"
+                    className="h-11 shrink-0 inline-flex items-center gap-1.5 rounded-2xl bg-card/60 px-3 text-xs font-semibold ring-1 ring-border hover:ring-cyber/40 transition"
+                  >
+                    {mode === "fast" ? <Zap className="h-4 w-4 text-cyber" /> : mode === "think" ? <Brain className="h-4 w-4 text-cyber" /> : <Globe className="h-4 w-4 text-cyber" />}
+                    <span className="hidden sm:inline">{mode === "fast" ? "Fast" : mode === "think" ? "Think" : "Search"}</span>
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${modeOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {modeOpen && (
+                    <div className="absolute bottom-14 left-0 z-20 w-64 rounded-2xl glass-strong p-2 animate-scale-in shadow-xl">
+                      {([
+                        { id: "fast", icon: Zap, label: "Fast", desc: "Quick, instant answers" },
+                        { id: "think", icon: Brain, label: "Think", desc: "Deeper reasoning for complex questions" },
+                        { id: "search", icon: Globe, label: "Search the web", desc: "Live results with real links" },
+                      ] as const).filter((o) => !(o.id === "search" && agent.id === "humaniser")).map((o) => (
+                        <button
+                          key={o.id}
+                          type="button"
+                          onClick={() => { setMode(o.id); setModeOpen(false); textareaRef.current?.focus(); }}
+                          className={`flex w-full items-start gap-2.5 rounded-xl px-3 py-2 text-left hover:bg-card/70 ${mode === o.id ? "bg-card/70" : ""}`}
+                        >
+                          <o.icon className="mt-0.5 h-4 w-4 text-cyber" />
+                          <span className="flex-1">
+                            <span className="block text-sm font-semibold">{o.label}</span>
+                            <span className="block text-[11px] text-muted-foreground">{o.desc}</span>
+                          </span>
+                          {mode === o.id && <Check className="mt-0.5 h-4 w-4 text-cyber" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 <textarea
                   ref={textareaRef}
