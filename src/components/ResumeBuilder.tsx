@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { chatWithAgent } from "@/lib/ai.functions";
+import { chatWithAgent, resumeAssist } from "@/lib/ai.functions";
+import { RESUME_TEMPLATES, DEFAULT_TEMPLATE, LAYOUT_LABELS, type ResumeTemplate } from "./resume-templates";
+import { Wand2, LayoutTemplate, Check, Undo2 } from "lucide-react";
 import {
   X,
   Plus,
@@ -60,6 +62,7 @@ const EMPTY: ResumeData = {
 };
 
 const STORAGE_KEY = "mw-resume-draft-v1";
+const TPL_KEY = "mw-resume-template-v1";
 
 const STEPS = [
   { key: "profile", label: "Profile & Photo" },
@@ -85,6 +88,65 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
   const [aiLoading, setAiLoading] = useState(false);
   const chat = useServerFn(chatWithAgent);
   const printRef = useRef<HTMLDivElement>(null);
+  const assist = useServerFn(resumeAssist);
+  const [tplId, setTplId] = useState<string | null>(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [fillText, setFillText] = useState("");
+  const [fillLoading, setFillLoading] = useState(false);
+  const [fillMsg, setFillMsg] = useState<string | null>(null);
+  const tpl = RESUME_TEMPLATES.find((t) => t.id === tplId) ?? DEFAULT_TEMPLATE;
+
+  useEffect(() => {
+    if (!open) return;
+    const saved = localStorage.getItem(TPL_KEY);
+    if (saved) setTplId(saved);
+    else setGalleryOpen(true);
+  }, [open]);
+
+  function chooseTemplate(id: string) {
+    setTplId(id);
+    localStorage.setItem(TPL_KEY, id);
+    setGalleryOpen(false);
+  }
+
+  async function quickFill() {
+    const text = fillText.trim();
+    if (!text || fillLoading) return;
+    setFillLoading(true);
+    setFillMsg(null);
+    try {
+      const res = await assist({
+        data: {
+          json: true,
+          instruction:
+            'Extract resume details from the text into this JSON shape (use "" for unknown, keep arrays empty if none): {"fullName":"","headline":"","summary":"","email":"","phone":"","location":"","linkedin":"","website":"","skills":"comma separated","achievements":"one per line","education":[{"school":"","degree":"","year":"","score":""}],"experience":[{"role":"","company":"","period":"","bullets":"one per line"}],"projects":[{"name":"","tech":"","link":"","bullets":"one per line"}],"certifications":[{"name":"","issuer":"","year":""}]}. Write a polished 2-3 sentence summary and ATS-friendly bullets based only on the facts given.',
+          text: text.slice(0, 9000),
+        },
+      });
+      if (res.error) throw new Error(res.error);
+      const m = res.text.match(/\{[\s\S]*\}/);
+      if (!m) throw new Error("bad");
+      const j = JSON.parse(m[0]) as Partial<ResumeData>;
+      setData((d) => {
+        const n = { ...d };
+        for (const k of ["fullName", "headline", "summary", "email", "phone", "location", "linkedin", "website", "skills", "achievements"] as const) {
+          const v = j[k];
+          if (typeof v === "string" && v.trim()) n[k] = v;
+        }
+        for (const k of ["education", "experience", "projects", "certifications"] as const) {
+          const v = j[k];
+          if (Array.isArray(v) && v.length) (n as Record<string, unknown>)[k] = v;
+        }
+        return n;
+      });
+      setFillMsg("Filled in. Review each step and tweak anything you like.");
+      setFillText("");
+    } catch {
+      setFillMsg("Couldn't read that. Try again or add a little more detail.");
+    } finally {
+      setFillLoading(false);
+    }
+  }
 
   // Persist draft
   useEffect(() => {
@@ -269,6 +331,13 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
           </div>
           <div className="flex items-center gap-2">
             <button
+              onClick={() => setGalleryOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-card/60 px-3 py-1.5 text-xs ring-1 ring-border hover:ring-cyber/50 transition"
+              type="button"
+            >
+              <LayoutTemplate className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Templates</span>
+            </button>
+            <button
               onClick={resetAll}
               className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-card/60 px-3 py-1.5 text-xs ring-1 ring-border hover:ring-destructive/50 transition"
               type="button"
@@ -352,6 +421,28 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* AI quick fill */}
+            <div className="rounded-2xl glass-strong p-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm font-semibold"><Wand2 className="h-4 w-4 text-cyber" /> AI quick fill</div>
+              <p className="text-[11px] text-muted-foreground">Paste a paragraph about yourself or your old resume. AI fills the fields directly.</p>
+              <textarea
+                value={fillText}
+                onChange={(e) => setFillText(e.target.value)}
+                rows={3}
+                placeholder="I'm Priya, final-year B.Com at… I interned at… skills: Excel, SQL…"
+                className="w-full rounded-lg bg-input px-3 py-2 text-sm outline-none ring-1 ring-border focus:ring-cyber resize-y"
+              />
+              <button
+                type="button"
+                onClick={() => void quickFill()}
+                disabled={fillLoading || !fillText.trim()}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-cyber to-magenta px-3 py-2 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {fillLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} Fill my resume
+              </button>
+              {fillMsg && <p className="text-[11px] text-muted-foreground">{fillMsg}</p>}
             </div>
 
             {/* Step fields */}
@@ -469,6 +560,9 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
         </div>
       )}
 
+      {galleryOpen && (
+        <TemplateGallery current={tplId ?? DEFAULT_TEMPLATE.id} onProceed={chooseTemplate} onClose={() => { if (!tplId) chooseTemplate(DEFAULT_TEMPLATE.id); else setGalleryOpen(false); }} />
+      )}
       <style>{RESUME_CSS}</style>
     </div>
   );
@@ -698,6 +792,14 @@ function Field({
   );
 }
 
+const AI_ACTIONS = [
+  "Make it professional and recruiter-ready",
+  "Make it shorter and more concise",
+  "Convert into ATS bullet points with strong action verbs",
+  "Fix grammar and spelling only",
+  "Add measurable impact where the facts allow",
+];
+
 function Area({
   label,
   value,
@@ -711,9 +813,70 @@ function Area({
   placeholder?: string;
   rows?: number;
 }) {
+  const assist = useServerFn(resumeAssist);
+  const [menu, setMenu] = useState(false);
+  const [custom, setCustom] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [prev, setPrev] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function run(instruction: string) {
+    if (!value.trim() || busy) return;
+    setBusy(true);
+    setErr(null);
+    setMenu(false);
+    try {
+      const res = await assist({ data: { instruction: `${instruction}. This is the "${label}" field of a resume.`, text: value } });
+      if (res.error || !res.text) throw new Error(res.error ?? "empty");
+      setPrev(value);
+      onChange(res.text);
+      setCustom("");
+    } catch {
+      setErr("AI couldn't rewrite this right now. Try again.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
-    <label className="block">
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{label}</div>
+    <div className="block">
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
+        <div className="relative flex items-center gap-1">
+          {prev !== null && (
+            <button type="button" onClick={() => { onChange(prev); setPrev(null); }} className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] text-muted-foreground hover:text-foreground" aria-label="Undo AI change">
+              <Undo2 className="h-3 w-3" /> Undo
+            </button>
+          )}
+          <button
+            type="button"
+            disabled={!value.trim() || busy}
+            onClick={() => setMenu((v) => !v)}
+            className="inline-flex items-center gap-1 rounded-full bg-cyber/15 px-2 py-0.5 text-[10px] font-semibold text-cyber ring-1 ring-cyber/40 disabled:opacity-40"
+          >
+            {busy ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />} AI
+          </button>
+          {menu && (
+            <div className="absolute right-0 top-6 z-30 w-64 rounded-2xl glass-strong p-2 shadow-xl animate-scale-in">
+              {AI_ACTIONS.map((a) => (
+                <button key={a} type="button" onClick={() => void run(a)} className="block w-full rounded-lg px-2.5 py-1.5 text-left text-xs hover:bg-card/70">
+                  {a}
+                </button>
+              ))}
+              <div className="mt-1 flex gap-1 border-t border-border/50 pt-2">
+                <input
+                  value={custom}
+                  onChange={(e) => setCustom(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter" && custom.trim()) void run(custom.trim()); }}
+                  placeholder="e.g. Convert into a confident tone"
+                  className="min-w-0 flex-1 rounded-lg bg-input px-2 py-1 text-xs outline-none ring-1 ring-border"
+                />
+                <button type="button" disabled={!custom.trim()} onClick={() => void run(custom.trim())} className="rounded-lg bg-cyber/20 px-2 text-xs text-cyber disabled:opacity-40">Go</button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -721,7 +884,73 @@ function Area({
         rows={rows}
         className="w-full rounded-lg bg-input px-3 py-2 text-sm outline-none ring-1 ring-border focus:ring-cyber resize-y"
       />
-    </label>
+      {err && <p className="mt-1 text-[11px] text-destructive">{err}</p>}
+    </div>
+  );
+}
+
+const SAMPLE: ResumeData = {
+  ...EMPTY,
+  fullName: "Ananya Sharma",
+  headline: "Final-year B.Tech CSE · Data & AI",
+  summary: "Detail-driven engineering student with hands-on experience in data analysis and machine learning projects.",
+  email: "ananya@email.com",
+  phone: "+91 98765 43210",
+  location: "Chennai, India",
+  linkedin: "https://linkedin.com",
+  education: [{ school: "Anna University", degree: "B.Tech Computer Science", year: "2022 – 2026", score: "CGPA 8.7" }],
+  experience: [{ role: "Data Analyst Intern", company: "Tech Corp", period: "May – Jul 2025", bullets: "Built 6 Power BI dashboards used by 40 managers\nCut report time by 35% with SQL automation" }],
+  projects: [{ name: "Smart Attendance", tech: "Python · OpenCV", link: "", bullets: "Face recognition system with 96% accuracy" }],
+  skills: "Python, SQL, Power BI, Excel, Machine Learning",
+  certifications: [{ name: "Google Data Analytics", issuer: "Coursera", year: "2025" }],
+};
+
+function TemplateGallery({ current, onProceed, onClose }: { current: string; onProceed: (id: string) => void; onClose: () => void }) {
+  const [sel, setSel] = useState(current);
+  const [filter, setFilter] = useState<string>("all");
+  const list = RESUME_TEMPLATES.filter((t) => filter === "all" || t.layout === filter);
+  return (
+    <div className="fixed inset-0 z-[80] flex flex-col bg-background/97 backdrop-blur-md print:hidden">
+      <div className="border-b border-border/60 px-4 py-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+          <div>
+            <h3 className="font-display text-lg font-semibold">Choose your resume template</h3>
+            <p className="text-xs text-muted-foreground">{RESUME_TEMPLATES.length} ATS-friendly designs. You can switch any time.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => onProceed(sel)} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-cyber to-magenta px-5 py-2 text-sm font-semibold text-primary-foreground glow-cyan">
+              Proceed <ChevronRight className="h-4 w-4" />
+            </button>
+            <button type="button" onClick={onClose} aria-label="Close templates" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-card/60 ring-1 ring-border"><X className="h-4 w-4" /></button>
+          </div>
+        </div>
+        <div className="mx-auto mt-3 flex max-w-7xl gap-2 overflow-x-auto pb-1">
+          {[{ id: "all", label: "All" }, ...LAYOUT_LABELS].map((l) => (
+            <button key={l.id} type="button" onClick={() => setFilter(l.id)} className={`shrink-0 rounded-full px-3 py-1 text-xs ring-1 transition ${filter === l.id ? "bg-cyber/20 text-cyber ring-cyber/50" : "bg-card/60 ring-border"}`}>
+              {l.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto px-4 py-5">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {list.map((t: ResumeTemplate) => (
+            <button key={t.id} type="button" onClick={() => setSel(t.id)} onDoubleClick={() => onProceed(t.id)} className={`group relative rounded-xl p-2 text-left ring-2 transition ${sel === t.id ? "ring-cyber bg-cyber/10" : "ring-transparent hover:ring-border bg-card/40"}`}>
+              <div className="relative aspect-[210/297] overflow-hidden rounded-md bg-card shadow">
+                <div className="pointer-events-none absolute left-0 top-0 origin-top-left" style={{ transform: "scale(0.25)", width: "210mm" }}>
+                  <div className="resume-page"><ResumePreview data={SAMPLE} tpl={t} /></div>
+                </div>
+              </div>
+              <div className="mt-2 flex items-center justify-between text-xs font-medium">
+                <span className="truncate">{t.name}</span>
+                {sel === t.id && <Check className="h-4 w-4 text-cyber" />}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+      <style>{RESUME_CSS}</style>
+    </div>
   );
 }
 
