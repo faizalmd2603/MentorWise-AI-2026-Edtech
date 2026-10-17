@@ -572,7 +572,7 @@ function AgentChat() {
                   <div className="flex items-center gap-2.5 rounded-2xl bg-card/85 px-4 py-3 text-sm ring-1 ring-border text-muted-foreground">
                     <span className="relative inline-flex h-5 w-5 items-center justify-center">
                       <span className="absolute inset-0 rounded-full bg-cyber/25 animate-ping" />
-                      {phase === "thinking" ? (
+                      {phase === "thinking" || phase === "typing" ? (
                         <Loader2 className="relative h-4 w-4 animate-spin text-cyber" />
                       ) : phase === "reading" ? (
                         <Globe className="relative h-4 w-4 text-magenta animate-float-y" />
