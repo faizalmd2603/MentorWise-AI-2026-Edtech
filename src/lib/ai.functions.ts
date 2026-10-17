@@ -29,6 +29,7 @@ const ChatInput = z.object({
     )
     .min(1)
     .max(24),
+  mode: z.enum(["fast", "think", "search"]).default("fast"),
 });
 
 const SHARED_STYLE_RULES = [
@@ -109,34 +110,6 @@ async function buildContent(
 
 
 
-/** Decides whether a live Google search is needed and what to search for. */
-async function planSearch(agentName: string, question: string): Promise<string | null> {
-  if (!question.trim()) return null;
-  try {
-    const { text } = await llmChat(
-      [
-        {
-          role: "system",
-          content:
-            `You are the retrieval router for the ${agentName} of MentorWise AI. Decide if answering the user's message well requires up-to-date information from the live web (jobs, internships, courses, certifications, companies, deadlines, exams, tools, prices, news, rankings, current best practices, anything that changes over time, or anything where the user expects real links).` +
-            ` If yes, reply with ONLY the best Google search query (max 14 words, add the year when recency matters).` +
-            ` If the message is purely a rewrite, personal advice, or opinion task with no factual lookup, reply with exactly NONE.`,
-        },
-        { role: "user", content: question.slice(0, 1500) },
-      ],
-      { maxTokens: 256, temperature: 0.2 },
-    );
-    const out = text.trim().replace(/^["'`]|["'`]$/g, "");
-    if (!out || /^none\b/i.test(out) || out.length > 160) return null;
-    // Guard against a truncated / degenerate router answer.
-    if (out.split(/\s+/).length < 3) return question.trim().slice(0, 120);
-    return out;
-  } catch {
-    return null;
-  }
-}
-
-
 export const chatWithAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
@@ -151,9 +124,10 @@ export const chatWithAgent = createServerFn({ method: "POST" })
     let sources: SearchSource[] = [];
     let searchQuery: string | null = null;
 
-    if (!isHumaniser) {
-      searchQuery = await planSearch(agent.name, question);
-      if (searchQuery) {
+    // Web search only runs when the user picks "Search the web" mode.
+    if (!isHumaniser && data.mode === "search" && question.trim()) {
+      searchQuery = question.trim().replace(/\s+/g, " ").slice(0, 150);
+      {
         const { googleSearch } = await import("./search.server");
         sources = await googleSearch(searchQuery, 8);
       }
@@ -166,6 +140,11 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       systemPrompt = HUMANISER_SYSTEM;
     } else {
       systemPrompt = `${agent.system}\n\n${SHARED_STYLE_RULES}\n\nToday's date is ${today}.`;
+      if (data.mode === "fast") {
+        systemPrompt += "\n\nFast mode: for greetings or small talk reply in one or two friendly lines. Otherwise answer directly and completely, but keep it tight.";
+      } else if (data.mode === "think") {
+        systemPrompt += "\n\nThink mode: reason carefully before answering, consider trade-offs, and give a thorough, well-structured, complete answer.";
+      }
       if (sources.length) {
         const { formatSourcesForPrompt } = await import("./search.server");
         systemPrompt +=
@@ -200,8 +179,9 @@ export const chatWithAgent = createServerFn({ method: "POST" })
           ...builtMessages,
         ],
         {
-          maxTokens: isHumaniser ? 2200 : 1600,
+          maxTokens: data.mode === "think" ? 8192 : 4096,
           temperature: isHumaniser ? 1 : 0.7,
+          reasoning: data.mode === "think" ? "high" : data.mode === "search" ? "medium" : "low",
           multimodal: hasAttachments,
         },
       );
@@ -267,4 +247,34 @@ export const generateImage = createServerFn({ method: "POST" })
     const url = json.choices?.[0]?.message?.images?.[0]?.image_url?.url;
     if (!url) throw new Error("No image returned.");
     return { url };
+  });
+
+
+const AssistInput = z.object({
+  instruction: z.string().min(2).max(600),
+  text: z.string().max(9000),
+  json: z.boolean().optional(),
+});
+
+/** Resume builder helper: rewrites a field or extracts resume data. Returns plain text only. */
+export const resumeAssist = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => AssistInput.parse(input))
+  .handler(async ({ data }) => {
+    const system = data.json
+      ? "You extract resume data. Reply with ONLY a valid JSON object, no markdown fences, no commentary."
+      : "You are an expert ATS resume writer. Apply the instruction to the text and reply with ONLY the final text that should go directly into the resume field. No preface, no quotes, no markdown headings. Keep facts and numbers; never invent employers, dates or metrics. For bullet lists put one bullet per line without bullet symbols.";
+    try {
+      const out = await llmChat(
+        [
+          { role: "system", content: system },
+          { role: "user", content: `Instruction: ${data.instruction}\n\nText:\n${data.text}` },
+        ],
+        { maxTokens: 3000, temperature: 0.4, reasoning: "low" },
+      );
+      return { text: out.text.trim(), error: null as string | null };
+    } catch (err) {
+      console.error("resumeAssist failed", err);
+      return { text: "", error: "AI is busy right now. Please try again in a moment." };
+    }
   });

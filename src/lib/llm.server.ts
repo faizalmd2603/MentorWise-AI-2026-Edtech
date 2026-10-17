@@ -11,6 +11,8 @@ export type LlmOptions = {
   temperature?: number;
   /** Set when any message carries image/file parts. Text-only providers are skipped. */
   multimodal?: boolean;
+  /** Reasoning depth. "low" keeps replies fast; "high" is for Think mode. */
+  reasoning?: "low" | "medium" | "high";
 };
 
 type Provider = {
@@ -93,7 +95,7 @@ export class LlmUnavailableError extends Error {
  * Retryable/credit errors (401/402/403/429/5xx) fall through to the next provider.
  */
 export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Promise<LlmResult> {
-  const { maxTokens = 1600, temperature = 0.7, multimodal = false } = opts;
+  const { maxTokens = 4096, temperature = 0.7, multimodal = false, reasoning = "low" } = opts;
   const statuses: number[] = [];
 
   for (const p of PROVIDERS) {
@@ -104,21 +106,26 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
     if (!key) continue;
 
     try {
-      const res = await fetch(p.url, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${key}`,
-          "Content-Type": "application/json",
-          ...(p.headers ?? {}),
-        },
-        body: JSON.stringify({
-          model: p.model,
-          max_tokens: maxTokens,
-          temperature,
-          messages: payloadMessages,
-        }),
-      });
+      const call = (msgs: unknown[]) =>
+        fetch(p.url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key}`,
+            "Content-Type": "application/json",
+            ...(p.headers ?? {}),
+          },
+          body: JSON.stringify({
+            model: p.model,
+            max_tokens: maxTokens,
+            temperature,
+            messages: msgs,
+            ...(p.name === "openrouter"
+              ? { reasoning: { effort: reasoning } }
+              : { reasoning_effort: reasoning }),
+          }),
+        });
 
+      let res = await call(payloadMessages);
       if (!res.ok) {
         statuses.push(res.status);
         const body = await res.text();
@@ -126,13 +133,26 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
         continue;
       }
 
-      const json = (await res.json()) as {
-        choices?: Array<{ message?: { content?: string } }>;
-      };
-      const text = (json.choices?.[0]?.message?.content ?? "").trim();
+      type Json = { choices?: Array<{ message?: { content?: string }; finish_reason?: string }> };
+      let json = (await res.json()) as Json;
+      let text = (json.choices?.[0]?.message?.content ?? "").trim();
       if (!text) {
         console.error(`[llm] ${p.name} returned empty content`);
         continue;
+      }
+      // If the reply was cut off by the token limit, ask the model to continue
+      // (up to 2 times) so users never see a half-finished answer.
+      for (let i = 0; i < 2 && json.choices?.[0]?.finish_reason === "length"; i++) {
+        res = await call([
+          ...payloadMessages,
+          { role: "assistant", content: text },
+          { role: "user", content: "Continue exactly where you stopped. Do not repeat anything, do not add a preface." },
+        ]);
+        if (!res.ok) break;
+        json = (await res.json()) as Json;
+        const more = json.choices?.[0]?.message?.content ?? "";
+        if (!more.trim()) break;
+        text += more;
       }
       return { text, provider: p.name };
     } catch (err) {
