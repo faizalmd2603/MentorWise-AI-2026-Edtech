@@ -374,7 +374,7 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
               Live Preview · ATS-optimised A4
             </div>
             <div ref={printRef} className="resume-page mx-auto bg-white text-[#111] shadow-2xl print:shadow-none print:mx-0">
-              <ResumePreview data={data} />
+              <ResumePreview data={data} tpl={tpl} />
             </div>
           </div>
         </div>
@@ -469,25 +469,7 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
         </div>
       )}
 
-      {/* Print styles */}
-      <style>{`
-        .resume-page {
-          width: 210mm;
-          min-height: 297mm;
-          padding: 14mm 14mm;
-          box-sizing: border-box;
-          font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-          font-size: 10.5pt;
-          line-height: 1.45;
-          color: #111;
-        }
-        @media print {
-          @page { size: A4; margin: 0; }
-          body * { visibility: hidden !important; }
-          .resume-page, .resume-page * { visibility: visible !important; }
-          .resume-page { box-shadow: none !important; margin: 0 !important; }
-        }
-      `}</style>
+      <style>{RESUME_CSS}</style>
     </div>
   );
 }
@@ -785,161 +767,113 @@ function ListEditor<T>({
 
 /* ===================== Resume preview (ATS friendly) ===================== */
 
-function ResumePreview({ data }: { data: ResumeData }) {
-  const skills = data.skills
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+export function ResumePreview({ data, tpl }: { data: ResumeData; tpl: ResumeTemplate }) {
+  const skills = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
   const achievements = data.achievements.split("\n").map((s) => s.trim()).filter(Boolean);
+  const L = tpl.layout;
+  const isSide = L === "sidebar";
+  const isBanner = L === "banner";
+  const centered = L === "centered";
+
+  const contacts = (
+    <div className={`rx-contact ${centered ? "justify-center" : ""} ${isSide ? "flex-col !gap-y-1" : ""}`}>
+      {data.email && <a href={`mailto:${data.email}`}>{data.email}</a>}
+      {data.phone && <span>{data.phone}</span>}
+      {data.location && <span>{data.location}</span>}
+      {data.linkedin && <a href={data.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>}
+      {data.website && <a href={data.website} target="_blank" rel="noreferrer">Portfolio</a>}
+      {data.links.map((l, i) => (l.url ? <a key={i} href={l.url} target="_blank" rel="noreferrer">{l.label || l.url}</a> : null))}
+    </div>
+  );
+
+  const header = (
+    <header className={`rx-header ${centered ? "text-center flex-col items-center" : ""} ${isBanner ? "rx-banner" : ""}`}>
+      {data.photo && <img src={data.photo} alt={data.fullName} className="rx-photo" />}
+      <div className="min-w-0 flex-1">
+        <h1 className="rx-name">{data.fullName || "Your Name"}</h1>
+        {data.headline && <p className="rx-headline">{data.headline}</p>}
+        {!isSide && contacts}
+      </div>
+    </header>
+  );
+
+  const summary = data.summary && <Section title="Professional Summary"><p>{data.summary}</p></Section>;
+  const experience = data.experience.some((e) => e.role || e.company) && (
+    <Section title="Experience">
+      {data.experience.filter((e) => e.role || e.company).map((e, i) => (
+        <div key={i} className="rx-item">
+          <div className="rx-row">
+            <div className="rx-title">{e.role}{e.company && <span className="rx-sub"> · {e.company}</span>}</div>
+            <div className="rx-date">{e.period}</div>
+          </div>
+          <Bullets text={e.bullets} />
+        </div>
+      ))}
+    </Section>
+  );
+  const projects = data.projects.some((p) => p.name) && (
+    <Section title="Projects">
+      {data.projects.filter((p) => p.name).map((p, i) => (
+        <div key={i} className="rx-item">
+          <div className="rx-row">
+            <div className="rx-title">{p.name}{p.tech && <span className="rx-sub"> · {p.tech}</span>}</div>
+            {p.link && <a href={p.link} target="_blank" rel="noreferrer" className="rx-date">Link</a>}
+          </div>
+          <Bullets text={p.bullets} />
+        </div>
+      ))}
+    </Section>
+  );
+  const education = data.education.some((e) => e.school || e.degree) && (
+    <Section title="Education">
+      {data.education.filter((e) => e.school || e.degree).map((e, i) => (
+        <div key={i} className={`rx-item ${isSide ? "" : "rx-row"}`}>
+          <div>
+            <div className="rx-title">{e.degree}</div>
+            <div className="rx-sub">{e.school}{e.score ? ` · ${e.score}` : ""}</div>
+          </div>
+          <div className="rx-date">{e.year}</div>
+        </div>
+      ))}
+    </Section>
+  );
+  const skillsEl = skills.length > 0 && (
+    <Section title="Skills">
+      {isSide ? <ul className="rx-plain">{skills.map((s) => <li key={s}>{s}</li>)}</ul> : <p>{skills.join(" · ")}</p>}
+    </Section>
+  );
+  const certs = data.certifications.some((c) => c.name) && (
+    <Section title="Certifications">
+      {data.certifications.filter((c) => c.name).map((c, i) => (
+        <div key={i} className={`rx-item ${isSide ? "" : "rx-row"}`}>
+          <span><span className="rx-title">{c.name}</span>{c.issuer && <span className="rx-sub"> · {c.issuer}</span>}</span>
+          <span className="rx-date">{c.year}</span>
+        </div>
+      ))}
+    </Section>
+  );
+  const ach = achievements.length > 0 && (
+    <Section title="Achievements">
+      <ul className="rx-bullets">{achievements.map((a, i) => <li key={i}>{a}</li>)}</ul>
+    </Section>
+  );
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-start gap-5 pb-4 border-b-2 border-[#0b3b8c]">
-        {data.photo && (
-          <img
-            src={data.photo}
-            alt={data.fullName}
-            className="h-24 w-24 rounded-full object-cover ring-2 ring-[#0b3b8c]"
-          />
-        )}
-        <div className="flex-1 min-w-0">
-          <h1 className="text-[22pt] font-bold leading-tight text-[#0b3b8c] tracking-tight">
-            {data.fullName || "Your Name"}
-          </h1>
-          {data.headline && (
-            <p className="mt-1 text-[11pt] text-[#333] font-medium">{data.headline}</p>
-          )}
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[9.5pt] text-[#444]">
-            {data.email && (
-              <a href={`mailto:${data.email}`} className="text-[#0b3b8c] underline">
-                {data.email}
-              </a>
-            )}
-            {data.phone && <span>{data.phone}</span>}
-            {data.location && <span>{data.location}</span>}
-            {data.linkedin && (
-              <a href={data.linkedin} target="_blank" rel="noreferrer" className="text-[#0b3b8c] underline">
-                LinkedIn
-              </a>
-            )}
-            {data.website && (
-              <a href={data.website} target="_blank" rel="noreferrer" className="text-[#0b3b8c] underline">
-                Portfolio
-              </a>
-            )}
-            {data.links.map((l, i) =>
-              l.url ? (
-                <a key={i} href={l.url} target="_blank" rel="noreferrer" className="text-[#0b3b8c] underline">
-                  {l.label || l.url}
-                </a>
-              ) : null,
-            )}
-          </div>
+    <div
+      className={`rx rx-${L}`}
+      style={{ ["--rx-accent" as string]: tpl.accent, fontFamily: tpl.font } as React.CSSProperties}
+    >
+      {header}
+      {isSide ? (
+        <div className="rx-cols">
+          <aside className="rx-side">
+            <Section title="Contact">{contacts}</Section>
+            {skillsEl}{education}{certs}
+          </aside>
+          <main>{summary}{experience}{projects}{ach}</main>
         </div>
-      </div>
-
-      {/* Summary */}
-      {data.summary && (
-        <Section title="Professional Summary">
-          <p className="text-[10pt] text-[#222]">{data.summary}</p>
-        </Section>
-      )}
-
-      {/* Experience */}
-      {data.experience.some((e) => e.role || e.company) && (
-        <Section title="Experience">
-          {data.experience
-            .filter((e) => e.role || e.company)
-            .map((e, i) => (
-              <div key={i} className="mb-3">
-                <div className="flex items-baseline justify-between gap-3">
-                  <div className="font-semibold text-[11pt] text-[#111]">
-                    {e.role}
-                    {e.company && <span className="font-normal text-[#444]"> · {e.company}</span>}
-                  </div>
-                  <div className="text-[9pt] text-[#666] shrink-0">{e.period}</div>
-                </div>
-                <Bullets text={e.bullets} />
-              </div>
-            ))}
-        </Section>
-      )}
-
-      {/* Projects */}
-      {data.projects.some((p) => p.name) && (
-        <Section title="Projects">
-          {data.projects
-            .filter((p) => p.name)
-            .map((p, i) => (
-              <div key={i} className="mb-3">
-                <div className="flex items-baseline justify-between gap-3">
-                  <div className="font-semibold text-[11pt] text-[#111]">
-                    {p.name}
-                    {p.tech && <span className="font-normal text-[#444]"> · {p.tech}</span>}
-                  </div>
-                  {p.link && (
-                    <a href={p.link} target="_blank" rel="noreferrer" className="text-[9pt] text-[#0b3b8c] underline shrink-0">
-                      Link
-                    </a>
-                  )}
-                </div>
-                <Bullets text={p.bullets} />
-              </div>
-            ))}
-        </Section>
-      )}
-
-      {/* Education */}
-      {data.education.some((e) => e.school || e.degree) && (
-        <Section title="Education">
-          {data.education
-            .filter((e) => e.school || e.degree)
-            .map((e, i) => (
-              <div key={i} className="mb-2 flex items-baseline justify-between gap-3">
-                <div>
-                  <div className="font-semibold text-[10.5pt]">{e.degree}</div>
-                  <div className="text-[9.5pt] text-[#444]">{e.school}{e.score ? ` · ${e.score}` : ""}</div>
-                </div>
-                <div className="text-[9pt] text-[#666] shrink-0">{e.year}</div>
-              </div>
-            ))}
-        </Section>
-      )}
-
-      {/* Skills */}
-      {skills.length > 0 && (
-        <Section title="Skills">
-          <p className="text-[10pt] text-[#222]">{skills.join(" · ")}</p>
-        </Section>
-      )}
-
-      {/* Certifications */}
-      {data.certifications.some((c) => c.name) && (
-        <Section title="Certifications">
-          {data.certifications
-            .filter((c) => c.name)
-            .map((c, i) => (
-              <div key={i} className="text-[10pt] flex items-baseline justify-between gap-3">
-                <span>
-                  <span className="font-semibold">{c.name}</span>
-                  {c.issuer && <span className="text-[#444]"> · {c.issuer}</span>}
-                </span>
-                <span className="text-[9pt] text-[#666]">{c.year}</span>
-              </div>
-            ))}
-        </Section>
-      )}
-
-      {/* Achievements */}
-      {achievements.length > 0 && (
-        <Section title="Achievements">
-          <ul className="list-disc pl-5 text-[10pt] space-y-0.5 text-[#222]">
-            {achievements.map((a, i) => (
-              <li key={i}>{a}</li>
-            ))}
-          </ul>
-        </Section>
+      ) : (
+        <>{summary}{experience}{projects}{education}{skillsEl}{certs}{ach}</>
       )}
     </div>
   );
@@ -947,23 +881,58 @@ function ResumePreview({ data }: { data: ResumeData }) {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-4">
-      <h2 className="text-[11pt] font-bold uppercase tracking-[0.12em] text-[#0b3b8c] border-b border-[#cfd8e8] pb-1 mb-2">
-        {title}
-      </h2>
+    <section className="rx-section">
+      <h2 className="rx-h2">{title}</h2>
       {children}
     </section>
   );
 }
 
 function Bullets({ text }: { text: string }) {
-  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const lines = text.split("\n").map((l) => l.replace(/^[-•*\s]+/, "").trim()).filter(Boolean);
   if (lines.length === 0) return null;
-  return (
-    <ul className="list-disc pl-5 mt-1 space-y-0.5 text-[10pt] text-[#222]">
-      {lines.map((l, i) => (
-        <li key={i}>{l}</li>
-      ))}
-    </ul>
-  );
+  return <ul className="rx-bullets">{lines.map((l, i) => <li key={i}>{l}</li>)}</ul>;
 }
+
+export const RESUME_CSS = `
+.resume-page { width: 210mm; min-height: 297mm; padding: 15mm 16mm; box-sizing: border-box; background: #fff; color: #1a1a1a; }
+.rx { font-size: 10.5pt; line-height: 1.42; color: #1a1a1a; }
+.rx a { color: var(--rx-accent); text-decoration: none; }
+.rx-header { display: flex; gap: 14pt; align-items: flex-start; padding-bottom: 10pt; margin-bottom: 4pt; border-bottom: 2px solid var(--rx-accent); }
+.rx-photo { width: 80pt; height: 80pt; border-radius: 9999px; object-fit: cover; flex-shrink: 0; }
+.rx-name { font-size: 22pt; font-weight: 700; line-height: 1.1; color: var(--rx-accent); letter-spacing: -0.01em; margin: 0; }
+.rx-headline { margin: 4pt 0 0; font-size: 11pt; font-weight: 500; color: #333; }
+.rx-contact { display: flex; flex-wrap: wrap; gap: 2pt 12pt; margin-top: 6pt; font-size: 9.3pt; color: #444; }
+.rx-section { margin-top: 11pt; }
+.rx-h2 { font-size: 10.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rx-accent); border-bottom: 1px solid color-mix(in srgb, var(--rx-accent) 25%, #fff); padding-bottom: 3pt; margin: 0 0 6pt; }
+.rx-section p { margin: 0; }
+.rx-item { margin-bottom: 7pt; break-inside: avoid; page-break-inside: avoid; }
+.rx-item:last-child { margin-bottom: 0; }
+.rx-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10pt; }
+.rx-title { font-weight: 600; color: #111; }
+.rx-sub { font-weight: 400; color: #4a4a4a; }
+.rx-date { font-size: 9pt; color: #666; white-space: nowrap; flex-shrink: 0; }
+.rx-bullets { list-style: disc; padding-left: 14pt; margin: 3pt 0 0; }
+.rx-bullets li { margin: 1.5pt 0; padding-left: 1pt; }
+.rx-plain { list-style: none; padding: 0; margin: 0; }
+.rx-plain li { margin: 1.5pt 0; }
+.rx-centered .rx-header { text-align: center; }
+.rx-centered .rx-h2 { text-align: center; }
+.rx-banner .rx-header { background: var(--rx-accent); margin: -15mm -16mm 6pt; padding: 12mm 16mm 9mm; border: 0; }
+.rx-banner .rx-name, .rx-banner .rx-headline, .rx-banner .rx-contact, .rx-banner .rx-contact a { color: #fff; }
+.rx-minimal .rx-header { border-bottom: 0; }
+.rx-minimal .rx-h2 { border: 0; letter-spacing: 0.18em; font-size: 9.5pt; }
+.rx-compact { font-size: 9.6pt; line-height: 1.33; }
+.rx-compact .rx-name { font-size: 18pt; }
+.rx-compact .rx-section { margin-top: 8pt; }
+.rx-cols { display: grid; grid-template-columns: 58mm 1fr; gap: 8mm; }
+.rx-side { border-right: 1px solid color-mix(in srgb, var(--rx-accent) 20%, #fff); padding-right: 6mm; font-size: 9.5pt; }
+.rx-side .rx-section:first-child, .rx-cols main > .rx-section:first-child { margin-top: 8pt; }
+@media print {
+  @page { size: A4; margin: 0; }
+  html, body { background: #fff !important; }
+  body * { visibility: hidden !important; }
+  .resume-page, .resume-page * { visibility: visible !important; }
+  .resume-page { position: absolute !important; left: 0; top: 0; margin: 0 !important; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+`;
