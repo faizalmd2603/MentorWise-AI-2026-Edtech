@@ -3,3 +3,9 @@
 - [x] Add prominent continuous skills and platform headline ribbons and a sliding feature shelf.
 - [x] Verify movement, reading holds, touch navigation, and reduced-motion behavior.
 - [ ] Previous sitemap submission remains blocked pending connected Google access verification.
+
+# Agent reliability and memory
+- [ ] Fix irrelevant search queries and preserve follow-up context.
+- [ ] Add private saved chats with history navigation.
+- [ ] Save resume drafts and assistant conversations per account.
+- [ ] Preserve resume paragraphs and bullets; verify real flows.
