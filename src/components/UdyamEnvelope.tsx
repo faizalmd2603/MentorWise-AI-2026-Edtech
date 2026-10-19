@@ -95,7 +95,7 @@ export function UdyamEnvelope() {
           aria-modal="true"
           aria-label="Udyam registration certificate"
           onClick={close}
-          className={`fixed inset-0 z-[100] grid place-items-center bg-background/60 p-4 backdrop-blur-md ${
+          className={`fixed inset-0 z-[2147483000] isolate grid place-items-center bg-background/60 p-4 backdrop-blur-md ${
             phase === "closing" ? "udyam-fade-out" : "udyam-fade-in"
           }`}
         >
