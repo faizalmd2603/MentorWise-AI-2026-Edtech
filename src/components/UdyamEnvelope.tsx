@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { MousePointerClick, X, ShieldCheck } from "lucide-react";
 import cert from "@/assets/udyam-certificate.png.asset.json";
 
@@ -88,7 +89,7 @@ export function UdyamEnvelope() {
         </div>
       </div>
 
-      {modal && (
+      {modal && createPortal(
         <div
           role="dialog"
           aria-modal="true"
@@ -118,7 +119,8 @@ export function UdyamEnvelope() {
               Business contact hidden for privacy · Verify at udyamregistration.gov.in
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </section>
   );
