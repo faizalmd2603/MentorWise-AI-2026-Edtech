@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import { Button } from "@/components/ui/button";
 import { DirectoryBadges } from "@/components/DirectoryBadges";
+import { UdyamEnvelope } from "@/components/UdyamEnvelope";
 import banner from "@/assets/mw-banner.png.asset.json";
 import { STOCK_AGENT_IMAGES } from "@/lib/stock-images";
 import {
@@ -65,6 +66,7 @@ function Home() {
       <Hero key={show ? "intro" : "ready"} />
       <BentoDeck />
       <BannerReveal />
+      <UdyamEnvelope />
       <Marquee />
       <DirectoryBadges />
       <AgentBento />

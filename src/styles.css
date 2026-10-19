@@ -539,3 +539,26 @@ html { scroll-behavior: smooth; }
 .feature-slide:nth-child(odd) > .motion-card { animation: float-card 6s ease-in-out infinite; }
 .feature-slide:nth-child(even) > .motion-card { animation: float-card 6s 3s ease-in-out infinite; }
 .feature-slide > .motion-card:hover { animation-play-state: paused; }
+
+/* Udyam envelope */
+.udyam-panel { background: radial-gradient(120% 120% at 0% 0%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 55%), linear-gradient(135deg, color-mix(in oklab, var(--background) 70%, oklch(0.25 0.08 260)), var(--background)); }
+.udyam-env { perspective: 900px; cursor: pointer; }
+.udyam-env-body { background: linear-gradient(160deg, oklch(0.3 0.08 260), oklch(0.2 0.06 260)); border: 1px solid color-mix(in oklab, var(--primary) 50%, transparent); }
+.udyam-env-pocket { z-index: 10; background: linear-gradient(to top right, oklch(0.24 0.07 260) 50%, transparent 50.5%) left/50% 100% no-repeat, linear-gradient(to top left, oklch(0.24 0.07 260) 50%, transparent 50.5%) right/50% 100% no-repeat; clip-path: polygon(0 30%, 50% 70%, 100% 30%, 100% 100%, 0 100%); background-color: oklch(0.26 0.07 260); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--primary) 60%, transparent); }
+.udyam-env-flap { z-index: 15; clip-path: polygon(0 0, 100% 0, 50% 100%); background: linear-gradient(180deg, oklch(0.34 0.09 260), oklch(0.27 0.07 260)); transform-style: preserve-3d; transform: rotateX(0deg); }
+.udyam-flap-open { transform: rotateX(180deg); z-index: 1; }
+.udyam-seal { background: radial-gradient(circle at 35% 30%, color-mix(in oklab, var(--primary) 70%, white), var(--primary)); box-shadow: 0 4px 14px color-mix(in oklab, var(--primary) 50%, transparent); transition: opacity .3s; }
+.udyam-env:has(.udyam-flap-open) .udyam-seal { opacity: 0; }
+.udyam-cta { animation: udyam-glow 2.2s ease-in-out infinite; }
+@keyframes udyam-glow { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent); } 50% { box-shadow: 0 0 0 10px transparent; } }
+.udyam-cursor { animation: udyam-tap 2s ease-in-out infinite; }
+.udyam-ripple { animation: udyam-rip 2s ease-out infinite; opacity: 0; }
+@keyframes udyam-tap { 0%,100% { transform: translate(10px,10px); } 45% { transform: translate(0,0) scale(.9); } 55% { transform: translate(0,0) scale(1); } }
+@keyframes udyam-rip { 0%,40% { transform: scale(.3); opacity: 0; } 50% { opacity: .9; } 100% { transform: scale(2.4); opacity: 0; } }
+.udyam-fade-in { animation: udyam-fade .4s ease both; }
+.udyam-fade-out { animation: udyam-fade .5s ease reverse both; }
+@keyframes udyam-fade { from { opacity: 0; } to { opacity: 1; } }
+.udyam-cert-in { animation: udyam-rise .6s cubic-bezier(.2,.8,.2,1) both; }
+.udyam-cert-out { animation: udyam-rise .5s cubic-bezier(.4,0,.6,1) reverse both; }
+@keyframes udyam-rise { from { transform: translateY(45vh) scale(.35); opacity: .3; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .udyam-cta, .udyam-cursor, .udyam-ripple { animation: none; } }
