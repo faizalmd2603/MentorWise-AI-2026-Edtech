@@ -9,3 +9,5 @@
 - [ ] Add private saved chats with history navigation.
 - [ ] Save resume drafts and assistant conversations per account.
 - [ ] Preserve resume paragraphs and bullets; verify real flows.
+
+- [ ] Recommend evidence-based visitor growth actions (approval required before implementation).
