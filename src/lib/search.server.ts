@@ -88,7 +88,10 @@ export async function googleSearch(query: string, limit = 8): Promise<SearchSour
   for (const r of json.organic_results ?? []) push(r.title, r.link, r.snippet, r.date, r.source);
   for (const r of json.top_stories ?? []) push(r.title, r.link, undefined, r.date, r.source);
 
-  return rows.slice(0, limit);
+  const { filterRelevant } = await import("./search-query");
+  return filterRelevant(rows, query)
+    .slice(0, limit)
+    .map((r, i) => ({ ...r, n: i + 1 }));
 }
 
 export function formatSourcesForPrompt(sources: SearchSource[]): string {
