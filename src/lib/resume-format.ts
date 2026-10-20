@@ -2,7 +2,7 @@
 
 export type Block = { type: "p"; text: string } | { type: "ul"; items: string[] };
 
-const BULLET = /^\s*(?:[-•*▪●◦‣–]|\d+[.)])\s+/;
+const BULLET = /^\s*(?:[•▪●◦‣]\s*|[-*–]\s+|\d+[.)]\s+)/;
 
 export function parseBlocks(text: string): Block[] {
   const blocks: Block[] = [];
