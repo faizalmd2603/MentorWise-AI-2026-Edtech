@@ -154,6 +154,77 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          attachment_names: string[] | null
+          content: string
+          created_at: string
+          id: string
+          role: string
+          search_query: string | null
+          sources: Json | null
+          thread_id: string
+          user_id: string
+        }
+        Insert: {
+          attachment_names?: string[] | null
+          content?: string
+          created_at?: string
+          id?: string
+          role: string
+          search_query?: string | null
+          sources?: Json | null
+          thread_id: string
+          user_id: string
+        }
+        Update: {
+          attachment_names?: string[] | null
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          search_query?: string | null
+          sources?: Json | null
+          thread_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_threads: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_rate_limit: {
         Row: {
           count: number
@@ -426,6 +497,30 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           year_of_study?: string | null
+        }
+        Relationships: []
+      }
+      resume_drafts: {
+        Row: {
+          assistant_messages: Json
+          data: Json
+          template_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assistant_messages?: Json
+          data?: Json
+          template_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assistant_messages?: Json
+          data?: Json
+          template_id?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
