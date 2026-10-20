@@ -30,6 +30,9 @@ const ChatInput = z.object({
     .min(1)
     .max(24),
   mode: z.enum(["fast", "think", "search"]).default("fast"),
+  /** When true the conversation is saved to the user's private history. */
+  persist: z.boolean().optional(),
+  threadId: z.string().uuid().nullable().optional(),
 });
 
 const SHARED_STYLE_RULES = [
@@ -110,26 +113,150 @@ async function buildContent(
 
 
 
+const HISTORY_CHAR_BUDGET = 24000;
+
+/** Turns the latest question (plus recent context) into a short, focused Google query. */
+async function buildSearchQuery(
+  agentId: string,
+  agentFocus: string,
+  convo: { role: string; content: string }[],
+): Promise<string> {
+  const { heuristicQuery, cleanQuery } = await import("./search-query");
+  const users = convo.filter((m) => m.role === "user");
+  const question = users[users.length - 1]?.content ?? "";
+  const previous = users[users.length - 2]?.content;
+  const fallback = heuristicQuery(question, agentId, previous);
+  try {
+    const recent = convo
+      .slice(-5)
+      .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content.slice(0, 600)}`)
+      .join("\n");
+    const out = await llmChat(
+      [
+        {
+          role: "system",
+          content: `You write Google search queries. Agent focus: ${agentFocus}. Read the conversation and write ONE concise Google query (4-10 words) for the user's LATEST message. Resolve follow-ups using earlier context (keep the role, field, location and level they mentioned). Use plain keywords, add the current year only when freshness matters. Output only the query text.`,
+        },
+        { role: "user", content: recent },
+      ],
+      { maxTokens: 400, temperature: 0.2, reasoning: "low" },
+    );
+    const q = cleanQuery(out.text);
+    return q.length >= 3 ? q : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export const chatWithAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     const agent = AGENTS.find((a) => a.id === data.agentId);
     if (!agent) throw new Error("Unknown agent.");
+    const { supabase, userId } = context;
 
     const isHumaniser = agent.id === "humaniser";
     const lastUser = [...data.messages].reverse().find((m) => m.role === "user");
     const question = lastUser?.content ?? "";
+
+    // ---- Saved conversations (memory) ----
+    let threadId: string | null = null;
+    let history: { role: "user" | "assistant"; content: string }[] = [];
+    let memoryNote = "";
+    if (data.persist) {
+      if (data.threadId) {
+        const { data: t, error } = await supabase
+          .from("chat_threads")
+          .select("id")
+          .eq("id", data.threadId)
+          .eq("user_id", userId)
+          .maybeSingle();
+        if (error) throw new Error(error.message);
+        if (!t) throw new Error("Conversation not found.");
+        threadId = t.id;
+        const { data: rows, error: hErr } = await supabase
+          .from("chat_messages")
+          .select("role, content")
+          .eq("thread_id", threadId)
+          .order("created_at", { ascending: false })
+          .limit(40);
+        if (hErr) throw new Error(hErr.message);
+        let used = 0;
+        for (const r of rows ?? []) {
+          used += r.content.length;
+          if (used > HISTORY_CHAR_BUDGET) break;
+          history.unshift({ role: r.role as "user" | "assistant", content: r.content });
+        }
+      } else {
+        const title = (question || "New chat").replace(/\s+/g, " ").trim().slice(0, 70) || "New chat";
+        const { data: t, error } = await supabase
+          .from("chat_threads")
+          .insert({ user_id: userId, agent_id: agent.id, title })
+          .select("id")
+          .single();
+        if (error) throw new Error(error.message);
+        threadId = t.id;
+      }
+
+      // Memory across earlier conversations with this agent.
+      const { data: others } = await supabase
+        .from("chat_threads")
+        .select("id, title, updated_at")
+        .eq("user_id", userId)
+        .eq("agent_id", agent.id)
+        .neq("id", threadId)
+        .order("updated_at", { ascending: false })
+        .limit(6);
+      if (others && others.length) {
+        const { data: asks } = await supabase
+          .from("chat_messages")
+          .select("thread_id, content, created_at")
+          .in("thread_id", others.map((o) => o.id))
+          .eq("role", "user")
+          .order("created_at", { ascending: false })
+          .limit(18);
+        memoryNote = others
+          .map((o) => {
+            const qs = (asks ?? []).filter((a) => a.thread_id === o.id).slice(0, 3).map((a) => a.content.replace(/\s+/g, " ").slice(0, 200));
+            return `- ${o.updated_at.slice(0, 10)} "${o.title}"${qs.length ? `: user asked — ${qs.join(" | ")}` : ""}`;
+          })
+          .join("\n");
+      }
+
+      const { error: insErr } = await supabase.from("chat_messages").insert({
+        thread_id: threadId,
+        user_id: userId,
+        role: "user",
+        content: question || "(see attached)",
+        attachment_names: (lastUser?.attachments ?? []).map((a) => a.name),
+      });
+      if (insErr) throw new Error(insErr.message);
+    }
+
+    const convo = data.persist
+      ? [...history, ...data.messages]
+      : data.messages;
 
     let sources: SearchSource[] = [];
     let searchQuery: string | null = null;
 
     // Web search only runs when the user picks "Search the web" mode.
     if (!isHumaniser && data.mode === "search" && question.trim()) {
-      searchQuery = question.trim().replace(/\s+/g, " ").slice(0, 150);
-      {
-        const { googleSearch } = await import("./search.server");
-        sources = await googleSearch(searchQuery, 8);
+      const { googleSearch, } = await import("./search.server");
+      searchQuery = await buildSearchQuery(agent.id, agent.short, convo);
+      sources = await googleSearch(searchQuery, 8);
+      if (sources.length === 0) {
+        const { heuristicQuery } = await import("./search-query");
+        const users = convo.filter((m) => m.role === "user");
+        const alt = heuristicQuery(question, agent.id, users[users.length - 2]?.content);
+        if (alt && alt !== searchQuery) {
+          const more = await googleSearch(alt, 8);
+          if (more.length) {
+            sources = more;
+            searchQuery = alt;
+          }
+        }
       }
     }
 
@@ -140,6 +267,13 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       systemPrompt = HUMANISER_SYSTEM;
     } else {
       systemPrompt = `${agent.system}\n\n${SHARED_STYLE_RULES}\n\nToday's date is ${today}.`;
+      if (data.persist) {
+        systemPrompt +=
+          "\n\nMemory: you remember this conversation in full (it is included above the latest message). Continue naturally where the user left off; never claim you cannot remember earlier messages in this chat.";
+        if (memoryNote) {
+          systemPrompt += `\n\nEarlier conversations this user had with you (most recent first). Use them for continuity when relevant, e.g. "Last time we discussed…", but do not repeat them unprompted:\n${memoryNote}`;
+        }
+      }
       if (data.mode === "fast") {
         systemPrompt += "\n\nFast mode: for greetings or small talk reply in one or two friendly lines. Otherwise answer directly and completely, but keep it tight.";
       } else if (data.mode === "think") {
@@ -148,12 +282,12 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       if (sources.length) {
         const { formatSourcesForPrompt } = await import("./search.server");
         systemPrompt +=
-          `\n\nLIVE GOOGLE SEARCH RESULTS for "${searchQuery}" (restricted to pages published from 2020 onwards). Ground your answer in these, prefer the most recent items, and cite them inline as clickable Markdown links using their exact URLs. Never cite a URL that is not listed here. If the results do not cover something, say so plainly instead of guessing.\n\n` +
+          `\n\nLIVE GOOGLE SEARCH RESULTS for "${searchQuery}" (restricted to pages published from 2020 onwards). Ground your answer in these, prefer the most recent items, and cite them inline as clickable Markdown links using their exact URLs. Never cite a URL that is not listed here. Ignore any result that is not relevant to the user's question. If the results do not cover something, say so plainly, then still give a complete, useful answer from your own knowledge (clearly labelled) with official root-domain links you are certain exist.\n\n` +
           formatSourcesForPrompt(sources) +
           `\n\nEnd your reply with a short "**Sources**" list of the links you actually used, as Markdown links.`;
       } else if (searchQuery) {
         systemPrompt +=
-          `\n\nA live web search was attempted but returned no usable recent results. Answer from your own knowledge, be explicit about what may have changed, and only link to official root domains you are certain exist.`;
+          `\n\nA live web search was attempted but returned no usable recent results. Answer completely from your own knowledge, be explicit about what may have changed, and only link to official root domains you are certain exist.`;
       }
     }
 
@@ -163,11 +297,10 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       ),
     );
 
-
     const builtMessages = await Promise.all(
-      data.messages.map(async (m) => ({
+      convo.map(async (m) => ({
         role: m.role,
-        content: await buildContent(m.content, m.attachments),
+        content: await buildContent(m.content, "attachments" in m ? m.attachments : undefined),
       })),
     );
 
@@ -196,14 +329,147 @@ export const chatWithAgent = createServerFn({ method: "POST" })
           : "Our AI providers are temporarily busy. Please try again in a moment — your message was received, just not answered yet.",
         sources: [],
         searchQuery: null,
+        threadId,
       };
     }
 
+    const finalReply = reply || "Sorry, I couldn't generate a response. Please try again.";
+    const cleanSources = sources.map((s) => ({ title: s.title, link: s.link, date: s.date ?? null, source: s.source ?? null }));
+
+    if (threadId) {
+      const { error: aErr } = await supabase.from("chat_messages").insert({
+        thread_id: threadId,
+        user_id: userId,
+        role: "assistant",
+        content: finalReply,
+        sources: cleanSources.length ? cleanSources : null,
+        search_query: searchQuery,
+      });
+      if (aErr) console.error("Saving assistant reply failed", aErr.message);
+      const { error: uErr } = await supabase
+        .from("chat_threads")
+        .update({ updated_at: new Date().toISOString() })
+        .eq("id", threadId);
+      if (uErr) console.error("Updating conversation failed", uErr.message);
+    }
+
     return {
-      reply: reply || "Sorry, I couldn't generate a response. Please try again.",
-      sources: sources.map((s) => ({ title: s.title, link: s.link, date: s.date ?? null, source: s.source ?? null })),
+      reply: finalReply,
+      sources: cleanSources,
       searchQuery,
+      threadId,
     };
+  });
+
+// ---------------- Chat history ----------------
+
+export const listChatThreads = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ agentId: z.string().min(1).max(40) }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { data: rows, error } = await context.supabase
+      .from("chat_threads")
+      .select("id, title, updated_at")
+      .eq("user_id", context.userId)
+      .eq("agent_id", data.agentId)
+      .order("updated_at", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+export const getChatThread = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ threadId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { data: t, error } = await context.supabase
+      .from("chat_threads")
+      .select("id, agent_id, title")
+      .eq("id", data.threadId)
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!t) return null;
+    const { data: msgs, error: mErr } = await context.supabase
+      .from("chat_messages")
+      .select("id, role, content, sources, search_query, attachment_names, created_at")
+      .eq("thread_id", t.id)
+      .order("created_at", { ascending: true })
+      .limit(200);
+    if (mErr) throw new Error(mErr.message);
+    return {
+      thread: t,
+      messages: (msgs ?? []).map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+        sources: (m.sources as { title: string; link: string; date?: string | null; source?: string | null }[] | null) ?? undefined,
+        searchQuery: m.search_query,
+        attachmentNames: m.attachment_names ?? [],
+      })),
+    };
+  });
+
+export const deleteChatThread = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ threadId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("chat_threads")
+      .delete()
+      .eq("id", data.threadId)
+      .eq("user_id", context.userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ---------------- Resume draft memory ----------------
+
+export const getResumeDraft = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("resume_drafts")
+      .select("data, template_id, assistant_messages, updated_at")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return data
+      ? {
+          data: data.data as Record<string, unknown>,
+          templateId: data.template_id,
+          assistantMessages: (data.assistant_messages as { role: "user" | "assistant"; content: string }[]) ?? [],
+          updatedAt: data.updated_at,
+        }
+      : null;
+  });
+
+export const saveResumeDraft = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        data: z.record(z.string(), z.unknown()),
+        templateId: z.string().max(80).nullable(),
+        assistantMessages: z
+          .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().max(12000) }))
+          .max(60),
+      })
+      .refine((v) => JSON.stringify(v.data).length < 4_500_000, "Resume is too large to save.")
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("resume_drafts").upsert(
+      {
+        user_id: context.userId,
+        data: data.data as never,
+        template_id: data.templateId,
+        assistant_messages: data.assistantMessages as never,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id" },
+    );
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 
