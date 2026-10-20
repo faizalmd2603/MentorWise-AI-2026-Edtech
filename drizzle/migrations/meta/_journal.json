@@ -8,6 +8,13 @@
       "when": 1790705580502,
       "tag": "0000_scope_event_messages_to_live_rooms",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792496357262,
+      "tag": "0001_chat_history_and_resume_drafts",
+      "breakpoints": true
     }
   ]
 }
