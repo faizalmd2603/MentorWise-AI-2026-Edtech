@@ -529,7 +529,12 @@ export const resumeAssist = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const system = data.json
       ? "You extract resume data. Reply with ONLY a valid JSON object, no markdown fences, no commentary."
-      : "You are an expert ATS resume writer. Apply the instruction to the text and reply with ONLY the final text that should go directly into the resume field. No preface, no quotes, no markdown headings. Keep facts and numbers; never invent employers, dates or metrics. For bullet lists put one bullet per line without bullet symbols.";
+      : [
+          "You are an expert ATS resume writer. Apply the instruction to the text and reply with ONLY the final text that should go directly into the resume field. No preface, no quotes, no markdown headings or bold.",
+          "Keep facts and numbers; never invent employers, dates or metrics.",
+          "PRESERVE THE STRUCTURE of the original text exactly: if it has a paragraph followed by bullet points, return a paragraph, then a blank line, then each bullet on its own line starting with '• '. Keep the same number of paragraphs and bullets unless the instruction explicitly asks to change them. Never merge bullets into a paragraph and never join separate lines into one.",
+          "If the field label says bullets, return one bullet per line starting with '• '.",
+        ].join(" ");
     try {
       const out = await llmChat(
         [
