@@ -300,7 +300,7 @@ export const chatWithAgent = createServerFn({ method: "POST" })
     const builtMessages = await Promise.all(
       convo.map(async (m) => ({
         role: m.role,
-        content: await buildContent(m.content, "attachments" in m ? m.attachments : undefined),
+        content: await buildContent(m.content, (m as { attachments?: z.infer<typeof Attachment>[] }).attachments),
       })),
     );
 
@@ -435,7 +435,7 @@ export const getResumeDraft = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return data
       ? {
-          data: data.data as Record<string, unknown>,
+          dataJson: JSON.stringify(data.data ?? {}),
           templateId: data.template_id,
           assistantMessages: (data.assistant_messages as { role: "user" | "assistant"; content: string }[]) ?? [],
           updatedAt: data.updated_at,

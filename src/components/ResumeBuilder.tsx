@@ -189,7 +189,7 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
       .then((r) => {
         if (cancelled) return;
         if (r) {
-          setData({ ...EMPTY, ...(r.data as Partial<ResumeData>) });
+          setData({ ...EMPTY, ...(JSON.parse(r.dataJson) as Partial<ResumeData>) });
           if (r.templateId) {
             setTplId(r.templateId);
             setGalleryOpen(false);
