@@ -1,8 +1,16 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AGENTS } from "@/lib/agents";
-import { chatWithAgent, generateImage } from "@/lib/ai.functions";
+import {
+  chatWithAgent,
+  generateImage,
+  listChatThreads,
+  getChatThread,
+  deleteChatThread,
+} from "@/lib/ai.functions";
+import { History, MessageSquare, Trash2 } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import * as Icons from "lucide-react";
 import {
@@ -68,6 +76,8 @@ export const Route = createFileRoute("/agents/$agentId")({
         : undefined,
     };
   },
+  validateSearch: (s: Record<string, unknown>): { chat?: string } =>
+    typeof s.chat === "string" && s.chat ? { chat: s.chat } : {},
   component: AgentChat,
 });
 
@@ -96,10 +106,24 @@ function readFileAsDataURL(file: File): Promise<string> {
 
 function AgentChat() {
   const { agentId } = useParams({ from: "/agents/$agentId" });
+  const { chat: chatId } = Route.useSearch();
+  const navigate = useNavigate({ from: "/agents/$agentId" });
   const agent = AGENTS.find((a) => a.id === agentId);
   const { isReady, user } = useAuthReady();
   const chat = useServerFn(chatWithAgent);
   const imgFn = useServerFn(generateImage);
+  const listThreads = useServerFn(listChatThreads);
+  const getThread = useServerFn(getChatThread);
+  const delThread = useServerFn(deleteChatThread);
+  const qc = useQueryClient();
+  const threadsQ = useQuery({
+    queryKey: ["chat-threads", agentId, user?.id],
+    queryFn: () => listThreads({ data: { agentId } }),
+    enabled: !!user && !!agent && !agent.comingSoon,
+  });
+  const skipLoadFor = useRef<string | null>(null);
+  const activeChatRef = useRef<string | undefined>(chatId);
+  const [threadLoading, setThreadLoading] = useState(false);
 
   const greeting = useMemo(
     () =>
@@ -135,14 +159,75 @@ function AgentChat() {
   const streamRef = useRef<MediaStream | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Reset chat when switching agents
+  // Clear the composer when switching agents
   useEffect(() => {
-    if (agent) {
+    setAttach([]);
+    setInput("");
+  }, [agentId]);
+
+  // Load the conversation named in the URL (?chat=<id>), or start fresh.
+  useEffect(() => {
+    activeChatRef.current = chatId;
+    if (!agent) return;
+    if (!chatId) {
       setMessages([{ role: "assistant", content: greeting }]);
-      setAttach([]);
-      setInput("");
+      setThreadLoading(false);
+      return;
     }
-  }, [agentId, agent, greeting]);
+    if (skipLoadFor.current === chatId) {
+      skipLoadFor.current = null;
+      return;
+    }
+    if (!isReady || !user) return;
+    let cancelled = false;
+    setThreadLoading(true);
+    getThread({ data: { threadId: chatId } })
+      .then((r) => {
+        if (cancelled) return;
+        if (!r || r.thread.agent_id !== agent.id) {
+          void navigate({ search: {}, replace: true });
+          return;
+        }
+        setMessages([
+          { role: "assistant", content: greeting },
+          ...r.messages.map((m) => ({
+            role: m.role,
+            content: m.content,
+            sources: m.sources as Source[] | undefined,
+            searchQuery: m.searchQuery,
+            attachments: m.attachmentNames.length
+              ? m.attachmentNames.map((n) => ({ kind: "file" as const, name: n, mime: "", dataUrl: "" }))
+              : undefined,
+          })),
+        ]);
+      })
+      .catch((err) => {
+        console.error("Loading chat failed", err);
+        if (!cancelled) void navigate({ search: {}, replace: true });
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setThreadLoading(false);
+          textareaRef.current?.focus();
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [agentId, chatId, isReady, user?.id, greeting]);
+
+  async function removeThread(id: string) {
+    if (!confirm("Delete this chat? This cannot be undone.")) return;
+    try {
+      await delThread({ data: { threadId: id } });
+      if (id === chatId) void navigate({ search: {}, replace: true });
+      void qc.invalidateQueries({ queryKey: ["chat-threads", agentId] });
+    } catch (err) {
+      console.error("Deleting chat failed", err);
+      alert("Couldn't delete this chat. Please try again.");
+    }
+  }
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -292,18 +377,21 @@ function AgentChat() {
       timers.push(setTimeout(() => setPhase("reading"), 2200));
       timers.push(setTimeout(() => setPhase("typing"), 4800));
     }
+    const sentFrom = chatId;
     try {
+      // History is loaded on the server from the saved conversation,
+      // so only the new message (with its attachments) is sent.
       const res = await chat({
         data: {
           agentId: agent!.id,
-          messages: newMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-            attachments: m.attachments,
-          })),
+          messages: [{ role: "user", content: userMsg.content, attachments: userMsg.attachments }],
           mode,
+          persist: true,
+          threadId: chatId ?? null,
         },
       });
+      // Ignore late replies if the user already switched to another chat.
+      if (activeChatRef.current !== sentFrom) return;
       setMessages((m) => [
         ...m,
         {
@@ -313,6 +401,12 @@ function AgentChat() {
           searchQuery: res.searchQuery ?? null,
         },
       ]);
+      if (res.threadId && res.threadId !== chatId) {
+        skipLoadFor.current = res.threadId;
+        activeChatRef.current = res.threadId;
+        void navigate({ search: { chat: res.threadId } });
+      }
+      void qc.invalidateQueries({ queryKey: ["chat-threads", agent!.id] });
     } catch (e) {
       console.error(e, "sent with", sentAttachments.length, "attachments");
       const msg = e instanceof Error ? e.message : "";
@@ -351,7 +445,7 @@ function AgentChat() {
     }
   }
 
-  const showPrompts = messages.length <= 1 && !loading;
+  const showPrompts = messages.length <= 1 && !loading && !threadLoading;
 
   return (
     <SiteLayout>
@@ -371,12 +465,65 @@ function AgentChat() {
             </Link>
             <div className="mt-3 max-h-[78vh] overflow-y-auto rounded-3xl glass p-3 tilt-3d">
               <Link
-                to="/agents"
+                to="/agents/$agentId"
+                params={{ agentId: agent.id }}
+                search={{}}
+                onClick={() => textareaRef.current?.focus()}
                 className="mb-2 flex items-center gap-3 rounded-full bg-gradient-to-r from-cyber/20 to-magenta/10 px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-cyber/30 hover:ring-cyber/60 transition"
               >
                 <MessageSquarePlus className="h-4 w-4 text-cyber" />
                 <span>New chat</span>
               </Link>
+
+              {!agent.comingSoon && (
+                <div className="mb-2">
+                  <div className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
+                    <History className="h-3 w-3 text-cyber" /> Recent chats
+                  </div>
+                  {!user ? (
+                    <p className="px-3 py-1.5 text-[11px] text-muted-foreground">Sign in to keep your chats private and pick up where you left off.</p>
+                  ) : threadsQ.isLoading ? (
+                    <p className="px-3 py-1.5 text-[11px] text-muted-foreground">Loading your chats…</p>
+                  ) : threadsQ.isError ? (
+                    <p className="px-3 py-1.5 text-[11px] text-destructive">Couldn't load your chats.</p>
+                  ) : (threadsQ.data ?? []).length === 0 ? (
+                    <p className="px-3 py-1.5 text-[11px] text-muted-foreground">No saved chats yet. Your conversations will appear here.</p>
+                  ) : (
+                    <ul className="max-h-60 overflow-y-auto">
+                      {(threadsQ.data ?? []).map((t) => {
+                        const active = t.id === chatId;
+                        return (
+                          <li
+                            key={t.id}
+                            className={`group my-0.5 flex items-center gap-1 rounded-full pr-1 text-sm transition ${
+                              active ? "bg-cyber/15 text-foreground ring-1 ring-cyber/40" : "text-muted-foreground hover:bg-card/70 hover:text-foreground"
+                            }`}
+                          >
+                            <Link
+                              to="/agents/$agentId"
+                              params={{ agentId: agent.id }}
+                              search={{ chat: t.id }}
+                              className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2"
+                              title={t.title}
+                            >
+                              <MessageSquare className="h-3.5 w-3.5 shrink-0" />
+                              <span className="truncate">{t.title}</span>
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => void removeThread(t.id)}
+                              aria-label={`Delete chat ${t.title}`}
+                              className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full opacity-60 hover:bg-destructive/15 hover:text-destructive hover:opacity-100"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+              )}
               <div className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
                 <Sparkles className="h-3 w-3 text-cyber" /> Agents
               </div>
@@ -495,6 +642,11 @@ function AgentChat() {
 
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-6 sm:px-6 space-y-4">
+              {threadLoading && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-cyber" /> Loading your conversation…
+                </div>
+              )}
               {messages.map((m, i) => (
                 <div key={i} className={`flex animate-fade-up ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div

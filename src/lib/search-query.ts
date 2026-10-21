@@ -34,7 +34,9 @@ export function heuristicQuery(question: string, agentId: string, previousUser?:
   // Short follow-ups ("what about Bangalore?") borrow keywords from the previous question.
   if (words.length < 3 && previousUser) words = [...keywords(previousUser), ...words];
   const topic = AGENT_TOPICS[agentId];
-  if (topic && !words.some((w) => topic.toLowerCase().includes(w))) words.push(...topic.split(" "));
+  const topicWords = topic ? keywords(topic) : [];
+  const covered = topicWords.some((t) => words.some((w) => w.startsWith(t) || t.startsWith(w)));
+  if (topic && !covered) words.push(...topicWords);
   return Array.from(new Set(words)).slice(0, 10).join(" ");
 }
 

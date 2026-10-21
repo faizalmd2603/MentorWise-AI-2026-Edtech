@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { chatWithAgent, resumeAssist } from "@/lib/ai.functions";
+import { chatWithAgent, resumeAssist, getResumeDraft, saveResumeDraft } from "@/lib/ai.functions";
+import { useAuthReady } from "@/hooks/use-auth-ready";
+import { ChatMarkdown } from "@/components/ChatMarkdown";
+import { parseBlocks, bulletLines } from "@/lib/resume-format";
 import { RESUME_TEMPLATES, DEFAULT_TEMPLATE, LAYOUT_LABELS, type ResumeTemplate } from "./resume-templates";
 import { Wand2, LayoutTemplate, Check, Undo2 } from "lucide-react";
 import {
@@ -94,6 +97,11 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
   const [fillText, setFillText] = useState("");
   const [fillLoading, setFillLoading] = useState(false);
   const [fillMsg, setFillMsg] = useState<string | null>(null);
+  const { isReady, user } = useAuthReady();
+  const getDraft = useServerFn(getResumeDraft);
+  const saveDraft = useServerFn(saveResumeDraft);
+  const [cloud, setCloud] = useState<"loading" | "saving" | "saved" | "error">("saved");
+  const cloudLoaded = useRef(false);
   const tpl = RESUME_TEMPLATES.find((t) => t.id === tplId) ?? DEFAULT_TEMPLATE;
 
   useEffect(() => {
@@ -119,7 +127,7 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
         data: {
           json: true,
           instruction:
-            'Extract resume details from the text into this JSON shape (use "" for unknown, keep arrays empty if none): {"fullName":"","headline":"","summary":"","email":"","phone":"","location":"","linkedin":"","website":"","skills":"comma separated","achievements":"one per line","education":[{"school":"","degree":"","year":"","score":""}],"experience":[{"role":"","company":"","period":"","bullets":"one per line"}],"projects":[{"name":"","tech":"","link":"","bullets":"one per line"}],"certifications":[{"name":"","issuer":"","year":""}]}. Write a polished 2-3 sentence summary and ATS-friendly bullets based only on the facts given.',
+            'Extract resume details from the text into this JSON shape (use "" for unknown, keep arrays empty if none): {"fullName":"","headline":"","summary":"","email":"","phone":"","location":"","linkedin":"","website":"","skills":"comma separated","achievements":"one per line","education":[{"school":"","degree":"","year":"","score":""}],"experience":[{"role":"","company":"","period":"","bullets":"one per line"}],"projects":[{"name":"","tech":"","link":"","bullets":"one per line"}],"certifications":[{"name":"","issuer":"","year":""}]}. Write a polished summary and ATS-friendly bullets based only on the facts given. If the source summary has a paragraph plus bullet points, keep that structure inside the summary string: the paragraph, then "\\n\\n", then each bullet on its own line starting with "• " separated by "\\n". Use "\\n" between bullets in every bullets field.',
           text: text.slice(0, 9000),
         },
       });
@@ -148,7 +156,7 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
     }
   }
 
-  // Persist draft
+  // Persist draft on this device
   useEffect(() => {
     if (!open) return;
     try {
@@ -166,6 +174,63 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
       /* ignore */
     }
   }, [data]);
+
+  // Account memory: load the saved draft + assistant chat when signed in.
+  useEffect(() => {
+    if (!open || !isReady) return;
+    if (!user) {
+      cloudLoaded.current = false;
+      return;
+    }
+    let cancelled = false;
+    cloudLoaded.current = false;
+    setCloud("loading");
+    getDraft()
+      .then((r) => {
+        if (cancelled) return;
+        if (r) {
+          setData({ ...EMPTY, ...(JSON.parse(r.dataJson) as Partial<ResumeData>) });
+          if (r.templateId) {
+            setTplId(r.templateId);
+            setGalleryOpen(false);
+          }
+          if (r.assistantMessages.length) setAiMsgs(r.assistantMessages);
+        }
+        cloudLoaded.current = true;
+        setCloud("saved");
+      })
+      .catch((err) => {
+        console.error("Loading resume draft failed", err);
+        if (!cancelled) {
+          cloudLoaded.current = true;
+          setCloud("error");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, isReady, user?.id, getDraft]);
+
+  // Account memory: save changes (debounced).
+  useEffect(() => {
+    if (!open || !user || !cloudLoaded.current) return;
+    setCloud("saving");
+    const t = setTimeout(() => {
+      saveDraft({
+        data: {
+          data: data as unknown as Record<string, unknown>,
+          templateId: tplId,
+          assistantMessages: aiMsgs.slice(-40).map((m) => ({ role: m.role, content: m.content.slice(0, 12000) })),
+        },
+      })
+        .then(() => setCloud("saved"))
+        .catch((err) => {
+          console.error("Saving resume draft failed", err);
+          setCloud("error");
+        });
+    }, 1200);
+    return () => clearTimeout(t);
+  }, [data, tplId, aiMsgs, open, user, saveDraft]);
 
   const stepIdx = STEPS.findIndex((s) => s.key === step);
   const guidance = useMemo(() => stepGuidance(step), [step]);
@@ -327,6 +392,17 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
             <h2 className="font-display text-lg font-semibold">ATS Resume Builder</h2>
             <span className="hidden sm:inline rounded-full bg-cyber/15 px-2 py-0.5 text-[10px] uppercase tracking-wider text-cyber ring-1 ring-cyber/40">
               MNC-grade
+            </span>
+            <span className="text-[11px] text-muted-foreground" aria-live="polite">
+              {!user
+                ? "Saved on this device · sign in to keep it in your account"
+                : cloud === "loading"
+                  ? "Loading your saved resume…"
+                  : cloud === "saving"
+                    ? "Saving…"
+                    : cloud === "error"
+                      ? "Couldn't save to your account — retrying on next change"
+                      : "Saved to your account"}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -510,13 +586,13 @@ export function ResumeBuilder({ open, onClose }: { open: boolean; onClose: () =>
             {aiMsgs.map((m, i) => (
               <div
                 key={i}
-                className={`max-w-[92%] rounded-2xl px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap ${
+                className={`max-w-[92%] rounded-2xl px-3 py-2 text-xs leading-relaxed ${
                   m.role === "user"
-                    ? "ml-auto bg-cyber/20 ring-1 ring-cyber/40"
+                    ? "ml-auto whitespace-pre-wrap bg-cyber/20 ring-1 ring-cyber/40"
                     : "bg-card/85 ring-1 ring-border"
                 }`}
               >
-                {m.content}
+                {m.role === "assistant" ? <ChatMarkdown content={m.content} /> : m.content}
               </div>
             ))}
             {aiLoading && (
@@ -998,7 +1074,7 @@ function ListEditor<T>({
 
 export function ResumePreview({ data, tpl }: { data: ResumeData; tpl: ResumeTemplate }) {
   const skills = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
-  const achievements = data.achievements.split("\n").map((s) => s.trim()).filter(Boolean);
+  const achievements = bulletLines(data.achievements);
   const L = tpl.layout;
   const isSide = L === "sidebar";
   const isBanner = L === "banner";
@@ -1026,7 +1102,7 @@ export function ResumePreview({ data, tpl }: { data: ResumeData; tpl: ResumeTemp
     </header>
   );
 
-  const summary = data.summary && <Section title="Professional Summary"><p>{data.summary}</p></Section>;
+  const summary = data.summary.trim() && <Section title="Professional Summary"><RichBlocks text={data.summary} /></Section>;
   const experience = data.experience.some((e) => e.role || e.company) && (
     <Section title="Experience">
       {data.experience.filter((e) => e.role || e.company).map((e, i) => (
@@ -1083,7 +1159,7 @@ export function ResumePreview({ data, tpl }: { data: ResumeData; tpl: ResumeTemp
   );
   const ach = achievements.length > 0 && (
     <Section title="Achievements">
-      <ul className="rx-bullets">{achievements.map((a, i) => <li key={i}>{a}</li>)}</ul>
+      <Bullets text={data.achievements} />
     </Section>
   );
 
@@ -1118,9 +1194,24 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function Bullets({ text }: { text: string }) {
-  const lines = text.split("\n").map((l) => l.replace(/^[-•*\s]+/, "").trim()).filter(Boolean);
+  const lines = bulletLines(text);
   if (lines.length === 0) return null;
   return <ul className="rx-bullets">{lines.map((l, i) => <li key={i}>{l}</li>)}</ul>;
+}
+
+/** Paragraphs stay paragraphs, bullet lines become a real list. */
+function RichBlocks({ text }: { text: string }) {
+  return (
+    <>
+      {parseBlocks(text).map((b, i) =>
+        b.type === "ul" ? (
+          <ul key={i} className="rx-bullets">{b.items.map((it, j) => <li key={j}>{it}</li>)}</ul>
+        ) : (
+          <p key={i} className="rx-para">{b.text}</p>
+        ),
+      )}
+    </>
+  );
 }
 
 export const RESUME_CSS = `
@@ -1135,6 +1226,8 @@ export const RESUME_CSS = `
 .rx-section { margin-top: 11pt; }
 .rx-h2 { font-size: 10.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rx-accent); border-bottom: 1px solid color-mix(in srgb, var(--rx-accent) 25%, #fff); padding-bottom: 3pt; margin: 0 0 6pt; }
 .rx-section p { margin: 0; }
+.rx-para + .rx-para, .rx-bullets + .rx-para { margin-top: 4pt; }
+.rx-para + .rx-bullets { margin-top: 4pt; }
 .rx-item { margin-bottom: 7pt; break-inside: avoid; page-break-inside: avoid; }
 .rx-item:last-child { margin-bottom: 0; }
 .rx-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10pt; }
