@@ -445,7 +445,7 @@ function AgentChat() {
     }
   }
 
-  const showPrompts = messages.length <= 1 && !loading;
+  const showPrompts = messages.length <= 1 && !loading && !threadLoading;
 
   return (
     <SiteLayout>
@@ -642,6 +642,11 @@ function AgentChat() {
 
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-6 sm:px-6 space-y-4">
+              {threadLoading && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-cyber" /> Loading your conversation…
+                </div>
+              )}
               {messages.map((m, i) => (
                 <div key={i} className={`flex animate-fade-up ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
