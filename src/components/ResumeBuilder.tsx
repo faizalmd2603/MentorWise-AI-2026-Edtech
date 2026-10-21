@@ -1226,6 +1226,8 @@ export const RESUME_CSS = `
 .rx-section { margin-top: 11pt; }
 .rx-h2 { font-size: 10.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rx-accent); border-bottom: 1px solid color-mix(in srgb, var(--rx-accent) 25%, #fff); padding-bottom: 3pt; margin: 0 0 6pt; }
 .rx-section p { margin: 0; }
+.rx-para + .rx-para, .rx-bullets + .rx-para { margin-top: 4pt; }
+.rx-para + .rx-bullets { margin-top: 4pt; }
 .rx-item { margin-bottom: 7pt; break-inside: avoid; page-break-inside: avoid; }
 .rx-item:last-child { margin-bottom: 0; }
 .rx-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10pt; }
