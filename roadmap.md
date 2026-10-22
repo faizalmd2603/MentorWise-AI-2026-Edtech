@@ -5,9 +5,12 @@
 - [ ] Previous sitemap submission remains blocked pending connected Google access verification.
 
 # Agent reliability and memory
-- [ ] Fix irrelevant search queries and preserve follow-up context.
-- [ ] Add private saved chats with history navigation.
-- [ ] Save resume drafts and assistant conversations per account.
-- [ ] Preserve resume paragraphs and bullets; verify real flows.
+- [x] Fix irrelevant search queries and preserve follow-up context.
+- [x] Add private saved chats with history navigation.
+- [x] Save resume drafts and assistant conversations per account.
+- [x] Preserve resume paragraphs and bullets; verify real flows.
 
 - [ ] Recommend evidence-based visitor growth actions (approval required before implementation).
+
+# Udyam certificate section
+- [ ] Finish certificate pop-up on phones (paused; waiting for go-ahead).
