@@ -1,23 +1,80 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MousePointerClick, X, ShieldCheck } from "lucide-react";
 import cert from "@/assets/udyam-certificate.png.asset.json";
 
-type Phase = "closed" | "opening" | "open" | "closing";
+/**
+ * closed → flap (flap swings open) → rise (certificate slides out of the pocket)
+ * → open (certificate flies from the envelope into the pop-up)
+ * → shrink (flies back) → drop (slides back in) → closed (flap shuts)
+ */
+type Phase = "closed" | "flap" | "rise" | "open" | "shrink" | "drop";
+
+const T = { flap: 550, rise: 700, fly: 560, drop: 600 };
 
 export function UdyamEnvelope() {
   const [phase, setPhase] = useState<Phase>("closed");
+  const certRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const timers = useRef<number[]>([]);
+
+  const later = (fn: () => void, ms: number) => {
+    timers.current.push(window.setTimeout(fn, ms));
+  };
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  const reduced =
+    typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
   const open = () => {
     if (phase !== "closed") return;
-    setPhase("opening");
-    window.setTimeout(() => setPhase("open"), 650);
+    if (reduced) return setPhase("open");
+    setPhase("flap");
+    later(() => setPhase("rise"), T.flap);
+    later(() => setPhase("open"), T.flap + T.rise);
   };
+
+  /** Transform that maps the pop-up card onto the certificate inside the envelope. */
+  const flipFrom = () => {
+    const from = certRef.current?.getBoundingClientRect();
+    const to = cardRef.current?.getBoundingClientRect();
+    if (!from || !to || !to.width) return null;
+    const s = from.width / to.width;
+    const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+    const dy = from.top + (to.height * s) / 2 - (to.top + to.height / 2);
+    return `translate(${dx}px, ${dy}px) scale(${s})`;
+  };
+
   const close = () => {
     if (phase !== "open") return;
-    setPhase("closing");
-    window.setTimeout(() => setPhase("closed"), 600);
+    if (reduced) return setPhase("closed");
+    setPhase("shrink");
+    const t = flipFrom();
+    if (t && cardRef.current) {
+      cardRef.current.animate([{ transform: "none" }, { transform: t }], {
+        duration: T.fly,
+        easing: "cubic-bezier(.4,0,.2,1)",
+        fill: "forwards",
+      });
+      backdropRef.current?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: T.fly, fill: "forwards" });
+    }
+    later(() => setPhase("drop"), T.fly);
+    later(() => setPhase("closed"), T.fly + T.drop);
   };
+
+  // Fly the certificate out of the envelope into the pop-up.
+  useLayoutEffect(() => {
+    if (phase !== "open" || reduced || !cardRef.current) return;
+    const t = flipFrom();
+    if (!t) return;
+    cardRef.current.animate([{ transform: t }, { transform: "none" }], {
+      duration: T.fly,
+      easing: "cubic-bezier(.2,.8,.2,1)",
+    });
+    backdropRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: T.fly });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "open") return;
@@ -27,7 +84,9 @@ export function UdyamEnvelope() {
   });
 
   const flapOpen = phase !== "closed";
-  const modal = phase === "open" || phase === "closing";
+  const certOut = phase === "rise" || phase === "open" || phase === "shrink";
+  const certHidden = phase === "open" || phase === "shrink";
+  const modal = phase === "open" || phase === "shrink";
 
   return (
     <section aria-labelledby="udyam-heading" className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
@@ -56,31 +115,82 @@ export function UdyamEnvelope() {
             type="button"
             onClick={open}
             aria-label="Open envelope to view Udyam registration certificate"
-            className="udyam-env group relative mx-auto aspect-[4/3] w-full max-w-sm"
+            className="udyam-env group relative mx-auto mt-16 aspect-[4/3] w-full max-w-sm"
           >
-            {/* certificate peeking */}
+            {/* back of the envelope (the inside you see when the flap opens) */}
+            <svg viewBox="0 0 400 300" className="absolute inset-0 z-[1] h-full w-full" aria-hidden>
+              <defs>
+                <linearGradient id="uenv-back" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="oklch(0.2 0.05 262)" />
+                  <stop offset="1" stopColor="oklch(0.15 0.04 262)" />
+                </linearGradient>
+              </defs>
+              <rect x="1" y="61" width="398" height="238" rx="14" fill="url(#uenv-back)" stroke="var(--primary)" strokeOpacity=".55" strokeWidth="1.5" />
+            </svg>
+
+            {/* certificate — sits between the back and the front pocket */}
             <div
-              className={`absolute inset-x-[8%] bottom-[10%] top-[-12%] overflow-hidden rounded-md border-2 border-primary bg-card shadow-xl transition-transform duration-700 ease-[cubic-bezier(.2,.8,.2,1)] ${
-                flapOpen ? "-translate-y-[35%]" : "group-hover:-translate-y-[8%]"
-              }`}
+              ref={certRef}
+              className="udyam-env-cert absolute inset-x-[9%] top-[40%] bottom-[5%] z-[2] overflow-hidden rounded-[6px] border border-primary/70 bg-card"
+              style={{
+                transform: certOut ? "translateY(-68%)" : "translateY(0)",
+                opacity: certHidden ? 0 : 1,
+                transition: `transform ${(phase === "drop" ? T.drop : T.rise) / 1000}s cubic-bezier(.2,.8,.2,1)`,
+              }}
             >
-              <img src={cert.url} alt="" className="h-full w-full object-cover object-top" />
+              <img src={cert.url} alt="" className="h-full w-full object-cover object-top" draggable={false} />
             </div>
-            {/* envelope body */}
-            <div className="udyam-env-body absolute inset-x-0 bottom-0 top-[22%] rounded-xl" />
-            <div className="udyam-env-pocket absolute inset-x-0 bottom-0 top-[22%] rounded-xl" />
-            {/* flap */}
+
+            {/* front pocket */}
+            <svg viewBox="0 0 400 300" className="pointer-events-none absolute inset-0 z-[3] h-full w-full" aria-hidden>
+              <defs>
+                <linearGradient id="uenv-front" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="oklch(0.3 0.07 262)" />
+                  <stop offset="1" stopColor="oklch(0.23 0.06 262)" />
+                </linearGradient>
+                <linearGradient id="uenv-side" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stopColor="oklch(0.27 0.065 262)" />
+                  <stop offset="1" stopColor="oklch(0.25 0.06 262)" />
+                </linearGradient>
+              </defs>
+              {/* pocket: a solid front panel, so nothing shows through until the flap opens */}
+              <path d="M1 112 L399 112 L399 285 Q399 299 385 299 L15 299 Q1 299 1 285 Z" fill="url(#uenv-front)" />
+              <path d="M1 112 L399 112" stroke="var(--primary)" strokeOpacity=".75" strokeWidth="1.5" />
+              {/* soft fold lines */}
+              <path d="M2 296 L200 196 L398 296" fill="none" stroke="oklch(0.18 0.04 262)" strokeOpacity=".55" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M2 113 L170 210 M398 113 L230 210" fill="none" stroke="oklch(0.18 0.04 262)" strokeOpacity=".35" strokeWidth="1.5" />
+              <rect x="1" y="61" width="398" height="238" rx="14" fill="none" stroke="var(--primary)" strokeOpacity=".55" strokeWidth="1.5" />
+            </svg>
+
+            {/* flap — hinged on the top edge */}
             <div
-              className={`udyam-env-flap absolute inset-x-0 top-[22%] h-[48%] origin-top transition-transform duration-700 ${
-                flapOpen ? "udyam-flap-open" : ""
-              }`}
-            />
-            <span className="udyam-seal absolute left-1/2 top-[52%] z-20 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-display text-xs font-bold text-primary-foreground">
+              className="pointer-events-none absolute inset-x-0 top-[20%] h-[47%] origin-top"
+              style={{
+                zIndex: flapOpen ? 0 : 4,
+                transform: flapOpen ? "rotateX(180deg)" : "rotateX(0deg)",
+                transition: `transform ${T.flap / 1000}s cubic-bezier(.4,0,.2,1), z-index 0s linear ${flapOpen ? T.flap / 2000 : T.flap / 2000}s`,
+              }}
+            >
+              <svg viewBox="0 0 400 141" preserveAspectRatio="none" className="h-full w-full" aria-hidden>
+                <defs>
+                  <linearGradient id="uenv-flap" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="oklch(0.33 0.08 262)" />
+                    <stop offset="1" stopColor="oklch(0.27 0.07 262)" />
+                  </linearGradient>
+                </defs>
+                <path d="M2 1 L398 1 L212 133 Q200 141 188 133 Z" fill="url(#uenv-flap)" stroke="var(--primary)" strokeOpacity=".7" strokeWidth="1.5" strokeLinejoin="round" />
+              </svg>
+            </div>
+
+            <span
+              className="udyam-seal absolute left-1/2 top-[64%] z-[5] grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-display text-xs font-bold text-primary-foreground"
+              style={{ opacity: flapOpen ? 0 : 1 }}
+            >
               MW
             </span>
-            {/* click ripple cursor */}
+
             {phase === "closed" && (
-              <span className="pointer-events-none absolute bottom-[18%] right-[14%] z-30">
+              <span className="pointer-events-none absolute bottom-[14%] right-[12%] z-[6]">
                 <span className="udyam-ripple absolute -left-3 -top-3 h-6 w-6 rounded-full border-2 border-primary" />
                 <MousePointerClick className="udyam-cursor h-7 w-7 text-primary drop-shadow" />
               </span>
@@ -95,13 +205,13 @@ export function UdyamEnvelope() {
           aria-modal="true"
           aria-label="Udyam registration certificate"
           onClick={close}
-          className={`fixed inset-0 z-[2147483000] isolate grid place-items-center bg-background/60 p-4 backdrop-blur-md ${
-            phase === "closing" ? "udyam-fade-out" : "udyam-fade-in"
-          }`}
+          className="fixed inset-0 z-[2147483000] isolate grid place-items-center p-4"
         >
+          <div ref={backdropRef} aria-hidden className="absolute inset-0 bg-background/70 backdrop-blur-md" />
           <div
+            ref={cardRef}
             onClick={(e) => e.stopPropagation()}
-            className={`relative max-h-[92vh] w-full max-w-md ${phase === "closing" ? "udyam-cert-out" : "udyam-cert-in"}`}
+            className="relative z-10 w-full max-w-md origin-center will-change-transform"
           >
             <button
               type="button"
