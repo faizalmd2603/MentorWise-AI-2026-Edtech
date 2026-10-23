@@ -13,4 +13,4 @@
 - [ ] Recommend evidence-based visitor growth actions (approval required before implementation).
 
 # Udyam certificate section
-- [ ] Finish certificate pop-up on phones (paused; waiting for go-ahead).
+- [x] Finish certificate pop-up on phones and rebuild the envelope animation.
