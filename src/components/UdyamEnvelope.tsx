@@ -131,9 +131,9 @@ export function UdyamEnvelope() {
             {/* certificate — sits between the back and the front pocket */}
             <div
               ref={certRef}
-              className="udyam-env-cert absolute inset-x-[9%] top-[24%] bottom-[7%] z-[2] overflow-hidden rounded-[6px] border border-primary/70 bg-card"
+              className="udyam-env-cert absolute inset-x-[9%] top-[40%] bottom-[5%] z-[2] overflow-hidden rounded-[6px] border border-primary/70 bg-card"
               style={{
-                transform: certOut ? "translateY(-52%)" : "translateY(0)",
+                transform: certOut ? "translateY(-68%)" : "translateY(0)",
                 opacity: certHidden ? 0 : 1,
                 transition: `transform ${(phase === "drop" ? T.drop : T.rise) / 1000}s cubic-bezier(.2,.8,.2,1)`,
               }}
@@ -153,12 +153,12 @@ export function UdyamEnvelope() {
                   <stop offset="1" stopColor="oklch(0.25 0.06 262)" />
                 </linearGradient>
               </defs>
-              {/* side folds */}
-              <path d="M1 75 L180 205 L1 299 Z" fill="url(#uenv-side)" />
-              <path d="M399 75 L220 205 L399 299 Z" fill="url(#uenv-side)" />
-              {/* bottom fold */}
-              <path d="M15 299 Q1 299 1 285 L1 160 L200 225 L399 160 L399 285 Q399 299 385 299 Z" fill="url(#uenv-front)" />
-              <path d="M1 160 L200 225 L399 160" fill="none" stroke="var(--primary)" strokeOpacity=".7" strokeWidth="1.5" strokeLinejoin="round" />
+              {/* pocket: a solid front panel, so nothing shows through until the flap opens */}
+              <path d="M1 112 L399 112 L399 285 Q399 299 385 299 L15 299 Q1 299 1 285 Z" fill="url(#uenv-front)" />
+              <path d="M1 112 L399 112" stroke="var(--primary)" strokeOpacity=".75" strokeWidth="1.5" />
+              {/* soft fold lines */}
+              <path d="M2 296 L200 196 L398 296" fill="none" stroke="oklch(0.18 0.04 262)" strokeOpacity=".55" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M2 113 L170 210 M398 113 L230 210" fill="none" stroke="oklch(0.18 0.04 262)" strokeOpacity=".35" strokeWidth="1.5" />
               <rect x="1" y="61" width="398" height="238" rx="14" fill="none" stroke="var(--primary)" strokeOpacity=".55" strokeWidth="1.5" />
             </svg>
 
