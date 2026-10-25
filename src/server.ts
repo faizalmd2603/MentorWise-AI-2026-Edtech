@@ -39,12 +39,18 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 export default {
-  async fetch(request: Request, env: unknown, ctx: unknown) {
+  async fetch(request: Request) {
     const nonce = crypto.randomUUID().replaceAll('-', '');
     const headers = new Headers(request.headers);
     headers.set('x-mentorwise-csp-nonce', nonce);
-    const securedRequest = new Request(request, { headers });
     try {
+      // Construct from URL: Vite's incoming request is not always an Undici Request.
+      const init: RequestInit & { duplex: 'half' } = {
+        method: request.method, headers, signal: request.signal,
+        body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,
+        duplex: 'half',
+      };
+      const securedRequest = new Request(request.url, init);
       const handler = await getServerEntry();
       const response = await handler.fetch(securedRequest);
       return protectResponse(await normalizeCatastrophicSsrResponse(response), nonce, import.meta.env.DEV);
