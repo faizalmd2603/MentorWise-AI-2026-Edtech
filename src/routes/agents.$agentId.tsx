@@ -11,8 +11,8 @@ import {
   deleteChatThread,
 } from "@/lib/ai.functions";
 import { History, MessageSquare, Trash2 } from "lucide-react";
-import { useState, useRef, useEffect, useMemo } from "react";
-import * as Icons from "lucide-react";
+import { useState, useRef, useEffect, useMemo, lazy, Suspense } from "react";
+import { agentIcon } from "@/lib/agent-icons";
 import {
   ArrowLeft,
   Send,
@@ -31,12 +31,12 @@ import {
   MessageSquarePlus,
 } from "lucide-react";
 import { Globe, Search, Zap, Brain, ChevronDown, Check } from "lucide-react";
-import { MentorVideoCall } from "@/components/MentorVideoCall";
-import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { ChatMarkdown } from "@/components/ChatMarkdown";
 import { useAuthReady } from "@/hooks/use-auth-ready";
 
 const SITE = "https://mentorwiseai.store";
+const ResumeBuilder = lazy(() => import('@/components/ResumeBuilder').then(m => ({ default: m.ResumeBuilder })));
+const MentorVideoCall = lazy(() => import('@/components/MentorVideoCall').then(m => ({ default: m.MentorVideoCall })));
 
 export const Route = createFileRoute("/agents/$agentId")({
   head: ({ params }) => {
@@ -282,7 +282,7 @@ function AgentChat() {
     );
   }
 
-  const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[agent.icon] ?? Icons.Bot;
+  const IconComp = agentIcon(agent.icon);
 
   function addAttachment(a: Attachment) {
     setAttach((cur) => {
@@ -528,7 +528,7 @@ function AgentChat() {
                 <Sparkles className="h-3 w-3 text-cyber" /> Agents
               </div>
               {AGENTS.map((a) => {
-                const Ic = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[a.icon] ?? Icons.Bot;
+                const Ic = agentIcon(a.icon);
                 const active = a.id === agent.id;
                 const locked = !!a.comingSoon;
                 const baseClass = `group flex items-center gap-3 rounded-full px-3 py-2 text-sm transition my-0.5`;
@@ -1008,10 +1008,10 @@ function AgentChat() {
         </div>
       )}
       {agent.id === "mentor" && callOpen && (
-        <MentorVideoCall open={callOpen} onClose={() => setCallOpen(false)} />
+        <Suspense fallback={null}><MentorVideoCall open={callOpen} onClose={() => setCallOpen(false)} /></Suspense>
       )}
-      {agent.id === "resume" && (
-        <ResumeBuilder open={resumeOpen} onClose={() => setResumeOpen(false)} />
+      {agent.id === "resume" && resumeOpen && (
+        <Suspense fallback={<div role="status" className="fixed inset-0 z-50 grid place-items-center bg-background/90 text-foreground">Opening resume builder…</div>}><ResumeBuilder open={resumeOpen} onClose={() => setResumeOpen(false)} /></Suspense>
       )}
     </SiteLayout>
   );

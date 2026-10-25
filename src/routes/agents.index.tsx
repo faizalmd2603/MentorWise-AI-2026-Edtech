@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AGENTS, COMING_SECTIONS } from "@/lib/agents";
-import * as Icons from "lucide-react";
+import { agentIcon } from "@/lib/agent-icons";
 import { Lock, Sparkles } from "lucide-react";
 import { STOCK_AGENT_IMAGES as AGENT_IMAGES } from "@/lib/stock-images";
 
@@ -73,7 +73,7 @@ function AgentsIndex() {
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {AGENTS.map((agent, idx) => {
-            const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[agent.icon] ?? Icons.Bot;
+            const IconComp = agentIcon(agent.icon);
             const locked = !!agent.comingSoon;
             const inner = (
               <>
@@ -135,7 +135,7 @@ function AgentsIndex() {
           <p className="mt-1 text-sm text-muted-foreground">Locked experiences launching soon for every MentorWise AI student.</p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {COMING_SECTIONS.map((s, idx) => {
-              const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[s.icon] ?? Icons.Sparkles;
+              const IconComp = agentIcon(s.icon);
               return (
                 <div key={s.id} className="relative rounded-2xl glass p-6 animate-fade-up" style={{ animationDelay: `${idx * 60}ms` }}>
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-glow/30 to-magenta/0 text-purple-glow">

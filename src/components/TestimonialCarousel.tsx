@@ -218,6 +218,9 @@ export function TestimonialCarousel() {
                 {testimonial.photo ? (
                   <img
                     src={testimonial.photo}
+                    width={160}
+                    height={160}
+                    loading="lazy"
                     alt={`${testimonial.name}, MentorWise AI community member`}
                     className="h-32 w-32 rounded-full border-2 border-primary/60 object-cover object-top shadow-xl shadow-primary/10 sm:h-40 sm:w-40"
                   />

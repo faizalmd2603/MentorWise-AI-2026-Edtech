@@ -29,7 +29,7 @@ export function SiteHeader() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative h-10 w-10 overflow-hidden rounded-xl ring-1 ring-border">
-              <img src={logo.url} alt="MentorWise AI" className="h-full w-full object-cover" />
+              <img src={logo.url} alt="MentorWise AI" width={1254} height={1254} className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col leading-tight">
               <span className="font-display text-base font-bold tracking-tight text-foreground">

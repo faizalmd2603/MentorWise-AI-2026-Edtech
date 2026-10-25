@@ -1,4 +1,6 @@
 # Homepage motion revision
+- [ ] Address FlawPilot app-controlled security headers, cookie findings and performance issues; verify without removing motion.
+- [ ] Audit DNS/email/hosting findings and identify provider-controlled blockers; reassess score after publishing and a fresh FlawPilot scan.
 - [x] Replace testimonial replacement effects with a persistent sliding track and touch swipes.
 - [x] Add prominent continuous skills and platform headline ribbons and a sliding feature shelf.
 - [x] Verify movement, reading holds, touch navigation, and reduced-motion behavior.
