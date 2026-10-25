@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Typewriter } from "@/components/Typewriter";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
@@ -55,15 +55,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const [show, setShow] = useState(true);
-  useEffect(() => {
-    const t = setTimeout(() => setShow(false), 1600);
-    return () => clearTimeout(t);
-  }, []);
   return (
     <SiteLayout>
-      {show && <SplashScreen />}
-      <Hero key={show ? "intro" : "ready"} />
+      <Hero />
       <BentoDeck />
       <BannerReveal />
       <UdyamEnvelope />
@@ -78,18 +72,6 @@ function Home() {
   );
 }
 
-
-function SplashScreen() {
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background animate-scale-in">
-      <div className="absolute inset-0 grid-bg opacity-80" />
-      <div className="relative flex flex-col items-center gap-4">
-        <img src={banner.url} alt="MentorWise AI" className="w-56 rounded-2xl animate-float-glow" />
-        <div className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground">Loading your free career app</div>
-      </div>
-    </div>
-  );
-}
 
 /* ---------------------------------- Hero --------------------------------- */
 
@@ -276,6 +258,8 @@ function BannerReveal() {
           <img
             src={banner.url}
             alt="MentorWise AI — official banner"
+            width={1942}
+            height={809}
             className="h-auto w-full object-contain"
             loading="lazy"
           />

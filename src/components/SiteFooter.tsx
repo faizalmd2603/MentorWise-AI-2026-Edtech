@@ -9,7 +9,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 overflow-hidden rounded-xl ring-1 ring-cyber/40">
-              <img src={logo.url} alt="MentorWise AI" className="h-full w-full object-cover" />
+              <img src={logo.url} alt="MentorWise AI" width={1254} height={1254} loading="lazy" className="h-full w-full object-cover" />
             </div>
             <div>
               <div className="font-display text-base font-bold text-gradient">MentorWise AI</div>

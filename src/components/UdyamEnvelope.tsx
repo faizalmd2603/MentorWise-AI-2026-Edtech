@@ -138,7 +138,7 @@ export function UdyamEnvelope() {
                 transition: `transform ${(phase === "drop" ? T.drop : T.rise) / 1000}s cubic-bezier(.2,.8,.2,1)`,
               }}
             >
-              <img src={cert.url} alt="" className="h-full w-full object-cover object-top" draggable={false} />
+              <img src={cert.url} alt="" width={941} height={1671} loading="lazy" className="h-full w-full object-cover object-top" draggable={false} />
             </div>
 
             {/* front pocket */}
@@ -222,7 +222,7 @@ export function UdyamEnvelope() {
               <X className="h-5 w-5" />
             </button>
             <div className="overflow-auto rounded-2xl border-2 border-primary shadow-2xl" style={{ maxHeight: "80vh" }}>
-              <img src={cert.url} alt="MentorWise AI Udyam Registration Certificate UDYAM-TN-02-0518128, Micro Enterprise (Services), Chennai, Tamil Nadu" className="block w-full" />
+              <img src={cert.url} alt="MentorWise AI Udyam Registration Certificate UDYAM-TN-02-0518128, Micro Enterprise (Services), Chennai, Tamil Nadu" width={941} height={1671} className="block w-full" />
             </div>
             <div className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-card/90 px-3 py-2 text-center text-xs text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-primary" />
