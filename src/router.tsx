@@ -1,14 +1,16 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { routeTree } from "./routeTree.gen";
 
-export const getRouter = async () => {
+const requestNonce = createIsomorphicFn()
+  .server(() => getRequestHeader('x-mentorwise-csp-nonce'))
+  .client(() => undefined);
+
+export const getRouter = () => {
   const queryClient = new QueryClient();
-  let nonce: string | undefined;
-  if (import.meta.env.SSR) {
-    const { getRequestHeader } = await import('@tanstack/react-start/server');
-    nonce = getRequestHeader('x-mentorwise-csp-nonce');
-  }
+  const nonce = requestNonce();
 
   const router = createRouter({
     routeTree,
