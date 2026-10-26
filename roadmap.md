@@ -1,6 +1,8 @@
 # Homepage motion revision
-- [ ] Address FlawPilot app-controlled security headers, cookie findings and performance issues; verify without removing motion.
-- [ ] Audit DNS/email/hosting findings and identify provider-controlled blockers; reassess score after publishing and a fresh FlawPilot scan.
+- [x] Address FlawPilot app-controlled security headers, preference cookie flags and performance issues; verify without removing motion.
+- [x] Audit DNS/email/hosting findings and document verified facts and blockers in security-review.md.
+- [ ] Complete DNS/mail and hosting protections: requires domain-provider changes, exact Zoho DKIM record, cookie/port evidence and confirmed rate-limit tradeoff.
+- [ ] Reassess FlawPilot score: requires publishing and a fresh external scan; strict COEP remains pending third-party compatibility.
 - [x] Replace testimonial replacement effects with a persistent sliding track and touch swipes.
 - [x] Add prominent continuous skills and platform headline ribbons and a sliding feature shelf.
 - [x] Verify movement, reading holds, touch navigation, and reduced-motion behavior.
