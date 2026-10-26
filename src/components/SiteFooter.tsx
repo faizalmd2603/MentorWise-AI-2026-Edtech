@@ -54,7 +54,7 @@ export function SiteFooter() {
               src="https://badge.flawpilot.com/scan?id=22dcc418-4d28-487f-b821-88b1b0ff3826"
               alt="FlawPilot Score: 91/100, Hardened"
               width={370}
-              height={155}
+              height={169}
               loading="lazy"
               className="h-auto w-full max-w-[370px] rounded-xl"
             />
