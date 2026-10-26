@@ -1,5 +1,8 @@
 # MentorWise AI Platform
 
+![FlawPilot Score: 91/100, Hardened](https://badge.flawpilot.com/scan?id=22dcc418-4d28-487f-b821-88b1b0ff3826)
+
+
 META-PROMPT: MENTOR WISE AI - OFFICIAL STARTUP PLATFORM & AGENT ECOSYSTEM
 Role: Act as a Principal Full-Stack Engineer, Lead UI/UX Architect, and AI Product Strategist.
 Objective: Architect, design, and code the final, official, production-ready landing page for an elite, globally unique AI EdTech startup named "Mentor Wise AI". 

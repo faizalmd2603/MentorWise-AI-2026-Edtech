@@ -49,6 +49,16 @@ export function SiteFooter() {
               <Linkedin className="h-3.5 w-3.5 text-cyber" /> LinkedIn
             </a>
           </div>
+          <div className="mt-5">
+            <img
+              src="https://badge.flawpilot.com/scan?id=22dcc418-4d28-487f-b821-88b1b0ff3826"
+              alt="FlawPilot Score: 91/100, Hardened"
+              width={370}
+              height={155}
+              loading="lazy"
+              className="h-auto w-full max-w-[370px] rounded-xl"
+            />
+          </div>
         </div>
       </div>
       <div className="border-t border-border/40">
