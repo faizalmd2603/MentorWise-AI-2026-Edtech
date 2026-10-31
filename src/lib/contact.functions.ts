@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { trackedApiFetch } from "./api-usage.server";
 
 const ContactInput = z.object({
   fullName: z.string().trim().min(1).max(120),
@@ -46,7 +47,7 @@ async function sendGmail(raw: string) {
   const gmail = process.env.GOOGLE_MAIL_API_KEY;
   if (!lovable || !gmail) throw new Error("Email service is not configured.");
 
-  const res = await fetch("https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send", {
+  const res = await trackedApiFetch({ provider: "gmail", model: "mail", operation: "send" }, "https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${lovable}`,
@@ -67,7 +68,7 @@ async function aiQueryAnswer(occupation: string, query: string): Promise<string 
   const key = process.env.LOVABLE_API_KEY;
   if (!key) return null;
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await trackedApiFetch({ provider: "lovable", model: "google/gemini-3-flash-preview", operation: "contact-answer" }, "https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({

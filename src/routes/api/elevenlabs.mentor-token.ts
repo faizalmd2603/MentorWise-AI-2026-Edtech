@@ -40,7 +40,9 @@ export const Route = createFileRoute("/api/elevenlabs/mentor-token")({
           );
         }
 
-        const res = await fetch(
+        const { trackedApiFetch } = await import("@/lib/api-usage.server");
+        const res = await trackedApiFetch(
+          { provider: "elevenlabs", model: "conversational-agent", operation: "session-token" },
           `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${encodeURIComponent(agentId)}`,
           { headers: { "xi-api-key": apiKey } },
         );

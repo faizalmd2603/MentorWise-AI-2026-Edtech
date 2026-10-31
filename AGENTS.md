@@ -1,4 +1,5 @@
 # Project architecture rules
+- API usage is captured server-side per provider request, including continuations, with service-role-only storage; dashboard reads require the verified designated email and an admin role so UI hiding is never the authorization boundary.
 
 - Browser security headers are applied in the server response wrapper with a server-generated request nonce passed to the router; development CSP is report-only so editor tooling works, while published CSP is enforced.
 - Keep OAuth-compatible opener isolation and COEP report-only until all third-party sign-in/media resources support strict isolation, because forcing isolation can break login and mentoring.

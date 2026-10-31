@@ -1,6 +1,7 @@
 // Gmail send helper via Lovable connector gateway.
 // All text is UTF-8 safe (base64url over UTF-8 bytes + MIME encoded-word subjects)
 // so emojis / accented chars never render as "Ã°ÂŸÂ" mojibake.
+import { trackedApiFetch } from "./api-usage.server";
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 
@@ -61,7 +62,7 @@ export async function sendGmail(opts: {
   });
 
   try {
-    const res = await fetch(`${GATEWAY_URL}/users/me/messages/send`, {
+    const res = await trackedApiFetch({ provider: "gmail", model: "mail", operation: "send" }, `${GATEWAY_URL}/users/me/messages/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

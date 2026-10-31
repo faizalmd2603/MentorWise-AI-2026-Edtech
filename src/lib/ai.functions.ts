@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { trackedApiFetch } from "./api-usage.server";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SearchSource } from "./search.server";
@@ -486,7 +487,7 @@ export const generateImage = createServerFn({ method: "POST" })
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI service is not configured.");
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await trackedApiFetch({ provider: "lovable", model: "google/gemini-2.5-flash-image", operation: "image" }, "https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${key}`,

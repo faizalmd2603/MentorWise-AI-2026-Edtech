@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-r
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/SiteLayout";
+import { ApiUsageDashboard } from "@/components/ApiUsageDashboard";
 import { AGENTS } from "@/lib/agents";
 import {
   chatWithAgent,
@@ -457,6 +458,7 @@ function AgentChat() {
       </div>
 
       <div className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8">
+        <ApiUsageDashboard />
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
           {/* Sidebar — agent selection (Gemini-inspired) */}
           <aside className="lg:sticky lg:top-24 lg:self-start">

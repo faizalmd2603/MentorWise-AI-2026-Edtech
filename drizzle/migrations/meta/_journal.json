@@ -15,6 +15,13 @@
       "when": 1792496357262,
       "tag": "0001_chat_history_and_resume_drafts",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793434195858,
+      "tag": "0002_api_usage_monitoring",
+      "breakpoints": true
     }
   ]
 }
