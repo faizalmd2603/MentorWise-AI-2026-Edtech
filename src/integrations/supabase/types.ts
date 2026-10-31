@@ -82,6 +82,54 @@ export type Database = {
         }
         Relationships: []
       }
+      api_usage_events: {
+        Row: {
+          duration_ms: number
+          id: string
+          input_tokens: number | null
+          model: string
+          operation: string
+          output_tokens: number | null
+          provider: string
+          quota_reset: string | null
+          recorded_at: string
+          remaining_requests: number | null
+          remaining_tokens: number | null
+          status: number
+          total_tokens: number | null
+        }
+        Insert: {
+          duration_ms: number
+          id?: string
+          input_tokens?: number | null
+          model: string
+          operation: string
+          output_tokens?: number | null
+          provider: string
+          quota_reset?: string | null
+          recorded_at?: string
+          remaining_requests?: number | null
+          remaining_tokens?: number | null
+          status: number
+          total_tokens?: number | null
+        }
+        Update: {
+          duration_ms?: number
+          id?: string
+          input_tokens?: number | null
+          model?: string
+          operation?: string
+          output_tokens?: number | null
+          provider?: string
+          quota_reset?: string | null
+          recorded_at?: string
+          remaining_requests?: number | null
+          remaining_tokens?: number | null
+          status?: number
+          total_tokens?: number | null
+        }
+        Relationships: []
+      }
       articles: {
         Row: {
           content: string
@@ -613,6 +661,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      api_usage_report: { Args: never; Returns: Json }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
