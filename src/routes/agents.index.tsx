@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
+import { ApiUsageDashboard } from "@/components/ApiUsageDashboard";
 import { AGENTS, COMING_SECTIONS } from "@/lib/agents";
 import { agentIcon } from "@/lib/agent-icons";
 import { Lock, Sparkles } from "lucide-react";
@@ -71,6 +72,7 @@ function AgentsIndex() {
         </div>
 
 
+        <div className="mt-8"><ApiUsageDashboard /></div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {AGENTS.map((agent, idx) => {
             const IconComp = agentIcon(agent.icon);

@@ -1,4 +1,5 @@
 // Real Google search via SerpAPI. Server-only.
+import { trackedApiFetch } from "./api-usage.server";
 
 export type SearchSource = {
   n: number;
@@ -51,7 +52,7 @@ export async function googleSearch(query: string, limit = 8): Promise<SearchSour
   };
 
   try {
-    const res = await fetch(`https://serpapi.com/search.json?${params.toString()}`);
+    const res = await trackedApiFetch({ provider: "serpapi", model: "google", operation: "search" }, `https://serpapi.com/search.json?${params.toString()}`);
     if (!res.ok) {
       console.error("SerpAPI error", res.status, await res.text());
       return [];

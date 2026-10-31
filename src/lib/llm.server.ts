@@ -1,5 +1,6 @@
 // Multi-provider LLM router. Server-only.
 // Primary: OpenRouter -> Groq. Fallbacks: Gemini -> Cerebras -> Lovable AI.
+import { trackedApiFetch } from "./api-usage.server";
 
 export type LlmMessage = {
   role: "system" | "user" | "assistant";
@@ -107,7 +108,7 @@ export async function llmChat(messages: LlmMessage[], opts: LlmOptions = {}): Pr
 
     try {
       const call = (msgs: unknown[]) =>
-        fetch(p.url, {
+        trackedApiFetch({ provider: p.name, model: p.model, operation: "completion" }, p.url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${key}`,
