@@ -1,4 +1,7 @@
 # Homepage motion revision
+- [ ] Add actual admin-only API usage dashboard with 30-second refresh, verify access and real requests.
+- [ ] Replace exposed Google AI key: secure replacement form was declined.
+- [ ] Store provider credentials in GitHub secrets: requires repository/environment and authorized GitHub access.
 - [x] Address FlawPilot app-controlled security headers, preference cookie flags and performance issues; verify without removing motion.
 - [x] Audit DNS/email/hosting findings and document verified facts and blockers in security-review.md.
 - [ ] Complete DNS/mail and hosting protections: requires domain-provider changes, exact Zoho DKIM record, cookie/port evidence and confirmed rate-limit tradeoff.
