@@ -511,17 +511,15 @@
 
 html { scroll-behavior: smooth; }
 
-/* App-style depth: the current story is full size, neighbours sink back while sliding. */
+/* Keep every story readable while the persistent track slides into place. */
 .testimonial-track .testimonial-card {
-  transform: scale(.86) rotateY(0deg);
-  opacity: .25;
-  filter: blur(2px);
-  transition: transform 950ms cubic-bezier(.22,.7,.15,1), opacity 950ms ease, filter 950ms ease;
+  transform: scale(.96);
+  opacity: 1;
+  filter: none;
+  transition: transform 950ms cubic-bezier(.22,.7,.15,1);
 }
 .testimonial-track .testimonial-card.is-current { transform: scale(1); opacity: 1; filter: none; }
 .testimonial-track.track-reset .testimonial-card { transition: none; }
-.testimonial-track .testimonial-card.is-current .testimonial-portrait { animation: testimonial-portrait-reveal .8s .35s cubic-bezier(.16,1,.3,1) both; }
-.testimonial-track .testimonial-card.is-current .testimonial-copy { animation: testimonial-content-settle .8s .45s cubic-bezier(.16,1,.3,1) both; }
 
 /* Second headline row runs the opposite way like a news ticker. */
 .headline-track-reverse { animation: marquee 38s linear infinite reverse; }

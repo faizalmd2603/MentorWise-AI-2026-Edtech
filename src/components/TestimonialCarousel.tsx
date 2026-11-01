@@ -203,7 +203,7 @@ export function TestimonialCarousel() {
             return <article
             key={`${testimonial.name}-${slideIndex}`}
             aria-hidden={slideIndex !== position}
-            className="testimonial-card relative overflow-hidden rounded-[1.75rem] border border-border bg-card p-6 sm:p-10"
+            className={`testimonial-card relative overflow-hidden rounded-[1.75rem] border border-border bg-card p-6 sm:p-10 ${slideIndex === position ? "is-current" : ""}`}
           >
             <div className="testimonial-story-number" aria-hidden="true">{String(storyIndex + 1).padStart(2, "0")}</div>
             <div className="absolute inset-x-0 top-0 h-1 bg-secondary">
