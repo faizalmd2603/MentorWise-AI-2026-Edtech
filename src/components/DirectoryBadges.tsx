@@ -5,12 +5,14 @@ import uno from "@/assets/directories/uno-directory.svg.asset.json";
 import easy from "@/assets/directories/easydofollow-badge-dark.svg.asset.json";
 import launchbuff from "@/assets/directories/launchbuff.svg.asset.json";
 import launchpanda from "@/assets/directories/launchpanda.svg.asset.json";
+import websiteshow from "@/assets/directories/websiteshow.svg.asset.json";
 
 const listings = [
   { href: "https://launchbuff.com", image: launchbuff.url, alt: "Featured on LaunchBuff", width: 256, height: 80 },
   { href: "https://launchpanda.dev/launches/ai-tool/mentorwise-ai", image: launchpanda.url, alt: "Launched on LaunchPanda", width: 260, height: 64 },
   { href: "https://uno.directory", image: uno.url, alt: "Listed on Uno Directory", width: 120, height: 30 },
   { href: "https://easydofollow.dev/ai/mentorwise-ai", image: easy.url, alt: "Featured on EasyDoFollow", width: 188, height: 56 },
+  { href: "https://www.website.show", image: websiteshow.url, alt: "Featured on website.show", width: 216, height: 64 },
 ];
 
 export function DirectoryBadges() {
@@ -26,7 +28,7 @@ export function DirectoryBadges() {
         </div>
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-5">
           {listings.map(listing => (
-            <a key={listing.href} href={listing.href} target="_blank" rel="noopener" className="directory-link flex min-h-20 max-w-full items-center justify-center" aria-label={listing.alt}>
+            <a key={listing.href} href={listing.href} target="_blank" rel="noopener" title={listing.alt} className="directory-link flex min-h-20 max-w-full items-center justify-center" aria-label={listing.alt}>
               <img src={listing.image} alt={listing.alt} width={listing.width} height={listing.height} className="h-auto max-w-full" />
             </a>
           ))}
@@ -38,7 +40,7 @@ export function DirectoryBadges() {
       <div aria-hidden="true" className="mask-marquee mt-8 overflow-hidden border-t border-border/50 pt-5">
         <div className="directory-track flex w-max">
           {[0, 1].map(copy => <div key={copy} className="flex shrink-0 items-center gap-12 px-6 font-display text-4xl font-semibold text-foreground/80 sm:text-6xl">
-            {["LaunchBuff", "LaunchPanda", "Uno Directory", "EasyDoFollow", "ToolIndex"].map(name => <span key={name} className="inline-flex items-center gap-12 whitespace-nowrap">{name}<span className="text-primary">✦</span></span>)}
+            {["LaunchBuff", "LaunchPanda", "Uno Directory", "EasyDoFollow", "website.show", "ToolIndex"].map(name => <span key={name} className="inline-flex items-center gap-12 whitespace-nowrap">{name}<span className="text-primary">✦</span></span>)}
           </div>)}
         </div>
       </div>
