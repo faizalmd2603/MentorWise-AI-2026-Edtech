@@ -1,5 +1,5 @@
 # Homepage motion revision
-- [ ] Add actual admin-only API usage dashboard with 30-second refresh, verify access and real requests.
+- [x] Add actual admin-only API usage dashboard with 30-second refresh; verified Groq token usage, assistant switching and denied direct access for other accounts.
 - [ ] Replace exposed Google AI key: secure replacement form was declined.
 - [ ] Store provider credentials in GitHub secrets: requires repository/environment and authorized GitHub access.
 - [x] Address FlawPilot app-controlled security headers, preference cookie flags and performance issues; verify without removing motion.

@@ -22,6 +22,13 @@
       "when": 1793434195858,
       "tag": "0002_api_usage_monitoring",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793518642507,
+      "tag": "0003_api_usage_explicit_private_grants",
+      "breakpoints": true
     }
   ]
 }
