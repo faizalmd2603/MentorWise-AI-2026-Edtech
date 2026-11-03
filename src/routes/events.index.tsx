@@ -40,6 +40,7 @@ function EventsPage() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["events"],
     queryFn: () => fetchList(),
+    enabled: auth.isReady && !!auth.user,
     staleTime: 45_000,
     refetchInterval: 30_000,
     refetchOnWindowFocus: false,

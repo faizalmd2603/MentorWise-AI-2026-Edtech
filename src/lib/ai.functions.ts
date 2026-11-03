@@ -235,9 +235,9 @@ export const chatWithAgent = createServerFn({ method: "POST" })
       if (insErr) throw new Error(insErr.message);
     }
 
-    const convo = data.persist
-      ? [...history, ...data.messages]
-      : data.messages;
+    // Never trust client-supplied roles: prior turns come only from the
+    // server-stored history; the client contributes just its newest user message.
+    const convo = lastUser ? [...history, lastUser] : history;
 
     let sources: SearchSource[] = [];
     let searchQuery: string | null = null;
