@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/mw-logo.png.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
+import { GeminiTrustBadge } from "@/components/GeminiTrustBadge";
 
 export function SiteFooter() {
   return (
@@ -49,7 +50,7 @@ export function SiteFooter() {
               <Linkedin className="h-3.5 w-3.5 text-cyber" /> LinkedIn
             </a>
           </div>
-          <div className="mt-5">
+          <div className="mt-5 flex flex-col items-start gap-4">
             <img
               src="https://badge.flawpilot.com/scan?id=22dcc418-4d28-487f-b821-88b1b0ff3826"
               alt="FlawPilot Score: 91/100, Hardened"
@@ -58,6 +59,7 @@ export function SiteFooter() {
               loading="lazy"
               className="h-auto w-full max-w-[370px] rounded-xl"
             />
+            <GeminiTrustBadge />
           </div>
         </div>
       </div>
