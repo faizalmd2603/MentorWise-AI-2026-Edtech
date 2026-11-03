@@ -13,7 +13,7 @@ export function GeminiTrustBadge() {
           "-apple-system, BlinkMacSystemFont, 'SF Pro Display', Roboto, sans-serif",
         backgroundColor: "#FAF6EE",
         color: "#7F8E9C",
-        borderRadius: 12,
+        borderRadius: 22,
         padding: "14px 18px 12px 26px",
         width: "100%",
         maxWidth: 370,
