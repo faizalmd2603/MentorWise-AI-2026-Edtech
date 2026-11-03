@@ -36,6 +36,13 @@
       "when": 1793706930815,
       "tag": "0004_pin_email_fn_search_path_tighten_read_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793725064993,
+      "tag": "0005_enforce_event_message_is_host",
+      "breakpoints": true
     }
   ]
 }
