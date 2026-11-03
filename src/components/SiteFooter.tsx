@@ -50,16 +50,16 @@ export function SiteFooter() {
               <Linkedin className="h-3.5 w-3.5 text-cyber" /> LinkedIn
             </a>
           </div>
-          <div className="mt-5 flex flex-col items-start gap-4">
+          <div className="mt-5 flex flex-wrap items-start gap-4">
             <img
               src="https://badge.flawpilot.com/scan?id=22dcc418-4d28-487f-b821-88b1b0ff3826"
               alt="FlawPilot Score: 91/100, Hardened"
               width={370}
               height={169}
               loading="lazy"
-              className="h-auto w-full max-w-[370px] rounded-xl"
+              className="h-auto w-full max-w-[370px] rounded-xl sm:w-[370px]"
             />
-            <GeminiTrustBadge />
+            <div className="w-full max-w-[370px] sm:w-[370px]"><GeminiTrustBadge /></div>
           </div>
         </div>
       </div>

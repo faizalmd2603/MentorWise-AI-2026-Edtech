@@ -13,10 +13,14 @@ export function GeminiTrustBadge() {
           "-apple-system, BlinkMacSystemFont, 'SF Pro Display', Roboto, sans-serif",
         backgroundColor: "#FAF6EE",
         color: "#7F8E9C",
-        borderRadius: 24,
-        padding: "24px 32px",
+        borderRadius: 12,
+        padding: "14px 18px 12px 26px",
         width: "100%",
-        maxWidth: 440,
+        maxWidth: 370,
+        aspectRatio: "370 / 169",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
         boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
         position: "relative",
         border: "1px solid rgba(0,0,0,0.02)",
@@ -30,7 +34,7 @@ export function GeminiTrustBadge() {
           left: 0,
           top: 0,
           bottom: 0,
-          width: 14,
+          width: 8,
           backgroundColor: GREEN,
         }}
       />
@@ -43,14 +47,14 @@ export function GeminiTrustBadge() {
           alignItems: "center",
           flexWrap: "wrap",
           gap: "8px 12px",
-          marginBottom: 20,
+          marginBottom: 0,
           paddingLeft: 6,
         }}
       >
         <span
           style={{
             fontWeight: 800,
-            fontSize: "clamp(12px, 3.4vw, 16px)",
+            fontSize: 13,
             letterSpacing: "0.06em",
             color: GREY,
             textTransform: "uppercase",
@@ -81,13 +85,13 @@ export function GeminiTrustBadge() {
         style={{
           display: "flex",
           alignItems: "baseline",
-          marginBottom: 28,
+          marginBottom: 0,
           paddingLeft: 6,
         }}
       >
         <span
           style={{
-            fontSize: "clamp(52px, 15vw, 72px)",
+            fontSize: 48,
             fontWeight: 800,
             color: GREEN,
             lineHeight: 1,
@@ -97,7 +101,7 @@ export function GeminiTrustBadge() {
         </span>
         <span
           style={{
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 500,
             color: GREY,
             marginLeft: 12,
@@ -113,16 +117,16 @@ export function GeminiTrustBadge() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-end",
-          flexWrap: "wrap",
-          gap: "10px 16px",
+          flexWrap: "nowrap",
+          gap: "8px",
           paddingLeft: 6,
           borderTop: "1px solid rgba(0,0,0,0.05)",
-          paddingTop: 16,
+          paddingTop: 8,
         }}
       >
         <div
           style={{
-            fontSize: 13,
+            fontSize: 11,
             fontWeight: 600,
             color: GREEN,
             textTransform: "uppercase",
@@ -132,10 +136,10 @@ export function GeminiTrustBadge() {
           ✓ Trustworthy &amp; Verified
         </div>
         <div style={{ textAlign: "right", lineHeight: 1.4, marginLeft: "auto" }}>
-          <div style={{ fontSize: 12, color: GREY }}>Scanned on Nov 3, 2026</div>
+          <div style={{ fontSize: 10, color: GREY }}>Scanned on Nov 3, 2026</div>
           <div
             style={{
-              fontSize: 13,
+              fontSize: 11,
               fontWeight: 600,
               color: INK,
               display: "flex",
