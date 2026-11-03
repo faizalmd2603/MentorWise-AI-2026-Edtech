@@ -95,9 +95,10 @@ export const deleteEvent = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const listEvents = createServerFn({ method: "GET" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin
+export const listEvents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+  const { data, error } = await context.supabase
     .from("live_events")
     .select("id, host_name, title, description, scheduled_at, status, created_at, updated_at")
     .order("scheduled_at", { ascending: false })
@@ -126,8 +127,11 @@ export const getMeetingLink = createServerFn({ method: "POST" })
       _role: "admin",
     });
     const isHost = (event as { host_id: string }).host_id === context.userId || !!isAdmin;
+    const status = (event as { status: string }).status;
+    // Attendees only receive the link while the session is live; hosts/admins always.
+    const canSeeLink = isHost || status === "live";
     return {
-      meetingUrl: (event as { meeting_url: string | null }).meeting_url ?? null,
+      meetingUrl: canSeeLink ? (event as { meeting_url: string | null }).meeting_url ?? null : null,
       isHost,
       status: (event as { status: string }).status,
     };

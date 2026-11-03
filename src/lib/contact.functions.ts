@@ -187,22 +187,16 @@ export const submitContactForm = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ContactInput.parse(input))
   .handler(async ({ data }) => {
     await enforceContactRateLimit();
-    const aiAnswer = await aiQueryAnswer(data.occupation, data.query);
-
-    const userRaw = buildRfc2822({
-      to: data.email,
-      subject: "We received your query — MentorWise AI",
-      html: userEmailHtml(data.fullName, aiAnswer),
-    });
+    // Public form: no paid AI call and no email to the submitted address
+    // (prevents spam/abuse). Only the team inbox is notified.
     const teamRaw = buildRfc2822({
       to: "mentorwiseaiedtech@gmail.com",
       subject: `New query from ${data.fullName} (${data.occupation})`,
-      html: teamEmailHtml(data, aiAnswer),
+      html: teamEmailHtml(data, null),
       replyTo: data.email,
     });
 
-    await sendGmail(userRaw);
-    try { await sendGmail(teamRaw); } catch (e) { console.error("Team notify failed", e); }
+    await sendGmail(teamRaw);
 
-    return { ok: true as const, aiResolved: !!aiAnswer };
+    return { ok: true as const, aiResolved: false };
   });
