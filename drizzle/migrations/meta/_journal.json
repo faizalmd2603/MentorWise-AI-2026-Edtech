@@ -29,6 +29,13 @@
       "when": 1793518642507,
       "tag": "0003_api_usage_explicit_private_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793706930815,
+      "tag": "0004_pin_email_fn_search_path_tighten_read_policies",
+      "breakpoints": true
     }
   ]
 }
