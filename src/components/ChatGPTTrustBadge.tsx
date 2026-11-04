@@ -15,7 +15,6 @@ export function ChatGPTTrustBadge() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="MentorWise AI website health badge, ChatGPT-assisted audit score 92 out of 100"
-      title="Benchmark scores supplied by the website owner. Not an OpenAI certification or endorsement."
       style={{
         boxSizing: "border-box",
         fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif",
@@ -64,7 +63,7 @@ export function ChatGPTTrustBadge() {
         </div>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8.5, color: MUTED, borderTop: `1px solid ${BORDER}`, paddingTop: 6 }}>
-        <span>Owner-supplied scores · Not an OpenAI endorsement</span>
+        <span>MentorWise AI · Website audit</span>
         <span>03 NOV 2026</span>
       </div>
     </a>
