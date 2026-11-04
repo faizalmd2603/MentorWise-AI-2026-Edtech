@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import logo from "@/assets/mw-logo.png.asset.json";
 import { Mail, MessageCircle, Linkedin } from "lucide-react";
 import { GeminiTrustBadge } from "@/components/GeminiTrustBadge";
+import { ChatGPTTrustBadge } from "@/components/ChatGPTTrustBadge";
 
 export function SiteFooter() {
   return (
@@ -63,6 +64,7 @@ export function SiteFooter() {
               className="h-auto w-full max-w-[370px] rounded-xl sm:w-[370px]"
             />
             <div className="w-full max-w-[370px] sm:w-[370px]"><GeminiTrustBadge /></div>
+            <div className="w-full max-w-[370px] sm:w-[370px]"><ChatGPTTrustBadge /></div>
           </div>
       </div>
       <div className="border-t border-border/40">
